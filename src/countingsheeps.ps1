@@ -49,6 +49,42 @@ Write-Output "[STARTUP] Getting all variables in place"
 [string]$PROJECTTEMPLATE = "Minimal"
 [string]$LOAD_SOURCE_FROM = "$env:USERPROFILE\Downloads\"
 
+[string]$ANALYSIS = "Analysis.csv"
+[string]$SEP = ";"
+
+
+#========================================
+# Localization
+
+[string]$text_projectname           = "Wöerter zählen"
+
+[string]$text_column_file            = "Datei"
+[string]$text_column_path            = "In Ordner"
+[string]$text_column_words           = "Wortzahl"
+[string]$text_column_proofreadtime   = "Überprüfungszeit"
+
+
+[string]$text_about = "CountingSheeps V1.0
+Wörter in datei lesen.
+AGPL-3.0 Stella Ménier - stella.menier@gmx.de
+
+Github Repo öffnen ?"
+
+[string]$GITHUB_LINK = "https://github.com/teamcons/Skrivanek-Rocketlaunch"
+
+
+
+
+# Need to use Word
+$word           = New-Object -ComObject Word.Application 
+$excel          = New-Object -ComObject Excel.Application 
+$powerpoint     = New-Object -ComObject Powerpoint.Application 
+$word.Visible   = $false 
+$excel.Visible  = $false 
+$powerpoint.Visible = $false 
+[int]$totalcount = 0
+  
+
 
 
 
@@ -69,100 +105,262 @@ $stream = [System.IO.MemoryStream]::new($iconBytes, 0, $iconBytes.Length)
 
 
 
+   
 
 #==============================================================
 #                GUI - Ask the Right Questions                =
 #==============================================================
-   
-   
 
-# If user asked to include source files, include those in new folder, with naming conventions
-if ($arg -eq $none)
-{
-    Write-Output "[DETECTED] Load source files"
 
-    # Grab source files
-    $SOURCEFILES = New-Object System.Windows.Forms.OpenFileDialog -Property @{ 
-        InitialDirectory = $LOAD_SOURCE_FROM
-        Multiselect = $true
-        Title = $APPNAME
+# thx https://www.rlvision.com/blog/a-drag-and-drop-gui-made-with-powershell/
+
+
+#================
+#= INITIAL WORK =
+
+[int]$form_leftalign = 25
+
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+
+
+### Create form ###
+ 
+$form = New-Object System.Windows.Forms.Form
+$form.Text = "PowerShell GUI"
+$form.Size = '550,450'
+$form.StartPosition = "CenterScreen"
+$form.MinimumSize = $form.Size
+$form.MaximizeBox = $False
+$form.Topmost = $True
+ 
+ 
+### Define controls ###
+ 
+$button = New-Object System.Windows.Forms.Button
+$button.Location = '5,5'
+$button.Size = '75,23'
+$button.Width = 120
+$button.Text = "Print list to console"
+ 
+$checkbox = New-Object Windows.Forms.Checkbox
+$checkbox.Location = '140,8'
+$checkbox.AutoSize = $True
+$checkbox.Text = "Clear afterwards"
+ 
+$label = New-Object Windows.Forms.Label
+$label.Location = '5,40'
+$label.AutoSize = $True
+$label.Text = "Drop files or folders here:"
+
+
+## Configure the ListView
+$sourcefiles                   = New-Object System.Windows.Forms.ListView
+$sourcefiles.Width             = 400
+$sourcefiles.Height            = 250
+$sourcefiles.Location          = New-Object System.Drawing.Size($form_leftalign,60) 
+$sourcefiles.Size              = New-Object System.Drawing.Size(580,120) 
+#$sourcefiles.FullRowSelect = $True
+$sourcefiles.HideSelection = $false
+$sourcefiles.AutoResizeColumns(2)
+$sourcefiles.View              = [System.Windows.Forms.View]::Details
+#$sourcefiles.Anchor = ([System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Left -bor [System.Windows.Forms.AnchorStyles]::Right -bor [System.Windows.Forms.AnchorStyles]::Top)
+$sourcefiles.AllowDrop = $True
+#$sourcefiles.SmallImageList = $imageList
+
+[void]$sourcefiles.Columns.Add($text_column_file,150)
+[void]$sourcefiles.Columns.Add($text_column_path,100)
+[void]$sourcefiles.Columns.Add($text_column_words,100)
+#[void]$sourcefiles.Columns.Add($text_column_proofreadtime,200)
+
+
+$statusBar = New-Object System.Windows.Forms.StatusBar
+$statusBar.Text = "Ready"
+ 
+ 
+### Add controls to form ###
+ 
+$form.SuspendLayout()
+$form.Controls.Add($button)
+$form.Controls.Add($checkbox)
+$form.Controls.Add($label)
+$form.Controls.Add($sourcefiles)
+$form.Controls.Add($statusBar)
+$form.ResumeLayout()
+ 
+ 
+### Write event handlers ###
+ 
+$button_Click = {
+    write-host "Listbox contains:" -ForegroundColor Yellow
+ 
+	foreach ($item in $listBox.Items)
+    {
+        $i = Get-Item -LiteralPath $item
+        if($i -is [System.IO.DirectoryInfo])
+        {
+            write-host ("`t" + $i.Name + " [Directory]")
+        }
+        else
+        {
+            write-host ("`t" + $i.Name + " [" + [math]::round($i.Length/1MB, 2) + " MB]")
+        }
+	}
+ 
+    if($checkbox.Checked -eq $True)
+    {
+        $listBox.Items.Clear()
     }
-    $null = $SOURCEFILES.ShowDialog()
-    Write-Output "[INPUT] Got:"
-    Write-Output $SOURCEFILES.FileNames
-
+ 
+    $statusBar.Text = ("List contains $($listBox.Items.Count) items")
 }
+ 
+$listBox_DragOver = [System.Windows.Forms.DragEventHandler]{
+	if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop)) # $_ = [System.Windows.Forms.DragEventArgs]
+	{
+	    $_.Effect = 'Copy'
+	}
+	else
+	{
+	    $_.Effect = 'None'
+	}
+}
+	
+$listBox_DragDrop = [System.Windows.Forms.DragEventHandler]{
+    $statusBar.Text = ("Processing...")
+	foreach ($filepath in $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop)) # $_ = [System.Windows.Forms.DragEventArgs]
+    {
+        $file = Get-Item $filepath
+
+        $sourcefilesItem = New-Object System.Windows.Forms.ListViewItem($file.Name)
+
+        [string]$filedirname = $file.Directory.FullName
+        [void]$sourcefilesItem.Subitems.Add($filedirname)
 
 
-
-
-# Need to use Word
-$word = New-Object -ComObject Word.Application 
-$word.Visible = $false 
-[int]$totalcount = 0
-
-
-
-
-
-#==============================================================
-#                GUI - Ask the Right Questions                =
-#==============================================================
-
-# PROCESS EACH SOURCE FILE
-# Rename and move file
-# Add count to total count and CSV
-foreach ($file in $SOURCEFILES.FileNames)
-{
-
-
+        # Use different backend depending on what needed
+        # Each time, check the extension to know what we deal with
+        if ($file.Extension -match ".[doc|docx]$" )
+        {
+            # OPEN IN WORD, PROCESS COUNT
+            $filecontent = $word.Documents.Open($file.FullName)
+            [int]$wordcount = $filecontent.ComputeStatistics([Microsoft.Office.Interop.Word.WdStatistic]::wdStatisticWords)
+            
+        }
+        elseif ($file.Extension -match ".[xls|xlsx]$" )
+        {
+            # OPEN IN EXCEL, PROCESS COUNT
+            $filecontent = $excel.Documents.Open($file.FullName)
+            [int]$wordcount = $filecontent.ComputeStatistics([Microsoft.Office.Interop.Excel.WdStatistic]::wdStatisticWords)
+        }
+        elseif ($file.Extension -match ".[ppt|pptx]$" )
+        {
+            # OPEN IN POWRPOINT, PROCESS COUNT
+            $file.Extension = $powerpoint.Documents.Open($file.FullName)
+            [int]$wordcount = $filecontent.ComputeStatistics([Microsoft.Office.Interop.Powerpoint.WdStatistic]::wdStatisticWords)
+        }
+        elseif ($file.Extension -match ".pdf$" )
+        {
+            # COUNT WORDS IN PDF FILE
+            [int]$wordcount = (Get-Content $file.FullName | Measure-Object –Word).Words
+        }
+    
+        elseif ($file.Extension -match ".[txt|csv]$" )
+        {
+            # COUNT WORDS IN TXT FILE
+            [int]$wordcount = (Get-Content $file.FullName | Measure-Object –Word).Words
+        }
+        else
+        {
+            # IDK
+            [int]$wordcount = 0
+        }
+            
+        # USE THE WORDCOUNT
+        [int]$totalcount += $wordcount
+        Write-Output "Wordcount: $wordcount"
+        #Write-Output "$newname;$wordcount" | Out-File -FilePath "$INFO\$ANALYSIS" -Append 
         
-    # OPEN IN WORD
-    $filecontent = $word.Documents.Open("$ORIG\$newname")
+        #CLOSE FILE
+        $filecontent.Close()
 
-    # PROCESS COUNT
-    [int]$wordcount = $filecontent.ComputeStatistics([Microsoft.Office.Interop.Word.WdStatistic]::wdStatisticWords)
-    [int]$totalcount += $wordcount
-    Write-Output "Wordcount: $wordcount"
-    echo "$newname;$wordcount" | Out-File -FilePath "$INFO\$ANALYSIS" -Append 
 
-        
-    #CLOSE FILE
-    $filecontent.Close()
+        # Wake up babe new wordcount just dropped
+        [void]$sourcefilesItem.Subitems.Add($wordcount)
+        [void]$sourcefiles.Items.Add($sourcefilesItem)
 
 
 
-} # End of loop processing all source file
-
-    
-    
-
-
-# Wont need Word anymore
-$word.Quit()
-    
+	} # End of processing list
+    $statusBar.Text = ("List contains $($sourcefiles.Items.Count) items, has $($totalcount) words")
+}
+ 
 
 
+
+$form_FormClosed = {
+	try
+    {
+        $listBox.remove_Click($button_Click)
+		$listBox.remove_DragOver($listBox_DragOver)
+		$listBox.remove_DragDrop($listBox_DragDrop)
+        $listBox.remove_DragDrop($listBox_DragDrop)
+		$form.remove_FormClosed($Form_Cleanup_FormClosed)
+
+        # Wont need Word anymore
+        $word.Quit()
+        $excel.Quit()
+        $powerpoint.Quit()
+
+
+	}
+	catch [Exception]
+    { }
+}
+ 
+ 
+### Wire up events ###
+ 
+$button.Add_Click($button_Click)
+$sourcefiles.Add_DragOver($listBox_DragOver)
+$sourcefiles.Add_DragDrop($listBox_DragDrop)
+$form.Add_FormClosed($form_FormClosed)
+ 
+ 
+#### Show form ###
+ 
+[void] $form.ShowDialog()
+
+exit
 
 #==============================================================
-#                GUI - Ask the Right Questions                =
+#                     Processing Le input                     =
 #==============================================================
 
-
-
-# GUI
+# Create the CSV
+Write-Output "sep=$SEP" | Out-File -FilePath "$ANALYSIS"
+Write-Output "Datei;Wörterzahl" | Out-File -FilePath "$ANALYSIS" -Append 
 
 
 
 # Finish CSV file, 
-echo "SUMME;$totalcount" | Out-File -FilePath "$INFO\$ANALYSIS" -Append
-
-
-
+Write-Output "SUMME;$totalcount" | Out-File -FilePath "$INFO\$ANALYSIS" -Append
 
 
 # Clipboard
 Set-Clipboard -Value $totalcount
 Write-Output "[ACTION] Set clipboard to $totalcount"
 
-   
+# Have a NICE NOTIFICATION THIS IS BALLERS
+# WOOOOHOOOO
+$objNotifyIcon                      = New-Object System.Windows.Forms.NotifyIcon
+#$objNotifyIcon.Icon = "M:\4_BE\06_General information\Stella\Skrivanek-Rocketlaunch\assets\Rocketlaunch-Icon.ico"  
+$objNotifyIcon.Icon                 = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
+$objNotifyIcon.BalloonTipTitle      = "Wortzahl Zur Zwischenablage hinzugefügt!"
+$objNotifyIcon.BalloonTipIcon       = "Info"
+$objNotifyIcon.BalloonTipText       = -join("Die Wortzahl (",$totalcount,"w) können Sie über Strng+V einfügen ;)")
+$objNotifyIcon.Visible              = $True
+$objNotifyIcon.ShowBalloonTip(10000)
+
+
+
