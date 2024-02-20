@@ -211,9 +211,6 @@ $sourcefiles                   = New-Object System.Windows.Forms.DataGridView
 $sourcefiles.Location          = New-Object System.Drawing.Size($form_leftalign,100)
 $sourcefiles.Size              = New-Object System.Drawing.Size(340,200)
 $sourcefiles.MaximumSize       = New-Object System.Drawing.Size(340,800)
-
-
-#$sourcefiles.GridColor = SystemColors.ActiveBorder
 $sourcefiles.BackgroundColor = "White"
 
 $sourcefiles.AllowDrop = $True
@@ -228,14 +225,9 @@ $ImageColumn = New-Object System.Windows.Forms.DataGridViewImageColumn
 $sourcefiles.Columns[0].Name = $text_column_file
 $sourcefiles.Columns[0].Width = 150
 $sourcefiles.Columns[1].Name = $text_column_words
-$sourcefiles.Columns[1].Width = 100
+$sourcefiles.Columns[1].Width = 80
 $sourcefiles.Columns.Insert(0, $ImageColumn);
-$sourcefiles.Columns[0].Width = 50
-
-echo $sourcefiles.Rows[-1].Cells[0] = $none
-
-#$statusBar = New-Object System.Windows.Forms.StatusBar
-#$statusBar.Text = "Ready"
+$sourcefiles.Columns[0].Width = 30
 
 
 #===================================================
@@ -258,8 +250,8 @@ $gui_okButton.UseVisualStyleBackColor       = $True
 #$gui_okButton.BackColor                     = ”Green”
 #$gui_okButton.ForeColor                     = ”White”
 $gui_okButton.DialogResult                  = [System.Windows.Forms.DialogResult]::OK
-$form.AcceptButton                          = $gui_okButton
-[void]$form.Controls.Add($gui_okButton)
+#$form.AcceptButton                          = $gui_okButton
+#[void]$form.Controls.Add($gui_okButton)
 
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
 $gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 260),10)
@@ -273,7 +265,7 @@ $gui_cancelButton.DialogResult              = [System.Windows.Forms.DialogResult
 #[void]$form.Controls.Add($gui_cancelButton)
 
 
-$gui_panel.Controls.Add($gui_okButton)
+#$gui_panel.Controls.Add($gui_okButton)
 $gui_panel.Controls.Add($gui_cancelButton)
 $gui_panel.Show()
 
@@ -455,17 +447,6 @@ Write-Output "SUMME;$totalcount" | Out-File -FilePath "$INFO\$ANALYSIS" -Append
 # Clipboard
 Set-Clipboard -Value $totalcount
 Write-Output "[ACTION] Set clipboard to $totalcount"
-
-# Have a NICE NOTIFICATION THIS IS BALLERS
-# WOOOOHOOOO
-$objNotifyIcon                      = New-Object System.Windows.Forms.NotifyIcon
-#$objNotifyIcon.Icon = "M:\4_BE\06_General information\Stella\Skrivanek-Rocketlaunch\assets\Rocketlaunch-Icon.ico"  
-$objNotifyIcon.Icon                 = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
-$objNotifyIcon.BalloonTipTitle      = "Wortzahl Zur Zwischenablage hinzugefügt!"
-$objNotifyIcon.BalloonTipIcon       = "Info"
-$objNotifyIcon.BalloonTipText       = -join("Die Wortzahl (",$totalcount,"w) können Sie über Strng+V einfügen ;)")
-$objNotifyIcon.Visible              = $True
-$objNotifyIcon.ShowBalloonTip(10000)
 
 
 
