@@ -45,7 +45,7 @@ Write-Output ""
 # Get all important variables in place 
 
 Write-Output "[STARTUP] Getting all variables in place"
-[string]$APPNAME = "-Rocketlaunch!"
+[string]$APPNAME = "CountingSheeps"
 [string]$PROJECTTEMPLATE = "Minimal"
 [string]$LOAD_SOURCE_FROM = "$env:USERPROFILE\Downloads\"
 
@@ -59,10 +59,8 @@ Write-Output "[STARTUP] Getting all variables in place"
 [string]$text_projectname           = "Wöerter zählen"
 
 [string]$text_column_file            = "Datei"
-[string]$text_column_path            = "In Ordner"
 [string]$text_column_words           = "Wortzahl"
 [string]$text_column_proofreadtime   = "Überprüfungszeit"
-
 
 [string]$text_about = "CountingSheeps V1.0
 Wörter in datei lesen.
@@ -72,6 +70,13 @@ Github Repo öffnen ?"
 
 [string]$GITHUB_LINK = "https://github.com/teamcons/Skrivanek-CountingSheeps"
 
+
+[string]$text_label_how   = "Benützen Sie Drag-And_Drop oder den laden-knopf"
+
+[string]$text_button_load   = "Laden"
+
+[string]$text_button_close   = "Schließen"
+[string]$text_button_save   = "Speichern"
 
 
 
@@ -172,10 +177,19 @@ $form.Controls.Add($label)
 
 
 
+
+
+
+
+
+#===============================================
+#                GUI - THE GRID                =
+#===============================================
+
 # Label and button
 $labelgrid                  = New-Object System.Windows.Forms.Label
-$labelgrid.Text             = "Drag and drop or browse"
-$labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 10, [System.Drawing.FontStyle]::Regular)
+$labelgrid.Text             = $text_label_how
+$labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
 $labelgrid.Location         = New-Object System.Drawing.Point($form_leftalign,80)
 $labelgrid.Size             = New-Object System.Drawing.Size(260,20)
 $form.Controls.Add($labelgrid)
@@ -183,11 +197,11 @@ $form.Controls.Add($labelgrid)
 $browsebutton                   = New-Object System.Windows.Forms.Button
 $browsebutton.Location          = New-Object System.Drawing.Point(($form_leftalign + 260),80)
 $browsebutton.Size              = New-Object System.Drawing.Size(80,20)
-$browsebutton.Text              = "Load"
+$browsebutton.Text              = $text_button_load
 $browsebutton.add_click({
     [System.Windows.Forms.MessageBox]::Show("Nein." , $APPNAME)
 })
-$form.Controls.Add($browsebutton)
+#$form.Controls.Add($browsebutton)
 
 
 
@@ -218,13 +232,15 @@ $sourcefiles.Columns[1].Width = 100
 $sourcefiles.Columns.Insert(0, $ImageColumn);
 $sourcefiles.Columns[0].Width = 50
 
-echo $sourcefiles.Rows[-1].Cells = $none
+echo $sourcefiles.Rows[-1].Cells[0] = $none
 
 #$statusBar = New-Object System.Windows.Forms.StatusBar
 #$statusBar.Text = "Ready"
 
-#====================
-#= OKCANCEL BUTTONS =
+
+#===================================================
+#                GUI - Down Buttons                =
+#===================================================
 
 $gui_panel = New-Object System.Windows.Forms.Panel
 $gui_panel.Left = 0
@@ -237,7 +253,7 @@ $gui_panel.Anchor = ([System.Windows.Forms.AnchorStyles]::Left -bor [System.Wind
 $gui_okButton                               = New-Object System.Windows.Forms.Button
 $gui_okButton.Location                      = New-Object System.Drawing.Point(($form_leftalign + 170),10)
 $gui_okButton.Size                          = New-Object System.Drawing.Size(80,25)
-$gui_okButton.Text                          = $text_OK
+$gui_okButton.Text                          = $text_button_save
 $gui_okButton.UseVisualStyleBackColor       = $True
 #$gui_okButton.BackColor                     = ”Green”
 #$gui_okButton.ForeColor                     = ”White”
@@ -248,13 +264,13 @@ $form.AcceptButton                          = $gui_okButton
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
 $gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 260),10)
 $gui_cancelButton.Size                      = New-Object System.Drawing.Size(80,25)
-$gui_cancelButton.Text                      = $text_Cancel
+$gui_cancelButton.Text                      = $text_button_close
 $gui_cancelButton.UseVisualStyleBackColor   = $True
 #$gui_cancelButton.BackColor                  = ”Red”
 #$gui_cancelButton.ForeColor                  = ”White”
 $gui_cancelButton.DialogResult              = [System.Windows.Forms.DialogResult]::Cancel
-$form.CancelButton                          = $gui_cancelButton
-[void]$form.Controls.Add($gui_cancelButton)
+#$form.CancelButton                          = $gui_cancelButton
+#[void]$form.Controls.Add($gui_cancelButton)
 
 
 $gui_panel.Controls.Add($gui_okButton)
