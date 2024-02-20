@@ -30,13 +30,13 @@ param([String]$arg)
 
 # Fancy !
 Write-Output "================================"
-Write-Output "=        -ROCKETLAUNCH!        ="
+Write-Output "=        CountingSheeps        ="
 Write-Output "================================"
 
 Write-Output ""
-Write-Output "For Skrivanek GmbH - Start new projects really, really quick!"
+Write-Output "For Skrivanek GmbH - Count number of words really, really quick!"
 Write-Output "CC0 Stella Ménier, Project manager Skrivanek BELGIUM - <stella.menier@gmx.de>"
-Write-Output "Git: https://github.com/teamcons/Skrivanek-Rocketlaunch"
+Write-Output "Git: https://github.com/teamcons/Skrivanek-CountingSheeps"
 Write-Output ""
 Write-Output ""
 
@@ -70,7 +70,7 @@ AGPL-3.0 Stella Ménier - stella.menier@gmx.de
 
 Github Repo öffnen ?"
 
-[string]$GITHUB_LINK = "https://github.com/teamcons/Skrivanek-Rocketlaunch"
+[string]$GITHUB_LINK = "https://github.com/teamcons/Skrivanek-CountingSheeps"
 
 
 
@@ -81,7 +81,7 @@ $excel          = New-Object -ComObject Excel.Application
 $powerpoint     = New-Object -ComObject Powerpoint.Application 
 $word.Visible   = $false 
 $excel.Visible  = $false 
-$powerpoint.Visible = $false 
+#$powerpoint.Visible = $false 
 [int]$totalcount = 0
   
 
@@ -121,7 +121,7 @@ $stream = [System.IO.MemoryStream]::new($iconBytes, 0, $iconBytes.Length)
  
 
 [int]$form_leftalign = 25
-[int]$form_verticalalign = 190
+[int]$form_verticalalign = 320
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -131,32 +131,24 @@ Add-Type -AssemblyName System.Drawing
 
 $form                   = New-Object System.Windows.Forms.Form
 $form.Text              = $APPNAME
-$form.Size              = New-Object System.Drawing.Size(550,($form_verticalalign + 60 ))
-#$form.MinimumSize       = New-Object System.Drawing.Size(600,450)
-#$form.MaximumSize       = New-Object System.Drawing.Size(750,550)
-$form.AutoSize          = $true
-$form.AutoScale         = $true
+$form.Size              = New-Object System.Drawing.Size(400,($form_verticalalign + 80 ))
+$form.MaximumSize       = New-Object System.Drawing.Size(400,($form_verticalalign + 80 + 400 ))
+#$form.AutoSize          = $true
+#$form.AutoScale         = $true
 $form.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
 
 $form.StartPosition     = 'CenterScreen'
 $form.FormBorderStyle   = 'FixedDialog'
-$form.MaximizeBox       = $false
+$form.MaximizeBox       = $True
 $form.Topmost           = $True
 $form.BackColor         = "White"
 $form.Icon              = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
 
 
-
-#==============
-#= INPUT TEXT =
-
 # FANCY ICON
 $pictureBox             = new-object Windows.Forms.PictureBox
 $pictureBox.Location    = New-Object System.Drawing.Point($form_leftalign,20)
-
-#$img                    = [System.Drawing.Image]::Fromfile($NEWPROJECTICON);
 $img = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
-
 $pictureBox.Width       = 64 #$img.Size.Width
 $pictureBox.Height      = 64 #$img.Size.Height
 $pictureBox.Image       = $img;
@@ -165,72 +157,128 @@ $pictureBox.Add_Click({
                     If ($Result -eq "Yes") { Start-Process $GITHUB_LINK } })
 
 
-$form.controls.add($pictureBox)
+#$form.controls.add($pictureBox)
+
 
 # LABEL AND TEXT
-# Label above input
 $label                  = New-Object System.Windows.Forms.Label
 $label.Location         = New-Object System.Drawing.Point(($form_leftalign + 80),30)
-$label.Size             = New-Object System.Drawing.Size(240,20)
+$label.Size             = New-Object System.Drawing.Size(100,20)
 $label.AutoSize         = $true
 $label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 11, [System.Drawing.FontStyle]::Bold)
-$label.Text             = "Yeah"
+$label.Text             = $APPNAME
 $form.Controls.Add($label)
  
-### Define controls ###
- 
-#$button = New-Object System.Windows.Forms.Button
-#$button.Location = '5,5'
-#$button.Size = '75,23'
-#$button.Width = 120
-#$button.Text = "Print list to console"
- 
-#$checkbox = New-Object Windows.Forms.Checkbox
-#$checkbox.Location = '140,8'
-#$checkbox.AutoSize = $True
-#$checkbox.Text = "Clear afterwards"
- 
-#$label = New-Object Windows.Forms.Label
-#$label.Location = '5,40'
-#$label.AutoSize = $True
-#$label.Text = "Drop files or folders here:"
 
 
-## Configure the ListView
+
+# Label and button
+$labelgrid                  = New-Object System.Windows.Forms.Label
+$labelgrid.Text             = "Drag and drop or browse"
+$labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 10, [System.Drawing.FontStyle]::Regular)
+$labelgrid.Location         = New-Object System.Drawing.Point($form_leftalign,80)
+$labelgrid.Size             = New-Object System.Drawing.Size(260,20)
+$form.Controls.Add($labelgrid)
+
+$browsebutton                   = New-Object System.Windows.Forms.Button
+$browsebutton.Location          = New-Object System.Drawing.Point(($form_leftalign + 260),80)
+$browsebutton.Size              = New-Object System.Drawing.Size(80,20)
+$browsebutton.Text              = "Load"
+$browsebutton.add_click({
+    [System.Windows.Forms.MessageBox]::Show("Nein." , $APPNAME)
+})
+$form.Controls.Add($browsebutton)
+
+
+
+
+## Configure the Gridview
 $sourcefiles                   = New-Object System.Windows.Forms.DataGridView
+$sourcefiles.Location          = New-Object System.Drawing.Size($form_leftalign,100)
+$sourcefiles.Size              = New-Object System.Drawing.Size(340,200)
+$sourcefiles.MaximumSize       = New-Object System.Drawing.Size(340,800)
 
 
-#$sourcefiles.Width             = 400
-#$sourcefiles.Height            = 250
-$sourcefiles.Location          = New-Object System.Drawing.Size($form_leftalign,60) 
-#$sourcefiles.Size              = New-Object System.Drawing.Size(580,120) 
-#$sourcefiles.FullRowSelect = $True
-#$sourcefiles.HideSelection = $false
+#$sourcefiles.GridColor = SystemColors.ActiveBorder
+$sourcefiles.BackgroundColor = "White"
 
-#$sourcefiles.Anchor = ([System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Left -bor [System.Windows.Forms.AnchorStyles]::Right -bor [System.Windows.Forms.AnchorStyles]::Top)
 $sourcefiles.AllowDrop = $True
-#$sourcefiles.SmallImageList = $imageList
 $sourcefiles.ColumnCount = 2
 $sourcefiles.ColumnHeadersVisible = $true
+$sourcefiles.RowHeadersVisible = $false
+$sourcefiles.ReadOnly = $true
+$sourcefiles.AutoSizeRowsMode = "AllCells"
+$sourcefiles.AutoSizeColumnsMode = "Fill"
+$ImageColumn = New-Object System.Windows.Forms.DataGridViewImageColumn
+
 $sourcefiles.Columns[0].Name = $text_column_file
+$sourcefiles.Columns[0].Width = 150
 $sourcefiles.Columns[1].Name = $text_column_words
+$sourcefiles.Columns[1].Width = 100
+$sourcefiles.Columns.Insert(0, $ImageColumn);
+$sourcefiles.Columns[0].Width = 50
+
+echo $sourcefiles.Rows[-1].Cells = $none
+
+#$statusBar = New-Object System.Windows.Forms.StatusBar
+#$statusBar.Text = "Ready"
+
+#====================
+#= OKCANCEL BUTTONS =
+
+$gui_panel = New-Object System.Windows.Forms.Panel
+$gui_panel.Left = 0
+$gui_panel.Top = ($form_verticalalign)
+$gui_panel.Width = 625
+$gui_panel.Height = 40
+$gui_panel.BackColor = '241,241,241'
+$gui_panel.Anchor = ([System.Windows.Forms.AnchorStyles]::Left -bor [System.Windows.Forms.AnchorStyles]::Right)
+
+$gui_okButton                               = New-Object System.Windows.Forms.Button
+$gui_okButton.Location                      = New-Object System.Drawing.Point(($form_leftalign + 170),10)
+$gui_okButton.Size                          = New-Object System.Drawing.Size(80,25)
+$gui_okButton.Text                          = $text_OK
+$gui_okButton.UseVisualStyleBackColor       = $True
+#$gui_okButton.BackColor                     = ”Green”
+#$gui_okButton.ForeColor                     = ”White”
+$gui_okButton.DialogResult                  = [System.Windows.Forms.DialogResult]::OK
+$form.AcceptButton                          = $gui_okButton
+[void]$form.Controls.Add($gui_okButton)
+
+$gui_cancelButton                           = New-Object System.Windows.Forms.Button
+$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 260),10)
+$gui_cancelButton.Size                      = New-Object System.Drawing.Size(80,25)
+$gui_cancelButton.Text                      = $text_Cancel
+$gui_cancelButton.UseVisualStyleBackColor   = $True
+#$gui_cancelButton.BackColor                  = ”Red”
+#$gui_cancelButton.ForeColor                  = ”White”
+$gui_cancelButton.DialogResult              = [System.Windows.Forms.DialogResult]::Cancel
+$form.CancelButton                          = $gui_cancelButton
+[void]$form.Controls.Add($gui_cancelButton)
 
 
-$statusBar = New-Object System.Windows.Forms.StatusBar
-$statusBar.Text = "Ready"
- 
+$gui_panel.Controls.Add($gui_okButton)
+$gui_panel.Controls.Add($gui_cancelButton)
+$gui_panel.Show()
+
+[void]$form.Controls.Add($gui_panel)
+
+
+
+
+
+
+
+
  
 ### Add controls to form ###
  
 $form.SuspendLayout()
-$form.Controls.Add($button)
-$form.Controls.Add($checkbox)
-$form.Controls.Add($label)
 $form.Controls.Add($sourcefiles)
-$form.Controls.Add($statusBar)
+#$form.Controls.Add($statusBar)
 $form.ResumeLayout()
  
- 
+
 ### Write event handlers ###
  
 $button_Click = {
@@ -249,7 +297,7 @@ $button_Click = {
         }
 	}
  
-    if($checkbox.Checked -eq $True)
+    if ($checkbox.Checked -eq $True)
     {
         $listBox.Items.Clear()
     }
@@ -281,6 +329,8 @@ $listBox_DragDrop = [System.Windows.Forms.DragEventHandler]{
             # OPEN IN WORD, PROCESS COUNT
             $filecontent = $word.Documents.Open($file.FullName)
             [int]$wordcount = $filecontent.ComputeStatistics([Microsoft.Office.Interop.Word.WdStatistic]::wdStatisticWords)
+            #CLOSE FILE
+            $filecontent.Close()
             
         }
         elseif ($file.Extension -match ".[xls|xlsx]$" )
@@ -288,12 +338,16 @@ $listBox_DragDrop = [System.Windows.Forms.DragEventHandler]{
             # OPEN IN EXCEL, PROCESS COUNT
             $filecontent = $excel.Documents.Open($file.FullName)
             [int]$wordcount = $filecontent.ComputeStatistics([Microsoft.Office.Interop.Excel.WdStatistic]::wdStatisticWords)
+            #CLOSE FILE
+            $filecontent.Close()
         }
         elseif ($file.Extension -match ".[ppt|pptx]$" )
         {
             # OPEN IN POWRPOINT, PROCESS COUNT
             $file.Extension = $powerpoint.Documents.Open($file.FullName)
             [int]$wordcount = $filecontent.ComputeStatistics([Microsoft.Office.Interop.Powerpoint.WdStatistic]::wdStatisticWords)
+            #CLOSE FILE
+            $filecontent.Close()
         }
         elseif ($file.Extension -match ".pdf$" )
         {
@@ -316,13 +370,9 @@ $listBox_DragDrop = [System.Windows.Forms.DragEventHandler]{
         [int]$totalcount += $wordcount
         Write-Output "Wordcount: $wordcount"
         #Write-Output "$newname;$wordcount" | Out-File -FilePath "$INFO\$ANALYSIS" -Append 
-        
-        $sourcefiles.Rows.Add($file.Name,$wordcount);
 
-
-
-        #CLOSE FILE
-        $filecontent.Close()
+        $ico =  ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
+        $sourcefiles.Rows.Add($ico,$file.Name,$wordcount);
 
 	} # End of processing list
     #$statusBar.Text = ("List contains $($sourcefiles.Items.Count) items, has $($totalcount) words")
@@ -335,10 +385,10 @@ $listBox_DragDrop = [System.Windows.Forms.DragEventHandler]{
 $form_FormClosed = {
 	try
     {
-        $listBox.remove_Click($button_Click)
-		$listBox.remove_DragOver($listBox_DragOver)
-		$listBox.remove_DragDrop($listBox_DragDrop)
-        $listBox.remove_DragDrop($listBox_DragDrop)
+        $sourcefiles.remove_Click($button_Click)
+		$sourcefiles.remove_DragOver($listBox_DragOver)
+		$sourcefiles.remove_DragDrop($listBox_DragDrop)
+        $sourcefiles.remove_DragDrop($listBox_DragDrop)
 		$form.remove_FormClosed($Form_Cleanup_FormClosed)
 
         # Wont need Word anymore
@@ -364,6 +414,11 @@ $form.Add_FormClosed($form_FormClosed)
 #### Show form ###
  
 [void] $form.ShowDialog()
+
+
+
+
+
 
 exit
 
