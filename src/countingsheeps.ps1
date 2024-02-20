@@ -118,60 +118,102 @@ $stream = [System.IO.MemoryStream]::new($iconBytes, 0, $iconBytes.Length)
 #================
 #= INITIAL WORK =
 
+ 
+
 [int]$form_leftalign = 25
+[int]$form_verticalalign = 190
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
+# Lets look cool
+[void] [System.Windows.Forms.Application]::EnableVisualStyles() 
 
-### Create form ###
- 
-$form = New-Object System.Windows.Forms.Form
-$form.Text = "PowerShell GUI"
-$form.Size = '550,450'
-$form.StartPosition = "CenterScreen"
-$form.MinimumSize = $form.Size
-$form.MaximizeBox = $False
-$form.Topmost = $True
- 
+$form                   = New-Object System.Windows.Forms.Form
+$form.Text              = $APPNAME
+$form.Size              = New-Object System.Drawing.Size(550,($form_verticalalign + 60 ))
+#$form.MinimumSize       = New-Object System.Drawing.Size(600,450)
+#$form.MaximumSize       = New-Object System.Drawing.Size(750,550)
+$form.AutoSize          = $true
+$form.AutoScale         = $true
+$form.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
+
+$form.StartPosition     = 'CenterScreen'
+$form.FormBorderStyle   = 'FixedDialog'
+$form.MaximizeBox       = $false
+$form.Topmost           = $True
+$form.BackColor         = "White"
+$form.Icon              = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
+
+
+
+#==============
+#= INPUT TEXT =
+
+# FANCY ICON
+$pictureBox             = new-object Windows.Forms.PictureBox
+$pictureBox.Location    = New-Object System.Drawing.Point($form_leftalign,20)
+
+#$img                    = [System.Drawing.Image]::Fromfile($NEWPROJECTICON);
+$img = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
+
+$pictureBox.Width       = 64 #$img.Size.Width
+$pictureBox.Height      = 64 #$img.Size.Height
+$pictureBox.Image       = $img;
+$pictureBox.Add_Click({
+                    $Result = [System.Windows.Forms.MessageBox]::Show($text_about,$APPNAME,4,[System.Windows.Forms.MessageBoxIcon]::Information)
+                    If ($Result -eq "Yes") { Start-Process $GITHUB_LINK } })
+
+
+$form.controls.add($pictureBox)
+
+# LABEL AND TEXT
+# Label above input
+$label                  = New-Object System.Windows.Forms.Label
+$label.Location         = New-Object System.Drawing.Point(($form_leftalign + 80),30)
+$label.Size             = New-Object System.Drawing.Size(240,20)
+$label.AutoSize         = $true
+$label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 11, [System.Drawing.FontStyle]::Bold)
+$label.Text             = "Yeah"
+$form.Controls.Add($label)
  
 ### Define controls ###
  
-$button = New-Object System.Windows.Forms.Button
-$button.Location = '5,5'
-$button.Size = '75,23'
-$button.Width = 120
-$button.Text = "Print list to console"
+#$button = New-Object System.Windows.Forms.Button
+#$button.Location = '5,5'
+#$button.Size = '75,23'
+#$button.Width = 120
+#$button.Text = "Print list to console"
  
-$checkbox = New-Object Windows.Forms.Checkbox
-$checkbox.Location = '140,8'
-$checkbox.AutoSize = $True
-$checkbox.Text = "Clear afterwards"
+#$checkbox = New-Object Windows.Forms.Checkbox
+#$checkbox.Location = '140,8'
+#$checkbox.AutoSize = $True
+#$checkbox.Text = "Clear afterwards"
  
-$label = New-Object Windows.Forms.Label
-$label.Location = '5,40'
-$label.AutoSize = $True
-$label.Text = "Drop files or folders here:"
+#$label = New-Object Windows.Forms.Label
+#$label.Location = '5,40'
+#$label.AutoSize = $True
+#$label.Text = "Drop files or folders here:"
 
 
 ## Configure the ListView
-$sourcefiles                   = New-Object System.Windows.Forms.ListView
-$sourcefiles.Width             = 400
-$sourcefiles.Height            = 250
+$sourcefiles                   = New-Object System.Windows.Forms.DataGridView
+
+
+#$sourcefiles.Width             = 400
+#$sourcefiles.Height            = 250
 $sourcefiles.Location          = New-Object System.Drawing.Size($form_leftalign,60) 
-$sourcefiles.Size              = New-Object System.Drawing.Size(580,120) 
+#$sourcefiles.Size              = New-Object System.Drawing.Size(580,120) 
 #$sourcefiles.FullRowSelect = $True
-$sourcefiles.HideSelection = $false
-$sourcefiles.AutoResizeColumns(2)
-$sourcefiles.View              = [System.Windows.Forms.View]::Details
+#$sourcefiles.HideSelection = $false
+
 #$sourcefiles.Anchor = ([System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Left -bor [System.Windows.Forms.AnchorStyles]::Right -bor [System.Windows.Forms.AnchorStyles]::Top)
 $sourcefiles.AllowDrop = $True
 #$sourcefiles.SmallImageList = $imageList
-
-[void]$sourcefiles.Columns.Add($text_column_file,150)
-[void]$sourcefiles.Columns.Add($text_column_path,100)
-[void]$sourcefiles.Columns.Add($text_column_words,100)
-#[void]$sourcefiles.Columns.Add($text_column_proofreadtime,200)
+$sourcefiles.ColumnCount = 2
+$sourcefiles.ColumnHeadersVisible = $true
+$sourcefiles.Columns[0].Name = $text_column_file
+$sourcefiles.Columns[1].Name = $text_column_words
 
 
 $statusBar = New-Object System.Windows.Forms.StatusBar
@@ -232,12 +274,6 @@ $listBox_DragDrop = [System.Windows.Forms.DragEventHandler]{
     {
         $file = Get-Item $filepath
 
-        $sourcefilesItem = New-Object System.Windows.Forms.ListViewItem($file.Name)
-
-        [string]$filedirname = $file.Directory.FullName
-        [void]$sourcefilesItem.Subitems.Add($filedirname)
-
-
         # Use different backend depending on what needed
         # Each time, check the extension to know what we deal with
         if ($file.Extension -match ".[doc|docx]$" )
@@ -281,18 +317,16 @@ $listBox_DragDrop = [System.Windows.Forms.DragEventHandler]{
         Write-Output "Wordcount: $wordcount"
         #Write-Output "$newname;$wordcount" | Out-File -FilePath "$INFO\$ANALYSIS" -Append 
         
+        $sourcefiles.Rows.Add($file.Name,$wordcount);
+
+
+
         #CLOSE FILE
         $filecontent.Close()
 
-
-        # Wake up babe new wordcount just dropped
-        [void]$sourcefilesItem.Subitems.Add($wordcount)
-        [void]$sourcefiles.Items.Add($sourcefilesItem)
-
-
-
 	} # End of processing list
-    $statusBar.Text = ("List contains $($sourcefiles.Items.Count) items, has $($totalcount) words")
+    #$statusBar.Text = ("List contains $($sourcefiles.Items.Count) items, has $($totalcount) words")
+    $statusBar.Text = ("List has $($totalcount) words")
 }
  
 

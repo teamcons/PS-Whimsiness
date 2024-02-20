@@ -14,5 +14,11 @@ The manual is for coworkers who may want to use it.
 
 # Some more stuff
 
-The stamp icon comes from there
-<a href="https://www.flaticon.com/free-icons/stamp" title="stamp icons">Stamp icons created by Freepik - Flaticon</a>
+The sheep icon
+<a href="https://www.flaticon.com/free-icons/sheep" title="sheep icons">Sheep icons created by SBTS2018 - Flaticon</a>
+
+<a href="https://www.flaticon.com/free-icons/sheep" title="sheep icons">Sheep icons created by Freepik - Flaticon</a>
+
+<a href="https://www.flaticon.com/free-icons/sheep" title="sheep icons">Sheep icons created by Freepik - Flaticon</a>
+
+<a href="https://www.flaticon.com/free-icons/sheep" title="sheep icons">Sheep icons created by Good Ware - Flaticon</a>
