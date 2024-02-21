@@ -76,7 +76,6 @@ Github Repo öffnen ?"
 [string]$text_button_save   = "Speichern"
 
 
-
 # Need to use Word
 $word           = New-Object -ComObject Word.Application 
 $excel          = New-Object -ComObject Excel.Application 
@@ -84,9 +83,6 @@ $powerpoint     = New-Object -ComObject Powerpoint.Application
 $word.Visible   = $false 
 $excel.Visible  = $false 
 #$powerpoint.Visible = $false 
-[int]$totalcount = 0
-  
-
 
 
 
@@ -104,7 +100,6 @@ $iconBytes = [Convert]::FromBase64String($iconBase64)
 $stream = [System.IO.MemoryStream]::new($iconBytes, 0, $iconBytes.Length)
 
 # This way we can draw icons without having any external file
-
 
 
 
@@ -178,15 +173,6 @@ $labelgrid.Location         = New-Object System.Drawing.Point(($form_leftalign +
 $labelgrid.Size             = New-Object System.Drawing.Size(250,20)
 $form.Controls.Add($labelgrid)
 
-# $browsebutton                   = New-Object System.Windows.Forms.Button
-# $browsebutton.Location          = New-Object System.Drawing.Point(($form_leftalign + 260),80)
-# $browsebutton.Size              = New-Object System.Drawing.Size(80,20)
-# $browsebutton.Text              = $text_button_load
-# $browsebutton.add_click({
-#     [System.Windows.Forms.MessageBox]::Show("Nein." , $APPNAME)
-# })
-#$form.Controls.Add($browsebutton)
-
 
 ## Configure the Gridview
 $sourcefiles                   = New-Object System.Windows.Forms.DataGridView
@@ -216,13 +202,13 @@ $sourcefiles.Columns[1].DefaultCellStyle.Alignment = "MiddleRight"
 $sourcefiles.Columns.Insert(0, $ImageColumn);
 $sourcefiles.Columns[0].Width = 32
 $sourcefiles.Columns[0].Resizable = "False"
-$sourcefiles.Columns[0].AutoSize = $false
+#$sourcefiles.Columns[0].AutoSize = $false
 
 # Adding an image column adds a weird unremovable line. Use it for sum.
 #$ico =  ([System.Drawing.Icon]::ExtractAssociatedIcon("C:\\Program Files\\") ).ToBitmap()
 #$sourcefiles.Rows[0].Cells[0].Value = "no"
-$sourcefiles.Rows[0].Cells[1].Value = $text_totalsum
-$sourcefiles.Rows[0].Cells[2].Value = $totalcount
+[string]$sourcefiles.Rows[0].Cells[1].Value = $text_totalsum
+[int]$sourcefiles.Rows[0].Cells[2].Value = 0
 
 $form.Controls.Add($sourcefiles)
 
@@ -337,10 +323,7 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
             [int]$wordcount = 0
         }
             
-        # USE THE WORDCOUNT
-        [int]$totalcount = ($totalcount + $wordcount)
-        Write-Output "Wordcount: $wordcount"
-
+        # Update totalcount
         $sourcefiles.Rows[ ($sourcefiles.Rows.Count - 1) ].Cells[2].Value += $wordcount
 
 
@@ -348,10 +331,6 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
 
         $ico =  ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
         $sourcefiles.Rows.Add($ico,$file.Name,$wordcount);
-
-
-        
-
 
 	} # End of processing list
     
