@@ -219,8 +219,8 @@ $sourcefiles.Columns[0].Resizable = "False"
 $sourcefiles.Columns[0].AutoSize = $false
 
 # Adding an image column adds a weird unremovable line. Use it for sum.
-$ico =  ([System.Drawing.Icon]::ExtractAssociatedIcon("C:\\Program Files\\") ).ToBitmap()
-$sourcefiles.Rows[0].Cells[0].Value = "no"
+#$ico =  ([System.Drawing.Icon]::ExtractAssociatedIcon("C:\\Program Files\\") ).ToBitmap()
+#$sourcefiles.Rows[0].Cells[0].Value = "no"
 $sourcefiles.Rows[0].Cells[1].Value = $text_totalsum
 $sourcefiles.Rows[0].Cells[2].Value = $totalcount
 
