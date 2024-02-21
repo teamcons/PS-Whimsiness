@@ -9,6 +9,11 @@ Im learning powershell as i write and expand it. Its bound to have some ugly and
 
 The manual is for coworkers who may want to use it.
 
+<div align="center">
+    <img src="https://github.com/teamcons/Skrivanek-CountingSheeps/blob/main/img/Screenshot App.png" /></td>
+</div>
+
+
 # Super Skrivanek Suite
 
 Its part of the suite of softwarescripts we did for our workplace because its relevant there for us.
