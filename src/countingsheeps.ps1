@@ -123,18 +123,16 @@ Add-Type -AssemblyName System.Drawing
 [void] [System.Windows.Forms.Application]::EnableVisualStyles() 
 
 [int]$form_leftalign = 20
-[int]$form_verticalalign = 320
+[int]$form_verticalalign = 220
 
 $form                   = New-Object System.Windows.Forms.Form
 $form.Text              = $APPNAME
 $form.Size              = New-Object System.Drawing.Size(400,($form_verticalalign + 80 ))
-$form.MaximumSize       = New-Object System.Drawing.Size(400,($form_verticalalign + 80 + 400 ))
 #$form.AutoSize          = $true
 #$form.AutoScale         = $true
 $form.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
 
 $form.StartPosition     = 'CenterScreen'
-$form.FormBorderStyle   = 'FixedDialog'
 $form.MaximizeBox       = $True
 $form.Topmost           = $True
 $form.BackColor         = "White"
@@ -200,8 +198,11 @@ $browsebutton.add_click({
 ## Configure the Gridview
 $sourcefiles                   = New-Object System.Windows.Forms.DataGridView
 $sourcefiles.Location          = New-Object System.Drawing.Size($form_leftalign,100)
-$sourcefiles.Size              = New-Object System.Drawing.Size(340,200)
-$sourcefiles.MaximumSize       = New-Object System.Drawing.Size(340,800)
+$sourcefiles.Size              = New-Object System.Drawing.Size(340,100)
+$sourcefiles.BackgroundColor = "White"
+$sourcefiles.Anchor = "Left,Bottom,Top,Right"
+
+#$sourcefiles.MaximumSize       = New-Object System.Drawing.Size(340,800)
 $sourcefiles.BackgroundColor = "White"
 
 $sourcefiles.AllowDrop = $True
@@ -231,7 +232,7 @@ $gui_panel.Top = ($form_verticalalign)
 $gui_panel.Width = 625
 $gui_panel.Height = 40
 $gui_panel.BackColor = '241,241,241'
-$gui_panel.Anchor = ([System.Windows.Forms.AnchorStyles]::Left -bor [System.Windows.Forms.AnchorStyles]::Right)
+$gui_panel.Anchor = "Left,Bottom,Right"
 
 $gui_okButton                               = New-Object System.Windows.Forms.Button
 $gui_okButton.Location                      = New-Object System.Drawing.Point(($form_leftalign + 170),10)
@@ -249,6 +250,7 @@ $gui_cancelButton.Location                  = New-Object System.Drawing.Point(($
 $gui_cancelButton.Size                      = New-Object System.Drawing.Size(80,25)
 $gui_cancelButton.Text                      = $text_button_close
 $gui_cancelButton.UseVisualStyleBackColor   = $True
+$gui_cancelButton.Anchor                    = "Bottom,Top,Right"
 #$gui_cancelButton.BackColor                  = ”Red”
 #$gui_cancelButton.ForeColor                  = ”White”
 $gui_cancelButton.DialogResult              = [System.Windows.Forms.DialogResult]::Cancel
@@ -404,7 +406,7 @@ $form_FormClosed = {
  
 ### Wire up events ###
  
-$button.Add_Click($button_Click)
+#$button.Add_Click($button_Click)
 $sourcefiles.Add_DragOver($listBox_DragOver)
 $sourcefiles.Add_DragDrop($listBox_DragDrop)
 $form.Add_FormClosed($form_FormClosed)
