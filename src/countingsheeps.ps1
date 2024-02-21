@@ -60,6 +60,7 @@ Write-Output "[STARTUP] Getting all variables in place"
 [string]$text_column_file            = "Datei"
 [string]$text_column_words           = "Wortzahl"
 [string]$text_column_proofreadtime   = "Überprüfungszeit"
+[string]$text_totalsum              = "SUMME"
 
 [string]$text_about = "CountingSheeps V1.0
 Wörter in datei lesen.
@@ -123,21 +124,22 @@ Add-Type -AssemblyName System.Drawing
 [void] [System.Windows.Forms.Application]::EnableVisualStyles() 
 
 [int]$form_leftalign = 20
-[int]$form_verticalalign = 220
+[int]$form_verticalalign = 200
 
 $form                   = New-Object System.Windows.Forms.Form
 $form.Text              = $APPNAME
-$form.Size              = New-Object System.Drawing.Size(400,($form_verticalalign + 80 ))
+$form.Size              = New-Object System.Drawing.Size(300,($form_verticalalign + 80 ))
 #$form.AutoSize          = $true
 #$form.AutoScale         = $true
 $form.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
-
 $form.StartPosition     = 'CenterScreen'
 $form.MaximizeBox       = $True
 $form.Topmost           = $True
 $form.BackColor         = "White"
 $form.Icon              = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
-
+$form.AllowDrop = $True
+#$form.AllowTransparency = $false
+#$form.Opacity = .90
 
 # FANCY ICON
 $pictureBox             = new-object Windows.Forms.PictureBox
@@ -156,19 +158,12 @@ $form.controls.add($pictureBox)
 
 # LABEL AND TEXT
 $label                  = New-Object System.Windows.Forms.Label
-$label.Location         = New-Object System.Drawing.Point(($form_leftalign + 80),30)
-$label.Size             = New-Object System.Drawing.Size(100,20)
+$label.Location         = New-Object System.Drawing.Point(($form_leftalign + 80),20)
+$label.Size             = New-Object System.Drawing.Size(200,20)
 $label.AutoSize         = $true
 $label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 11, [System.Drawing.FontStyle]::Bold)
 $label.Text             = $APPNAME
 $form.Controls.Add($label)
- 
-
-
-
-
-
-
 
 
 #===============================================
@@ -179,30 +174,26 @@ $form.Controls.Add($label)
 $labelgrid                  = New-Object System.Windows.Forms.Label
 $labelgrid.Text             = $text_label_how
 $labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
-$labelgrid.Location         = New-Object System.Drawing.Point($form_leftalign,80)
-$labelgrid.Size             = New-Object System.Drawing.Size(260,20)
+$labelgrid.Location         = New-Object System.Drawing.Point(($form_leftalign + 80),40)
+$labelgrid.Size             = New-Object System.Drawing.Size(250,20)
 $form.Controls.Add($labelgrid)
 
-$browsebutton                   = New-Object System.Windows.Forms.Button
-$browsebutton.Location          = New-Object System.Drawing.Point(($form_leftalign + 260),80)
-$browsebutton.Size              = New-Object System.Drawing.Size(80,20)
-$browsebutton.Text              = $text_button_load
-$browsebutton.add_click({
-    [System.Windows.Forms.MessageBox]::Show("Nein." , $APPNAME)
-})
+# $browsebutton                   = New-Object System.Windows.Forms.Button
+# $browsebutton.Location          = New-Object System.Drawing.Point(($form_leftalign + 260),80)
+# $browsebutton.Size              = New-Object System.Drawing.Size(80,20)
+# $browsebutton.Text              = $text_button_load
+# $browsebutton.add_click({
+#     [System.Windows.Forms.MessageBox]::Show("Nein." , $APPNAME)
+# })
 #$form.Controls.Add($browsebutton)
-
-
 
 
 ## Configure the Gridview
 $sourcefiles                   = New-Object System.Windows.Forms.DataGridView
-$sourcefiles.Location          = New-Object System.Drawing.Size($form_leftalign,100)
-$sourcefiles.Size              = New-Object System.Drawing.Size(340,100)
+$sourcefiles.Location          = New-Object System.Drawing.Size($form_leftalign,80)
+$sourcefiles.Size              = New-Object System.Drawing.Size(250,100)
 $sourcefiles.BackgroundColor = "White"
 $sourcefiles.Anchor = "Left,Bottom,Top,Right"
-
-#$sourcefiles.MaximumSize       = New-Object System.Drawing.Size(340,800)
 $sourcefiles.BackgroundColor = "White"
 
 $sourcefiles.AllowDrop = $True
@@ -212,15 +203,24 @@ $sourcefiles.RowHeadersVisible = $false
 $sourcefiles.ReadOnly = $true
 $sourcefiles.AutoSizeRowsMode = "AllCells"
 $sourcefiles.AutoSizeColumnsMode = "Fill"
+$sourcefiles.AllowUserToAddRows = "False"
 $ImageColumn = New-Object System.Windows.Forms.DataGridViewImageColumn
 
 $sourcefiles.Columns[0].Name = $text_column_file
-$sourcefiles.Columns[0].Width = 150
+$sourcefiles.Columns[0].Width = 120
 $sourcefiles.Columns[1].Name = $text_column_words
-$sourcefiles.Columns[1].Width = 80
-$sourcefiles.Columns.Insert(0, $ImageColumn);
-$sourcefiles.Columns[0].Width = 30
+$sourcefiles.Columns[1].Width = 70
+$sourcefiles.Columns[1].DefaultCellStyle.Alignment = "MiddleRight" 
 
+$sourcefiles.Columns.Insert(0, $ImageColumn);
+$sourcefiles.Columns[0].Width = 32
+$sourcefiles.Columns[0].Resizable = "False"
+
+$sourcefiles.Rows[0]
+$sourcefiles.Rows[0].Cells[1].Value = $text_totalsum
+$sourcefiles.Rows[0].Cells[2].Value = $totalcount
+
+$form.Controls.Add($sourcefiles)
 
 #===================================================
 #                GUI - Down Buttons                =
@@ -234,23 +234,23 @@ $gui_panel.Height = 40
 $gui_panel.BackColor = '241,241,241'
 $gui_panel.Anchor = "Left,Bottom,Right"
 
-$gui_okButton                               = New-Object System.Windows.Forms.Button
-$gui_okButton.Location                      = New-Object System.Drawing.Point(($form_leftalign + 170),10)
-$gui_okButton.Size                          = New-Object System.Drawing.Size(80,25)
-$gui_okButton.Text                          = $text_button_save
-$gui_okButton.UseVisualStyleBackColor       = $True
-#$gui_okButton.BackColor                     = ”Green”
-#$gui_okButton.ForeColor                     = ”White”
-$gui_okButton.DialogResult                  = [System.Windows.Forms.DialogResult]::OK
-#$form.AcceptButton                          = $gui_okButton
-#[void]$form.Controls.Add($gui_okButton)
+# $gui_okButton                               = New-Object System.Windows.Forms.Button
+# $gui_okButton.Location                      = New-Object System.Drawing.Point(($form_leftalign + 180),10)
+# $gui_okButton.Size                          = New-Object System.Drawing.Size(80,25)
+# $gui_okButton.Text                          = $text_button_save
+# $gui_okButton.UseVisualStyleBackColor       = $True
+# #$gui_okButton.BackColor                     = ”Green”
+# #$gui_okButton.ForeColor                     = ”White”
+# $gui_okButton.DialogResult                  = [System.Windows.Forms.DialogResult]::OK
+# #$form.AcceptButton                          = $gui_okButton
+# #[void]$form.Controls.Add($gui_okButton)
 
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
-$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 260),10)
+$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 170),10)
 $gui_cancelButton.Size                      = New-Object System.Drawing.Size(80,25)
 $gui_cancelButton.Text                      = $text_button_close
 $gui_cancelButton.UseVisualStyleBackColor   = $True
-$gui_cancelButton.Anchor                    = "Bottom,Top,Right"
+$gui_cancelButton.Anchor                    = "Bottom,Right"
 #$gui_cancelButton.BackColor                  = ”Red”
 #$gui_cancelButton.ForeColor                  = ”White”
 $gui_cancelButton.DialogResult              = [System.Windows.Forms.DialogResult]::Cancel
@@ -266,48 +266,15 @@ $gui_panel.Show()
 
 
 
-
-
-
-
-
- 
-### Add controls to form ###
- 
-$form.SuspendLayout()
-$form.Controls.Add($sourcefiles)
-#$form.Controls.Add($statusBar)
-$form.ResumeLayout()
- 
-
 ### Write event handlers ###
  
 $button_Click = {
     write-host "Listbox contains:" -ForegroundColor Yellow
  
-	foreach ($item in $listBox.Items)
-    {
-        $i = Get-Item -LiteralPath $item
-        if($i -is [System.IO.DirectoryInfo])
-        {
-            write-host ("`t" + $i.Name + " [Directory]")
-        }
-        else
-        {
-            write-host ("`t" + $i.Name + " [" + [math]::round($i.Length/1MB, 2) + " MB]")
-        }
-	}
- 
-    if ($checkbox.Checked -eq $True)
-    {
-        $listBox.Items.Clear()
-    }
- 
-    $statusBar.Text = ("List contains $($listBox.Items.Count) items")
 }
  
-$listBox_DragOver = [System.Windows.Forms.DragEventHandler]{
-	if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop)) # $_ = [System.Windows.Forms.DragEventArgs]
+$DragOver = [System.Windows.Forms.DragEventHandler]{
+	if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop))
 	{
 	    $_.Effect = 'Copy'
 	}
@@ -317,9 +284,8 @@ $listBox_DragOver = [System.Windows.Forms.DragEventHandler]{
 	}
 }
 	
-$listBox_DragDrop = [System.Windows.Forms.DragEventHandler]{
-    $statusBar.Text = ("Processing...")
-	foreach ($filepath in $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop)) # $_ = [System.Windows.Forms.DragEventArgs]
+$DragDrop = [System.Windows.Forms.DragEventHandler]{
+	foreach ($filepath in $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
     {
         $file = Get-Item $filepath
 
@@ -368,16 +334,23 @@ $listBox_DragDrop = [System.Windows.Forms.DragEventHandler]{
         }
             
         # USE THE WORDCOUNT
-        [int]$totalcount += $wordcount
+        [int]$totalcount = ($totalcount + $wordcount)
         Write-Output "Wordcount: $wordcount"
+
+        $sourcefiles.Rows[ ($sourcefiles.Rows.Count - 1) ].Cells[2].Value += $wordcount
+
+
         #Write-Output "$newname;$wordcount" | Out-File -FilePath "$INFO\$ANALYSIS" -Append 
 
         $ico =  ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
         $sourcefiles.Rows.Add($ico,$file.Name,$wordcount);
 
+
+        
+
+
 	} # End of processing list
-    #$statusBar.Text = ("List contains $($sourcefiles.Items.Count) items, has $($totalcount) words")
-    $statusBar.Text = ("List has $($totalcount) words")
+    
 }
  
 
@@ -387,9 +360,9 @@ $form_FormClosed = {
 	try
     {
         $sourcefiles.remove_Click($button_Click)
-		$sourcefiles.remove_DragOver($listBox_DragOver)
-		$sourcefiles.remove_DragDrop($listBox_DragDrop)
-        $sourcefiles.remove_DragDrop($listBox_DragDrop)
+		$sourcefiles.remove_DragOver($DragOver)
+		$sourcefiles.remove_DragDrop($DragDrop)
+        $sourcefiles.remove_DragDrop($DragDrop)
 		$form.remove_FormClosed($Form_Cleanup_FormClosed)
 
         # Wont need Word anymore
@@ -407,18 +380,13 @@ $form_FormClosed = {
 ### Wire up events ###
  
 #$button.Add_Click($button_Click)
-$sourcefiles.Add_DragOver($listBox_DragOver)
-$sourcefiles.Add_DragDrop($listBox_DragDrop)
+$sourcefiles.Add_DragOver($DragOver)
+$sourcefiles.Add_DragDrop($DragDrop)
+$form.Add_DragOver($DragOver)
+$form.Add_DragDrop($DragDrop)
 $form.Add_FormClosed($form_FormClosed)
  
- 
-#### Show form ###
- 
 [void] $form.ShowDialog()
-
-
-
-
 
 
 exit
