@@ -50,6 +50,7 @@ Write-Output "[STARTUP] Getting all variables in place"
 
 [string]$ANALYSIS = "Analysis.csv"
 [string]$SEP = ";"
+[int]$WORDS_PER_HOUR = 1800
 
 
 #========================================
@@ -70,7 +71,7 @@ Github Repo öffnen ?"
 
 [string]$GITHUB_LINK = "https://github.com/teamcons/Skrivanek-CountingSheeps"
 
-[string]$text_label_how   = "Einfach Drag & Drop benützen !"
+[string]$text_label_how   = "Einfach Drag and Drop benützen !"
 [string]$text_button_load   = "Laden"
 [string]$text_button_close   = "Schließen"
 [string]$text_button_save   = "Speichern"
@@ -183,7 +184,7 @@ $sourcefiles.Anchor = "Left,Bottom,Top,Right"
 $sourcefiles.BackgroundColor = "White"
 
 $sourcefiles.AllowDrop = $True
-$sourcefiles.ColumnCount = 2
+$sourcefiles.ColumnCount = 3
 $sourcefiles.ColumnHeadersVisible = $true
 $sourcefiles.RowHeadersVisible = $false
 $sourcefiles.ReadOnly = $true
@@ -194,9 +195,15 @@ $ImageColumn = New-Object System.Windows.Forms.DataGridViewImageColumn
 
 $sourcefiles.Columns[0].Name = $text_column_file
 $sourcefiles.Columns[0].Width = 120
+
 $sourcefiles.Columns[1].Name = $text_column_words
 $sourcefiles.Columns[1].Width = 70
 $sourcefiles.Columns[1].DefaultCellStyle.Alignment = "MiddleRight" 
+
+$sourcefiles.Columns[2].Name = $text_column_proofreadtime
+$sourcefiles.Columns[2].Width = 70
+$sourcefiles.Columns[2].DefaultCellStyle.Alignment = "MiddleRight" 
+
 
 # Add an image column. Has to be inserted afterward. Idk why
 $sourcefiles.Columns.Insert(0, $ImageColumn);
@@ -209,6 +216,7 @@ $sourcefiles.Columns[0].Resizable = "False"
 #$sourcefiles.Rows[0].Cells[0].Value = "no"
 [string]$sourcefiles.Rows[0].Cells[1].Value = $text_totalsum
 [int]$sourcefiles.Rows[0].Cells[2].Value = 0
+[int]$sourcefiles.Rows[0].Cells[3].Value = 0
 
 $form.Controls.Add($sourcefiles)
 
@@ -281,7 +289,7 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
 
         # Use different backend depending on what needed
         # Each time, check the extension to know what we deal with
-        if ($file.Extension -match ".[doc|docx]$" )
+        if ($file.Extension -match ".doc[|x]" )
         {
             # OPEN IN WORD, PROCESS COUNT
             $filecontent = $word.Documents.Open($file.FullName)
@@ -290,7 +298,7 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
             $filecontent.Close()
             
         }
-        elseif ($file.Extension -match ".[xls|xlsx]$" )
+        elseif ($file.Extension -match ".xls[|x]" )
         {
             # OPEN IN EXCEL, PROCESS COUNT
             $filecontent = $excel.Documents.Open($file.FullName)
@@ -298,21 +306,21 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
             #CLOSE FILE
             $filecontent.Close()
         }
-        elseif ($file.Extension -match ".[ppt|pptx]$" )
+        elseif ($file.Extension -match ".ppt[|x]" )
         {
             # OPEN IN POWRPOINT, PROCESS COUNT
-            $file.Extension = $powerpoint.Documents.Open($file.FullName)
+            $filecontent = $powerpoint.Documents.Open($file.FullName)
             [int]$wordcount = $filecontent.ComputeStatistics([Microsoft.Office.Interop.Powerpoint.WdStatistic]::wdStatisticWords)
             #CLOSE FILE
             $filecontent.Close()
         }
-        elseif ($file.Extension -match ".pdf$" )
+        elseif ($file.Extension -match ".pdf" )
         {
             # COUNT WORDS IN PDF FILE
             [int]$wordcount = (Get-Content $file.FullName | Measure-Object –Word).Words
         }
     
-        elseif ($file.Extension -match ".[txt|csv]$" )
+        elseif ($file.Extension -match ".[txt|csv]" )
         {
             # COUNT WORDS IN TXT FILE
             [int]$wordcount = (Get-Content $file.FullName | Measure-Object –Word).Words
@@ -324,13 +332,14 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
         }
             
         # Update totalcount
-        $sourcefiles.Rows[ ($sourcefiles.Rows.Count - 1) ].Cells[2].Value += $wordcount
-
-
-        #Write-Output "$newname;$wordcount" | Out-File -FilePath "$INFO\$ANALYSIS" -Append 
-
         $ico =  ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
-        $sourcefiles.Rows.Add($ico,$file.Name,$wordcount);
+
+        $proofreadtime = [math]::round(($wordcount / $WORDS_PER_HOUR),2)
+
+        $sourcefiles.Rows[ ($sourcefiles.Rows.Count - 1) ].Cells[2].Value += $wordcount
+        $sourcefiles.Rows[ ($sourcefiles.Rows.Count - 1) ].Cells[3].Value += $proofreadtime
+
+        $sourcefiles.Rows.Add($ico,$file.Name,$wordcount,$proofreadtime);
 
 	} # End of processing list
     
