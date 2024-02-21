@@ -45,23 +45,20 @@ Write-Output ""
 # Get all important variables in place 
 
 Write-Output "[STARTUP] Getting all variables in place"
-[string]$APPNAME = "CountingSheeps"
-[string]$LOAD_SOURCE_FROM = "$env:USERPROFILE\Downloads\"
-
-[string]$ANALYSIS = "Analysis.csv"
-[string]$SEP = ";"
-[int]$WORDS_PER_HOUR = 1800
-
+[string]$APPNAME                        = "CountingSheeps"
+[string]$ANALYSIS                       = "Analysis.csv"
+[string]$SEP                            = ";"
+[int]$WORDS_PER_HOUR                    = 1800
+[int]$DECIMALS                          = 2
 
 #========================================
 # Localization
 
-[string]$text_projectname           = "Wöerter zählen"
-
-[string]$text_column_file            = "Datei"
-[string]$text_column_words           = "Wortzahl"
-[string]$text_column_proofreadtime   = "Überprüfungszeit"
-[string]$text_totalsum              = "SUMME"
+[string]$text_projectname               = "Wöerter zählen"
+[string]$text_column_file               = "Datei"
+[string]$text_column_words              = "Wortzahl"
+[string]$text_column_proofreadtime      = "Überprüfungszeit"
+[string]$text_totalsum                  = "SUMME"
 
 [string]$text_about = "CountingSheeps V1.0
 Wörter in datei lesen.
@@ -69,20 +66,19 @@ AGPL-3.0 Stella Ménier - stella.menier@gmx.de
 
 Github Repo öffnen ?"
 
-[string]$GITHUB_LINK = "https://github.com/teamcons/Skrivanek-CountingSheeps"
-
-[string]$text_label_how   = "Einfach Drag and Drop benützen !"
-[string]$text_button_load   = "Laden"
-[string]$text_button_close   = "Schließen"
-[string]$text_button_save   = "Speichern"
+[string]$GITHUB_LINK                    = "https://github.com/teamcons/Skrivanek-CountingSheeps"
+[string]$text_label_how                 = "Einfach Drag and Drop benützen !"
+[string]$text_button_load               = "Laden"
+[string]$text_button_close              = "Schließen"
+[string]$text_button_save               = "Speichern"
 
 
 # Need to use Word
-$word           = New-Object -ComObject Word.Application 
-$excel          = New-Object -ComObject Excel.Application 
-$powerpoint     = New-Object -ComObject Powerpoint.Application 
-$word.Visible   = $false 
-$excel.Visible  = $false 
+$word                                   = New-Object -ComObject Word.Application 
+$excel                                  = New-Object -ComObject Excel.Application 
+$powerpoint                             = New-Object -ComObject Powerpoint.Application 
+$word.Visible                           = $false 
+$excel.Visible                          = $false 
 #$powerpoint.Visible = $false 
 
 
@@ -334,7 +330,7 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
         # Update totalcount
         $ico =  ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
 
-        $proofreadtime = [math]::round(($wordcount / $WORDS_PER_HOUR),2)
+        $proofreadtime = [math]::round(($wordcount / $WORDS_PER_HOUR),$DECIMALS)
 
         $sourcefiles.Rows[ ($sourcefiles.Rows.Count - 1) ].Cells[2].Value += $wordcount
         $sourcefiles.Rows[ ($sourcefiles.Rows.Count - 1) ].Cells[3].Value += $proofreadtime
