@@ -115,12 +115,12 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [void] [System.Windows.Forms.Application]::EnableVisualStyles() 
 
-[int]$form_leftalign = 20
+[int]$form_leftalign = 15
 [int]$form_verticalalign = 200
 
 $form                   = New-Object System.Windows.Forms.Form
 $form.Text              = $APPNAME
-$form.Size              = New-Object System.Drawing.Size(300,($form_verticalalign + 80 ))
+$form.Size              = New-Object System.Drawing.Size(400,($form_verticalalign + 80 ))
 #$form.AutoSize          = $true
 #$form.AutoScale         = $true
 $form.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
@@ -174,7 +174,7 @@ $form.Controls.Add($labelgrid)
 ## Configure the Gridview
 $sourcefiles                   = New-Object System.Windows.Forms.DataGridView
 $sourcefiles.Location          = New-Object System.Drawing.Size($form_leftalign,80)
-$sourcefiles.Size              = New-Object System.Drawing.Size(250,100)
+$sourcefiles.Size              = New-Object System.Drawing.Size(360,100)
 $sourcefiles.BackgroundColor = "White"
 $sourcefiles.Anchor = "Left,Bottom,Top,Right"
 $sourcefiles.BackgroundColor = "White"
@@ -195,16 +195,17 @@ $sourcefiles.Columns[0].Width = 120
 $sourcefiles.Columns[1].Name = $text_column_words
 $sourcefiles.Columns[1].Width = 70
 $sourcefiles.Columns[1].DefaultCellStyle.Alignment = "MiddleRight" 
+$sourcefiles.Columns[1].HeaderCell.Style.Alignment = "MiddleRight" 
 
 $sourcefiles.Columns[2].Name = $text_column_proofreadtime
 $sourcefiles.Columns[2].Width = 70
 $sourcefiles.Columns[2].DefaultCellStyle.Alignment = "MiddleRight" 
-
+$sourcefiles.Columns[2].HeaderCell.Style.Alignment = "MiddleRight" 
 
 # Add an image column. Has to be inserted afterward. Idk why
 $sourcefiles.Columns.Insert(0, $ImageColumn);
 $sourcefiles.Columns[0].Width = 32
-$sourcefiles.Columns[0].Resizable = "False"
+#$sourcefiles.Columns[0].Resizable = "False"
 #$sourcefiles.Columns[0].AutoSize = $false
 
 # Adding an image column adds a weird unremovable line. Use it for sum.
