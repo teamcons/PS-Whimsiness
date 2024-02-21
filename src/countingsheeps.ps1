@@ -49,7 +49,7 @@ Write-Output "[STARTUP] Getting all variables in place"
 [string]$ANALYSIS                       = "Analysis.csv"
 [string]$SEP                            = ";"
 [int]$WORDS_PER_HOUR                    = 1800
-[int]$DECIMALS                          = 2
+[int]$DECIMALS                          = 1
 
 #========================================
 # Localization
@@ -57,7 +57,7 @@ Write-Output "[STARTUP] Getting all variables in place"
 [string]$text_projectname               = "Wöerter zählen"
 [string]$text_column_file               = "Datei"
 [string]$text_column_words              = "Wortzahl"
-[string]$text_column_proofreadtime      = "Überprüfungszeit"
+[string]$text_column_proofreadtime      = "Std"
 [string]$text_totalsum                  = "SUMME"
 
 [string]$text_about = "CountingSheeps V1.0
@@ -193,12 +193,12 @@ $sourcefiles.Columns[0].Name = $text_column_file
 $sourcefiles.Columns[0].Width = 120
 
 $sourcefiles.Columns[1].Name = $text_column_words
-$sourcefiles.Columns[1].Width = 70
+$sourcefiles.Columns[1].Width = 75
 $sourcefiles.Columns[1].DefaultCellStyle.Alignment = "MiddleRight" 
 $sourcefiles.Columns[1].HeaderCell.Style.Alignment = "MiddleRight" 
 
 $sourcefiles.Columns[2].Name = $text_column_proofreadtime
-$sourcefiles.Columns[2].Width = 70
+$sourcefiles.Columns[2].Width = 75
 $sourcefiles.Columns[2].DefaultCellStyle.Alignment = "MiddleRight" 
 $sourcefiles.Columns[2].HeaderCell.Style.Alignment = "MiddleRight" 
 
@@ -241,7 +241,7 @@ $gui_panel.Anchor = "Left,Bottom,Right"
 # #[void]$form.Controls.Add($gui_okButton)
 
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
-$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 170),10)
+$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 280),10)
 $gui_cancelButton.Size                      = New-Object System.Drawing.Size(80,25)
 $gui_cancelButton.Text                      = $text_button_close
 $gui_cancelButton.UseVisualStyleBackColor   = $True
