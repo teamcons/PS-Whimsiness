@@ -1,6 +1,5 @@
 
-# Skrivanek-Tag
-
+# CountingSheeps
 Just a powershell script i use at work, as right-click option.
 
 It just looks for the context a file is invoked upon.
@@ -10,7 +9,9 @@ Im learning powershell as i write and expand it. Its bound to have some ugly and
 
 The manual is for coworkers who may want to use it.
 
+# Super Skrivanek Suite
 
+Its part of the suite of softwarescripts we did for our workplace because its relevant there for us.
 
 # Some more stuff
 
