@@ -176,12 +176,8 @@ $form.Controls.Add($labelgrid)
 ## Configure the Gridview
 $sourcefiles                   = New-Object System.Windows.Forms.DataGridView
 $sourcefiles.Location          = New-Object System.Drawing.Size($form_leftalign,60)
-
-
 $sourcefiles.Size              = New-Object System.Drawing.Size(320,70)
-
-$sourcefiles.AutoSize           = $true
-
+$sourcefiles.AutoSize = $true
 $sourcefiles.BackgroundColor = "White"
 $sourcefiles.Anchor = "Left,Bottom,Top,Right"
 $sourcefiles.BackgroundColor = "White"
