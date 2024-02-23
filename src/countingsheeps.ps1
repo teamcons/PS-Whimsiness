@@ -180,7 +180,6 @@ $sourcefiles.Size              = New-Object System.Drawing.Size(320,70)
 $sourcefiles.AutoSize = $true
 $sourcefiles.BackgroundColor = "White"
 $sourcefiles.Anchor = "Left,Bottom,Top,Right"
-$sourcefiles.BackgroundColor = "White"
 
 $sourcefiles.AllowDrop = $True
 $sourcefiles.ColumnCount = 3
@@ -204,6 +203,8 @@ $sourcefiles.Columns[2].Name = $text_column_proofreadtime
 $sourcefiles.Columns[2].Width = 36
 $sourcefiles.Columns[2].DefaultCellStyle.Alignment = "MiddleRight" 
 $sourcefiles.Columns[2].HeaderCell.Style.Alignment = "MiddleRight" 
+
+
 
 # Add an image column. Has to be inserted afterward. Idk why
 $sourcefiles.Columns.Insert(0, $ImageColumn);
