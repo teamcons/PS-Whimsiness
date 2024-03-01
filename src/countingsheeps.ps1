@@ -82,6 +82,11 @@ $excel.Visible                          = $false
 #$powerpoint.Visible = $false 
 
 
+if ($MyInvocation.MyCommand.CommandType -eq "ExternalScript")
+    { $global:ScriptPath = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition }
+else
+    {$global:ScriptPath = Split-Path -Parent -Path ([Environment]::GetCommandLineArgs()[0]) 
+    if (!$ScriptPath){ $global:ScriptPath = "." } }
 
 #================================
 # Project icon in Base 64
@@ -122,8 +127,8 @@ Add-Type -AssemblyName System.Drawing
 
 $form                   = New-Object System.Windows.Forms.Form
 $form.Text              = $APPNAME
-$form.Size              = New-Object System.Drawing.Size(350,($form_verticalalign + 40))
-$form.MinimumSize       = New-Object System.Drawing.Size(350,($form_verticalalign + 40))
+$form.Size              = New-Object System.Drawing.Size(345,($form_verticalalign + 40))
+$form.MinimumSize       = New-Object System.Drawing.Size(345,($form_verticalalign + 40))
 #$form.AutoSize         = $true
 $form.AutoScale         = $true
 $form.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
@@ -213,8 +218,11 @@ $sourcefiles.Columns[0].Width = 32
 
 
 # Adding an image column adds a weird unremovable line. Use it for sum.
-#$ico =  ([System.Drawing.Icon]::ExtractAssociatedIcon("C:\\Program Files\\") ).ToBitmap()
-#$sourcefiles.Rows[0].Cells[0].Value = "no"
+$ico =  ([System.Drawing.Icon]::ExtractAssociatedIcon(([Environment]::GetCommandLineArgs()[0])) ).ToBitmap()
+
+$sourcefiles.Rows[0].Cells[0].Value = $ico
+
+
 [string]$sourcefiles.Rows[0].Cells[1].Value = $text_totalsum
 [int]$sourcefiles.Rows[0].Cells[2].Value = 0
 [int]$sourcefiles.Rows[0].Cells[3].Value = 0
