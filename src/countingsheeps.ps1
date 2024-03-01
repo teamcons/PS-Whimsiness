@@ -341,7 +341,7 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
             [int]$wordcount = (Get-Content $file.FullName | Measure-Object –Word).Words
         }
     
-        elseif ($file.Extension -match ".[txt|csv]" )
+        elseif ($file.Extension -match ".[txt|csv|md|log]" )
         {
             # COUNT WORDS IN TXT FILE
             [int]$wordcount = (Get-Content $file.FullName | Measure-Object –Word).Words
