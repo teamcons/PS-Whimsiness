@@ -71,7 +71,7 @@ Github Repo öffnen ?"
 [string]$text_button_load               = "Laden"
 [string]$text_button_close              = "Schließen"
 [string]$text_button_save               = "Speichern"
-
+[string]$text_keepontop                 = "Über allen Fenstern halten"
 
 # Need to use Word
 $word                                   = New-Object -ComObject Word.Application 
@@ -122,8 +122,8 @@ Add-Type -AssemblyName System.Drawing
 
 $form                   = New-Object System.Windows.Forms.Form
 $form.Text              = $APPNAME
-$form.Size              = New-Object System.Drawing.Size(360,($form_verticalalign + 40))
-$form.MinimumSize       = New-Object System.Drawing.Size(360,($form_verticalalign + 40))
+$form.Size              = New-Object System.Drawing.Size(350,($form_verticalalign + 40))
+$form.MinimumSize       = New-Object System.Drawing.Size(350,($form_verticalalign + 40))
 #$form.AutoSize         = $true
 $form.AutoScale         = $true
 $form.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
@@ -177,7 +177,7 @@ $form.Controls.Add($labelgrid)
 ## Configure the Gridview
 $sourcefiles                   = New-Object System.Windows.Forms.DataGridView
 $sourcefiles.Location          = New-Object System.Drawing.Size($form_leftalign,80)
-$sourcefiles.Size              = New-Object System.Drawing.Size(320,70)
+$sourcefiles.Size              = New-Object System.Drawing.Size(310,70)
 $sourcefiles.AutoSize = $true
 $sourcefiles.BackgroundColor = "White"
 $sourcefiles.Anchor = "Left,Bottom,Top,Right"
@@ -228,11 +228,21 @@ $form.Controls.Add($sourcefiles)
 $gui_panel = New-Object System.Windows.Forms.Panel
 $gui_panel.Left = 0
 $gui_panel.Top = ($form_verticalalign)
-$gui_panel.Width = 450
+$gui_panel.Width = 440
 $gui_panel.Height = 40
 $gui_panel.BackColor = '241,241,241'
 $gui_panel.Dock = "Bottom"
 #$gui_panel.Anchor = "Left,Bottom,Right"
+
+
+$gui_keepontop                           = New-Object System.Windows.Forms.Checkbox
+$gui_keepontop.Location                  = New-Object System.Drawing.Point(($form_leftalign),12)
+$gui_keepontop.Size                      = New-Object System.Drawing.Size(180,25)
+$gui_keepontop.Text                      = $text_keepontop
+$gui_keepontop.UseVisualStyleBackColor   = $True
+$gui_keepontop.Anchor                    = "Bottom,Left"
+$gui_keepontop.Checked                   = $form.Topmost
+$gui_keepontop.Add_Click({$form.Topmost = $gui_keepontop.Checked})
 
 # $gui_okButton                               = New-Object System.Windows.Forms.Button
 # $gui_okButton.Location                      = New-Object System.Drawing.Point(($form_leftalign + 180),10)
@@ -246,7 +256,7 @@ $gui_panel.Dock = "Bottom"
 # #[void]$form.Controls.Add($gui_okButton)
 
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
-$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 350),10)
+$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 340),10)
 $gui_cancelButton.Size                      = New-Object System.Drawing.Size(80,25)
 $gui_cancelButton.Text                      = $text_button_close
 $gui_cancelButton.UseVisualStyleBackColor   = $True
@@ -259,6 +269,7 @@ $gui_cancelButton.DialogResult              = [System.Windows.Forms.DialogResult
 
 
 #$gui_panel.Controls.Add($gui_okButton)
+$gui_panel.Controls.Add($gui_keepontop)
 $gui_panel.Controls.Add($gui_cancelButton)
 $gui_panel.Show()
 
