@@ -58,7 +58,7 @@ Write-Output "[STARTUP] Getting all variables in place"
 [string]$text_column_file               = "Datei"
 [string]$text_column_words              = "Wortzahl"
 [string]$text_column_proofreadtime      = "Std"
-[string]$text_totalsum                  = "SUMME"
+[string]$text_totalsum                  = "TOTAL"
 
 [string]$text_about = "CountingSheeps V1.0
 Wörter in datei lesen.
@@ -67,7 +67,7 @@ AGPL-3.0 Stella Ménier - stella.menier@gmx.de
 Github Repo öffnen ?"
 
 [string]$GITHUB_LINK                    = "https://github.com/teamcons/Skrivanek-CountingSheeps"
-[string]$text_label_how                 = "Einfach Drag and Drop benützen !"
+[string]$text_label_how                 = "Einfach mit Drag u. Drop Dateien ablegen!"
 [string]$text_button_load               = "Laden"
 [string]$text_button_close              = "Schließen"
 [string]$text_button_save               = "Speichern"
@@ -153,7 +153,7 @@ $form.controls.add($pictureBox)
 
 # LABEL AND TEXT
 $label                  = New-Object System.Windows.Forms.Label
-$label.Location         = New-Object System.Drawing.Point(($form_leftalign + 70),10) # leftalign+80 if icon
+$label.Location         = New-Object System.Drawing.Point(($form_leftalign + 70),20) # leftalign+80 if icon
 $label.Size             = New-Object System.Drawing.Size(180,20)
 $label.AutoSize         = $true
 $label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 11, [System.Drawing.FontStyle]::Bold)
@@ -168,8 +168,8 @@ $form.Controls.Add($label)
 # Label and button
 $labelgrid                  = New-Object System.Windows.Forms.Label
 $labelgrid.Text             = $text_label_how
-$labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
-$labelgrid.Location         = New-Object System.Drawing.Point(($form_leftalign + 70),30)
+$labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Italic)
+$labelgrid.Location         = New-Object System.Drawing.Point(($form_leftalign + 70),45)
 $labelgrid.Size             = New-Object System.Drawing.Size(250,20)
 $form.Controls.Add($labelgrid)
 
@@ -210,8 +210,7 @@ $sourcefiles.Columns[2].HeaderCell.Style.Alignment = "MiddleRight"
 # Add an image column. Has to be inserted afterward. Idk why
 $sourcefiles.Columns.Insert(0, $ImageColumn);
 $sourcefiles.Columns[0].Width = 32
-#$sourcefiles.Columns[0].Resizable = "False"
-#$sourcefiles.Columns[0].AutoSize = $false
+
 
 # Adding an image column adds a weird unremovable line. Use it for sum.
 #$ico =  ([System.Drawing.Icon]::ExtractAssociatedIcon("C:\\Program Files\\") ).ToBitmap()
@@ -394,11 +393,8 @@ exit
 Write-Output "sep=$SEP" | Out-File -FilePath "$ANALYSIS"
 Write-Output "Datei;Wörterzahl" | Out-File -FilePath "$ANALYSIS" -Append 
 
-
-
 # Finish CSV file, 
-Write-Output "SUMME;$totalcount" | Out-File -FilePath "$INFO\$ANALYSIS" -Append
-
+Write-Output "TOTAL;$totalcount" | Out-File -FilePath "$INFO\$ANALYSIS" -Append
 
 # Clipboard
 Set-Clipboard -Value $totalcount
