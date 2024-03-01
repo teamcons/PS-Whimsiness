@@ -115,15 +115,16 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [void] [System.Windows.Forms.Application]::EnableVisualStyles() 
 
-[int]$form_leftalign = 15
-[int]$form_verticalalign = 140
+[int]$form_leftalign = 10
+[int]$form_verticalalign = 200
 
 
 
 $form                   = New-Object System.Windows.Forms.Form
 $form.Text              = $APPNAME
-$form.Size              = New-Object System.Drawing.Size(360,($form_verticalalign + 80 ))
-$form.AutoSize          = $true
+$form.Size              = New-Object System.Drawing.Size(360,($form_verticalalign + 40))
+$form.MinimumSize       = New-Object System.Drawing.Size(360,($form_verticalalign + 40))
+#$form.AutoSize         = $true
 $form.AutoScale         = $true
 $form.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
 $form.StartPosition     = 'CenterScreen'
@@ -136,23 +137,23 @@ $form.AllowDrop = $True
 #$form.Opacity = .90
 
 # FANCY ICON
-#$pictureBox             = new-object Windows.Forms.PictureBox
-#$pictureBox.Location    = New-Object System.Drawing.Point($form_leftalign,10)
-#$img = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
-#$pictureBox.Width       = 64 #$img.Size.Width
-#$pictureBox.Height      = 64 #$img.Size.Height
-#$pictureBox.Image       = $img;
+$pictureBox             = new-object Windows.Forms.PictureBox
+$pictureBox.Location    = New-Object System.Drawing.Point($form_leftalign,10)
+$img = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
+$pictureBox.Width       = 64 #$img.Size.Width
+$pictureBox.Height      = 64 #$img.Size.Height
+$pictureBox.Image       = $img;
 #$pictureBox.Add_Click({
 #                    $Result = [System.Windows.Forms.MessageBox]::Show($text_about,$APPNAME,4,[System.Windows.Forms.MessageBoxIcon]::Information)
 #                    If ($Result -eq "Yes") { Start-Process $GITHUB_LINK } })
 
 
-#$form.controls.add($pictureBox)
+$form.controls.add($pictureBox)
 
 
 # LABEL AND TEXT
 $label                  = New-Object System.Windows.Forms.Label
-$label.Location         = New-Object System.Drawing.Point(($form_leftalign),10) # leftalign+80 if icon
+$label.Location         = New-Object System.Drawing.Point(($form_leftalign + 70),10) # leftalign+80 if icon
 $label.Size             = New-Object System.Drawing.Size(180,20)
 $label.AutoSize         = $true
 $label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 11, [System.Drawing.FontStyle]::Bold)
@@ -168,14 +169,14 @@ $form.Controls.Add($label)
 $labelgrid                  = New-Object System.Windows.Forms.Label
 $labelgrid.Text             = $text_label_how
 $labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
-$labelgrid.Location         = New-Object System.Drawing.Point(($form_leftalign),30)
+$labelgrid.Location         = New-Object System.Drawing.Point(($form_leftalign + 70),30)
 $labelgrid.Size             = New-Object System.Drawing.Size(250,20)
 $form.Controls.Add($labelgrid)
 
 
 ## Configure the Gridview
 $sourcefiles                   = New-Object System.Windows.Forms.DataGridView
-$sourcefiles.Location          = New-Object System.Drawing.Size($form_leftalign,60)
+$sourcefiles.Location          = New-Object System.Drawing.Size($form_leftalign,80)
 $sourcefiles.Size              = New-Object System.Drawing.Size(320,70)
 $sourcefiles.AutoSize = $true
 $sourcefiles.BackgroundColor = "White"
@@ -231,7 +232,8 @@ $gui_panel.Top = ($form_verticalalign)
 $gui_panel.Width = 450
 $gui_panel.Height = 40
 $gui_panel.BackColor = '241,241,241'
-$gui_panel.Anchor = "Left,Bottom,Right"
+$gui_panel.Dock = "Bottom"
+#$gui_panel.Anchor = "Left,Bottom,Right"
 
 # $gui_okButton                               = New-Object System.Windows.Forms.Button
 # $gui_okButton.Location                      = New-Object System.Drawing.Point(($form_leftalign + 180),10)
@@ -245,7 +247,7 @@ $gui_panel.Anchor = "Left,Bottom,Right"
 # #[void]$form.Controls.Add($gui_okButton)
 
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
-$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 240),10)
+$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 350),10)
 $gui_cancelButton.Size                      = New-Object System.Drawing.Size(80,25)
 $gui_cancelButton.Text                      = $text_button_close
 $gui_cancelButton.UseVisualStyleBackColor   = $True
