@@ -71,7 +71,7 @@ Github Repo öffnen ?"
 [string]$text_button_load               = "Laden"
 [string]$text_button_close              = "Schließen"
 [string]$text_button_save               = "Speichern"
-[string]$text_keepontop                 = "Über allen Fenstern halten"
+[string]$text_keepontop                 = "Über alle Fenster"
 
 # Need to use Word
 $word                                   = New-Object -ComObject Word.Application 
@@ -102,7 +102,7 @@ $iconBytes = [Convert]::FromBase64String($iconBase64)
 $stream = [System.IO.MemoryStream]::new($iconBytes, 0, $iconBytes.Length)
 
 # This way we can draw icons without having any external file
-
+$icon = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
 
 
 #==============================================================
@@ -121,7 +121,7 @@ Add-Type -AssemblyName System.Drawing
 [void] [System.Windows.Forms.Application]::EnableVisualStyles() 
 
 [int]$form_leftalign = 10
-[int]$form_verticalalign = 200
+[int]$form_verticalalign = 190
 
 
 
@@ -136,7 +136,7 @@ $form.StartPosition     = 'CenterScreen'
 $form.MaximizeBox       = $True
 $form.Topmost           = $True
 $form.BackColor         = "White"
-$form.Icon              = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
+$form.Icon              = $icon
 $form.AllowDrop = $True
 #$form.AllowTransparency = $false
 #$form.Opacity = .90
@@ -173,6 +173,7 @@ $form.Controls.Add($label)
 # Label and button
 $labelgrid                  = New-Object System.Windows.Forms.Label
 $labelgrid.Text             = $text_label_how
+$labelgrid.AutoSize         = $True
 $labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Italic)
 $labelgrid.Location         = New-Object System.Drawing.Point(($form_leftalign + 70),45)
 $labelgrid.Size             = New-Object System.Drawing.Size(250,20)
@@ -210,18 +211,13 @@ $sourcefiles.Columns[2].Width = 36
 $sourcefiles.Columns[2].DefaultCellStyle.Alignment = "MiddleRight" 
 $sourcefiles.Columns[2].HeaderCell.Style.Alignment = "MiddleRight" 
 
-
-
 # Add an image column. Has to be inserted afterward. Idk why
 $sourcefiles.Columns.Insert(0, $ImageColumn);
 $sourcefiles.Columns[0].Width = 32
 
-
 # Adding an image column adds a weird unremovable line. Use it for sum.
-$ico =  ([System.Drawing.Icon]::ExtractAssociatedIcon(([Environment]::GetCommandLineArgs()[0])) ).ToBitmap()
-
-$sourcefiles.Rows[0].Cells[0].Value = $ico
-
+$miniico =  ([System.Drawing.Icon]::ExtractAssociatedIcon(([Environment]::GetCommandLineArgs()[0])) ).ToBitmap()
+$sourcefiles.Rows[0].Cells[0].Value = $miniico
 
 [string]$sourcefiles.Rows[0].Cells[1].Value = $text_totalsum
 [int]$sourcefiles.Rows[0].Cells[2].Value = 0
@@ -237,46 +233,45 @@ $gui_panel = New-Object System.Windows.Forms.Panel
 $gui_panel.Left = 0
 $gui_panel.Top = ($form_verticalalign)
 $gui_panel.Width = 440
-$gui_panel.Height = 40
+$gui_panel.Height = 35
 $gui_panel.BackColor = '241,241,241'
 $gui_panel.Dock = "Bottom"
 #$gui_panel.Anchor = "Left,Bottom,Right"
 
 
 $gui_keepontop                           = New-Object System.Windows.Forms.Checkbox
-$gui_keepontop.Location                  = New-Object System.Drawing.Point(($form_leftalign),12)
-$gui_keepontop.Size                      = New-Object System.Drawing.Size(180,25)
+$gui_keepontop.Location                  = New-Object System.Drawing.Point(($form_leftalign),10)
+$gui_keepontop.Size                      = New-Object System.Drawing.Size(120,20)
 $gui_keepontop.Text                      = $text_keepontop
 $gui_keepontop.UseVisualStyleBackColor   = $True
 $gui_keepontop.Anchor                    = "Bottom,Left"
 $gui_keepontop.Checked                   = $form.Topmost
 $gui_keepontop.Add_Click({$form.Topmost = $gui_keepontop.Checked})
 
-# $gui_okButton                               = New-Object System.Windows.Forms.Button
-# $gui_okButton.Location                      = New-Object System.Drawing.Point(($form_leftalign + 180),10)
-# $gui_okButton.Size                          = New-Object System.Drawing.Size(80,25)
-# $gui_okButton.Text                          = $text_button_save
-# $gui_okButton.UseVisualStyleBackColor       = $True
-# #$gui_okButton.BackColor                     = ”Green”
-# #$gui_okButton.ForeColor                     = ”White”
-# $gui_okButton.DialogResult                  = [System.Windows.Forms.DialogResult]::OK
-# #$form.AcceptButton                          = $gui_okButton
-# #[void]$form.Controls.Add($gui_okButton)
+$gui_okButton                               = New-Object System.Windows.Forms.Button
+$gui_okButton.Location                      = New-Object System.Drawing.Point(($form_leftalign + 275),7)
+$gui_okButton.Size                          = New-Object System.Drawing.Size(70,23)
+$gui_okButton.Text                          = $text_button_save
+$gui_okButton.UseVisualStyleBackColor       = $True
+$gui_okButton.Anchor                        = "Bottom,Right"
+#$gui_okButton.BackColor                     = ”Green”
+$gui_okButton.DialogResult                  = [System.Windows.Forms.DialogResult]::OK
+$form.AcceptButton                          = $gui_okButton
+[void]$form.Controls.Add($gui_okButton)
 
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
-$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 340),10)
-$gui_cancelButton.Size                      = New-Object System.Drawing.Size(80,25)
+$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 350),7)
+$gui_cancelButton.Size                      = New-Object System.Drawing.Size(70,23)
 $gui_cancelButton.Text                      = $text_button_close
 $gui_cancelButton.UseVisualStyleBackColor   = $True
 $gui_cancelButton.Anchor                    = "Bottom,Right"
 #$gui_cancelButton.BackColor                  = ”Red”
-#$gui_cancelButton.ForeColor                  = ”White”
 $gui_cancelButton.DialogResult              = [System.Windows.Forms.DialogResult]::Cancel
-#$form.CancelButton                          = $gui_cancelButton
+$form.CancelButton                          = $gui_cancelButton
 #[void]$form.Controls.Add($gui_cancelButton)
 
 
-#$gui_panel.Controls.Add($gui_okButton)
+$gui_panel.Controls.Add($gui_okButton)
 $gui_panel.Controls.Add($gui_keepontop)
 $gui_panel.Controls.Add($gui_cancelButton)
 $gui_panel.Show()
@@ -361,6 +356,10 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
         $sourcefiles.Rows[ ($sourcefiles.Rows.Count - 1) ].Cells[3].Value += $proofreadtime
 
         $sourcefiles.Rows.Add($ico,$file.Name,$wordcount,$proofreadtime);
+
+        $form.Height = ($form.Height + 30)
+
+
 
 	} # End of processing list
     
