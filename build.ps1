@@ -14,7 +14,7 @@ ps2exe `
 -title "CountingSheeps" `
 -description "Count words quick !" `
 -company "Skrivanek GmbH" `
--copyright "GPL-V3 Stella - stella.menier@gmx.de" `
+-copyright "GPL-3.0 Stella - stella.menier@gmx.de" `
 -version 0.9 `
 -Verbose `
 -outputFile $ScriptPath\countingsheeps.exe

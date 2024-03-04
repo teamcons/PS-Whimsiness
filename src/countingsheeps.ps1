@@ -61,7 +61,6 @@ Write-Output "[STARTUP] Getting all variables in place"
 [string]$text_totalsum                  = "TOTAL"
 
 [string]$text_about = "CountingSheeps V0.9
-Wörter in datei lesen.
 GPL-3.0 Stella Ménier - stella.menier@gmx.de
 Die Projektseite auf Github öffnen?"
 
@@ -87,6 +86,11 @@ else
     {$global:ScriptPath = Split-Path -Parent -Path ([Environment]::GetCommandLineArgs()[0]) 
     if (!$ScriptPath){ $global:ScriptPath = "." } }
 
+
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+[void] [System.Windows.Forms.Application]::EnableVisualStyles() 
+
 #================================
 # Project icon in Base 64
 # [Convert]::ToBase64String((Get-Content "..\assets\Skrivanek-Rocketlaunch-Icon.ico" -Encoding Byte))
@@ -109,7 +113,7 @@ function Save-CSV([string] $initialDirectory)
 {   
     $OpenFileDialog = New-Object System.Windows.Forms.SaveFileDialog
     $OpenFileDialog.initialDirectory = $initialDirectory
-    $OpenFileDialog.filter = "Comma Separated Value files (*.csv)|*.csv|All files (*.*)|*.*"
+    $OpenFileDialog.filter = "Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*"
     $OpenFileDialog.ShowDialog() |  Out-Null
     return $OpenFileDialog.filename
 }
@@ -118,7 +122,7 @@ function Save-CSV([string] $initialDirectory)
 function saveeverything
     {
 
-    $analysisfile = Save-CSV $env:userprofile
+    $analysisfile = Save-CSV $ScriptPath
     # Cancel culture : Drop everything if cancel
     if ($analysisfile -eq "")
         { Write-Output "[INPUT] Got Cancel. Aw. Exit." ; exit }
@@ -152,9 +156,7 @@ function saveeverything
 #================
 #= INITIAL WORK =
 
-Add-Type -AssemblyName System.Windows.Forms
-Add-Type -AssemblyName System.Drawing
-[void] [System.Windows.Forms.Application]::EnableVisualStyles() 
+
 
 [int]$MainWindow_leftalign = 10
 [int]$MainWindow_verticalalign = 190
@@ -285,8 +287,8 @@ $gui_keepontop.Checked                   = $MainWindow.Topmost
 $gui_keepontop.Add_Click({$MainWindow.Topmost = $gui_keepontop.Checked})
 
 $gui_saveButton                               = New-Object System.Windows.Forms.Button
-$gui_saveButton.Location                      = New-Object System.Drawing.Point(($MainWindow_leftalign + 265),7)
-$gui_saveButton.Size                          = New-Object System.Drawing.Size(75,23)
+$gui_saveButton.Location                      = New-Object System.Drawing.Point(($MainWindow_leftalign + 255),7)
+$gui_saveButton.Size                          = New-Object System.Drawing.Size(80,23)
 $gui_saveButton.Text                          = $text_button_save
 $gui_saveButton.UseVisualStyleBackColor       = $True
 $gui_saveButton.Anchor                        = "Bottom,Right"
@@ -295,8 +297,8 @@ $gui_saveButton.Add_Click({saveeverything})
 
 
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
-$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($MainWindow_leftalign + 345),7)
-$gui_cancelButton.Size                      = New-Object System.Drawing.Size(75,23)
+$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($MainWindow_leftalign + 340),7)
+$gui_cancelButton.Size                      = New-Object System.Drawing.Size(80,23)
 $gui_cancelButton.Text                      = $text_button_close
 $gui_cancelButton.UseVisualStyleBackColor   = $True
 $gui_cancelButton.Anchor                    = "Bottom,Right"
