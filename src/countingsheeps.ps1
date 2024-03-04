@@ -248,19 +248,19 @@ $gui_keepontop.Checked                   = $form.Topmost
 $gui_keepontop.Add_Click({$form.Topmost = $gui_keepontop.Checked})
 
 $gui_okButton                               = New-Object System.Windows.Forms.Button
-$gui_okButton.Location                      = New-Object System.Drawing.Point(($form_leftalign + 275),7)
-$gui_okButton.Size                          = New-Object System.Drawing.Size(70,23)
+$gui_okButton.Location                      = New-Object System.Drawing.Point(($form_leftalign + 265),7)
+$gui_okButton.Size                          = New-Object System.Drawing.Size(75,23)
 $gui_okButton.Text                          = $text_button_save
 $gui_okButton.UseVisualStyleBackColor       = $True
 $gui_okButton.Anchor                        = "Bottom,Right"
 #$gui_okButton.BackColor                     = ”Green”
 $gui_okButton.DialogResult                  = [System.Windows.Forms.DialogResult]::OK
 $form.AcceptButton                          = $gui_okButton
-[void]$form.Controls.Add($gui_okButton)
+#[void]$form.Controls.Add($gui_okButton)
 
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
-$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 350),7)
-$gui_cancelButton.Size                      = New-Object System.Drawing.Size(70,23)
+$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 345),7)
+$gui_cancelButton.Size                      = New-Object System.Drawing.Size(75,23)
 $gui_cancelButton.Text                      = $text_button_close
 $gui_cancelButton.UseVisualStyleBackColor   = $True
 $gui_cancelButton.Anchor                    = "Bottom,Right"
@@ -270,7 +270,7 @@ $form.CancelButton                          = $gui_cancelButton
 #[void]$form.Controls.Add($gui_cancelButton)
 
 
-$gui_panel.Controls.Add($gui_okButton)
+#$gui_panel.Controls.Add($gui_okButton)
 $gui_panel.Controls.Add($gui_keepontop)
 $gui_panel.Controls.Add($gui_cancelButton)
 $gui_panel.Show()
