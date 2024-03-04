@@ -62,7 +62,7 @@ Write-Output "[STARTUP] Getting all variables in place"
 
 [string]$text_about = "CountingSheeps V0.9
 Wörter in datei lesen.
-AGPL-3.0 Stella Ménier - stella.menier@gmx.de
+GPL-3.0 Stella Ménier - stella.menier@gmx.de
 Die Projektseite auf Github öffnen?"
 
 [string]$GITHUB_LINK                    = "https://github.com/teamcons/Skrivanek-CountingSheeps"
