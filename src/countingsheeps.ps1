@@ -78,6 +78,11 @@ else
     if (!$ScriptPath){ $global:ScriptPath = "." } }
 
 
+
+$script:word = New-Object -ComObject Word.Application
+$script:excel = New-Object -ComObject Excel.Application
+$script:powerpoint = New-Object -ComObject Powerpoint.Application
+
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [void] [System.Windows.Forms.Application]::EnableVisualStyles() 
@@ -343,6 +348,7 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
         }
         elseif ($file.Extension -match ".xls[|x]" )
         {
+
             # OPEN IN EXCEL, PROCESS COUNT
             $filecontent = $excel.Documents.Open($file.FullName)
             [int]$wordcount = $filecontent.ComputeStatistics([Microsoft.Office.Interop.Excel.WdStatistic]::wdStatisticWords)
@@ -376,14 +382,14 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
             
         # Update totalcount
         $ico =  ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
-
         $proofreadtime = [math]::round(($wordcount / $WORDS_PER_HOUR),$DECIMALS)
 
+        # Add
         $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[2].Value += $wordcount
         $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[3].Value += $proofreadtime
-
         $datagridview.Rows.Add($ico,$file.Name,$wordcount,$proofreadtime);
 
+        # HIGHER
         $MainWindow.Height = ($MainWindow.Height + 30)
 
 
@@ -430,15 +436,6 @@ $MainWindow.Add_FormClosed($MainWindow_FormClosed)
 #                     Processing Le input                     =
 #==============================================================
 
-#$MainWindow.add_Shown({ 
-    # Need to use Word
-    $word                                   = New-Object -ComObject Word.Application 
-    $excel                                  = New-Object -ComObject Excel.Application 
-    $powerpoint                             = New-Object -ComObject Powerpoint.Application 
-    $word.Visible                           = $false 
-    $excel.Visible                          = $false 
-    #$powerpoint.Visible = $false 
-#} )
 
 $MainWindow.ShowDialog()
 
