@@ -104,6 +104,43 @@ $stream = [System.IO.MemoryStream]::new($iconBytes, 0, $iconBytes.Length)
 $icon = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
 
 
+
+function Save-CSV([string] $initialDirectory)
+{   
+    $OpenFileDialog = New-Object System.Windows.Forms.SaveFileDialog
+    $OpenFileDialog.initialDirectory = $initialDirectory
+    $OpenFileDialog.filter = "Comma Separated Value files (*.csv)|*.csv|All files (*.*)|*.*"
+    $OpenFileDialog.ShowDialog() |  Out-Null
+    return $OpenFileDialog.filename
+}
+
+
+function saveeverything
+    {
+
+    $analysisfile = Save-CSV $env:userprofile
+    # Cancel culture : Drop everything if cancel
+    if ($analysisfile -eq "")
+        { Write-Output "[INPUT] Got Cancel. Aw. Exit." ; exit }
+
+
+    # Create the CSV, specify separator to avoid issues opening the csv in your fav office software
+    Write-Output "sep=$SEP" | Out-File -FilePath "$analysisfile"
+
+    # Add column headers
+    $top = -join($datagridview.Columns[1].Name,$SEP,$datagridview.Columns[2].Name,$SEP,$datagridview.Columns[3].Name,$SEP)
+    Write-Output $top | Out-File -FilePath "$analysisfile" -Append 
+
+
+    # Rebuild and append each line
+    foreach ($row in $datagridview.Rows )
+    {
+        $line = -join($row[0].Cells[1].Value,$SEP,$row[0].Cells[2].Value,$SEP,$row[0].Cells[3].Value,$SEP)
+        Write-Output $line | Out-File -FilePath "$analysisfile" -Append
+    }
+}
+
+
 #==============================================================
 #                GUI - Ask the Right Questions                =
 #==============================================================
@@ -186,7 +223,6 @@ $datagridview.Size              = New-Object System.Drawing.Size(310,70)
 $datagridview.AutoSize = $true
 $datagridview.BackgroundColor = "White"
 $datagridview.Anchor = "Left,Bottom,Top,Right"
-
 $datagridview.AllowDrop = $True
 $datagridview.ColumnCount = 3
 $datagridview.ColumnHeadersVisible = $true
@@ -195,7 +231,7 @@ $datagridview.ReadOnly = $true
 $datagridview.AutoSizeRowsMode = "AllCells"
 $datagridview.AutoSizeColumnsMode = "Fill"
 $datagridview.AllowUserToAddRows = "False"
-
+$datagridview.AllowUserToDeleteRows = $true
 
 $datagridview.Columns[0].Name = $text_column_file
 $datagridview.Columns[0].Width = 120
@@ -248,16 +284,15 @@ $gui_keepontop.Anchor                    = "Bottom,Left"
 $gui_keepontop.Checked                   = $MainWindow.Topmost
 $gui_keepontop.Add_Click({$MainWindow.Topmost = $gui_keepontop.Checked})
 
-$gui_okButton                               = New-Object System.Windows.Forms.Button
-$gui_okButton.Location                      = New-Object System.Drawing.Point(($MainWindow_leftalign + 265),7)
-$gui_okButton.Size                          = New-Object System.Drawing.Size(75,23)
-$gui_okButton.Text                          = $text_button_save
-$gui_okButton.UseVisualStyleBackColor       = $True
-$gui_okButton.Anchor                        = "Bottom,Right"
+$gui_saveButton                               = New-Object System.Windows.Forms.Button
+$gui_saveButton.Location                      = New-Object System.Drawing.Point(($MainWindow_leftalign + 265),7)
+$gui_saveButton.Size                          = New-Object System.Drawing.Size(75,23)
+$gui_saveButton.Text                          = $text_button_save
+$gui_saveButton.UseVisualStyleBackColor       = $True
+$gui_saveButton.Anchor                        = "Bottom,Right"
 #$gui_okButton.BackColor                     = ”Green”
-$gui_okButton.DialogResult                  = [System.Windows.Forms.DialogResult]::OK
-$MainWindow.AcceptButton                          = $gui_okButton
-#[void]$MainWindow.Controls.Add($gui_okButton)
+$gui_saveButton.Add_Click({saveeverything})
+
 
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
 $gui_cancelButton.Location                  = New-Object System.Drawing.Point(($MainWindow_leftalign + 345),7)
@@ -268,10 +303,9 @@ $gui_cancelButton.Anchor                    = "Bottom,Right"
 #$gui_cancelButton.BackColor                  = ”Red”
 $gui_cancelButton.DialogResult              = [System.Windows.Forms.DialogResult]::Cancel
 $MainWindow.CancelButton                          = $gui_cancelButton
-#[void]$MainWindow.Controls.Add($gui_cancelButton)
 
 
-#$gui_panel.Controls.Add($gui_okButton)
+$gui_panel.Controls.Add($gui_saveButton)
 $gui_panel.Controls.Add($gui_keepontop)
 $gui_panel.Controls.Add($gui_cancelButton)
 $gui_panel.Show()
@@ -403,47 +437,14 @@ $MainWindow.Add_FormClosed($MainWindow_FormClosed)
 #                     Processing Le input                     =
 #==============================================================
 
-<# function Rebuild-Table {
-    param($Datagridview)
-    $table = New-Object System.Data.DataTable
 
-    foreach ($row in (Select-Object -Skip 1 $Datagridview.Rows) )
-    {
-
-        $table.Rows.Add($row)
-
-    }
-
-    return $table
-
-} #>
+$MainWindow.ShowDialog()
 
 
-
-$result = $MainWindow.ShowDialog()
-
-# Cancel culture : Close if cancel
-if ($result -eq [System.Windows.Forms.DialogResult]::Cancel)
-    { Write-Output "[INPUT] Got Cancel. Aw. Exit." ; exit }
-
-
-#Rebuild-Table $datagridview
-
-
-
-exit
-
-
-# Create the CSV
-Write-Output "sep=$SEP" | Out-File -FilePath "$ANALYSIS"
-Write-Output "Datei;Wörterzahl" | Out-File -FilePath "$ANALYSIS" -Append 
-
-# Finish CSV file, 
-Write-Output "TOTAL;$totalcount" | Out-File -FilePath "$INFO\$ANALYSIS" -Append
 
 # Clipboard
-Set-Clipboard -Value $totalcount
-Write-Output "[ACTION] Set clipboard to $totalcount"
+#Set-Clipboard -Value $totalcount
+#Write-Output '[ACTION] Set clipboard to $wordcount'
 
 
 
