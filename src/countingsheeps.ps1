@@ -69,13 +69,6 @@ Projektseite auf Github öffnen?"
 [string]$text_button_save               = "Speichern"
 [string]$text_keepontop                 = "Über alle Fenster"
 
-# Need to use Word
-$word                                   = New-Object -ComObject Word.Application 
-$excel                                  = New-Object -ComObject Excel.Application 
-$powerpoint                             = New-Object -ComObject Powerpoint.Application 
-$word.Visible                           = $false 
-$excel.Visible                          = $false 
-#$powerpoint.Visible = $false 
 
 
 if ($MyInvocation.MyCommand.CommandType -eq "ExternalScript")
@@ -437,6 +430,15 @@ $MainWindow.Add_FormClosed($MainWindow_FormClosed)
 #                     Processing Le input                     =
 #==============================================================
 
+#$MainWindow.add_Shown({ 
+    # Need to use Word
+    $word                                   = New-Object -ComObject Word.Application 
+    $excel                                  = New-Object -ComObject Excel.Application 
+    $powerpoint                             = New-Object -ComObject Powerpoint.Application 
+    $word.Visible                           = $false 
+    $excel.Visible                          = $false 
+    #$powerpoint.Visible = $false 
+#} )
 
 $MainWindow.ShowDialog()
 
