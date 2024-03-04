@@ -1,13 +1,10 @@
 
 # CountingSheeps
-Just a powershell script i use at work, as right-click option.
 
-It just looks for the context a file is invoked upon.
-And then renames it/moves it/whatevers it according to our internal conventions.
+Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
 
-Im learning powershell as i write and expand it. Its bound to have some ugly and some clever code.
+Its not great for PDF, but everything else it rocks, and you can even save it
 
-The manual is for coworkers who may want to use it.
 
 <div align="center">
     <img src="https://github.com/teamcons/Skrivanek-CountingSheeps/blob/main/img/Screenshot App.png" /></td>
@@ -17,6 +14,7 @@ The manual is for coworkers who may want to use it.
 # Super Skrivanek Suite
 
 Its part of the suite of softwarescripts we did for our workplace because its relevant there for us.
+
 
 # Some more stuff
 
