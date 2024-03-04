@@ -119,30 +119,30 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [void] [System.Windows.Forms.Application]::EnableVisualStyles() 
 
-[int]$form_leftalign = 10
-[int]$form_verticalalign = 190
+[int]$MainWindow_leftalign = 10
+[int]$MainWindow_verticalalign = 190
 
 
 
-$form                   = New-Object System.Windows.Forms.Form
-$form.Text              = $APPNAME
-$form.Size              = New-Object System.Drawing.Size(345,($form_verticalalign + 40))
-$form.MinimumSize       = New-Object System.Drawing.Size(345,($form_verticalalign + 40))
-#$form.AutoSize         = $true
-$form.AutoScale         = $true
-$form.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
-$form.StartPosition     = 'CenterScreen'
-$form.MaximizeBox       = $True
-$form.Topmost           = $True
-$form.BackColor         = "White"
-$form.Icon              = $icon
-$form.AllowDrop = $True
-#$form.AllowTransparency = $false
-#$form.Opacity = .90
+$MainWindow                   = New-Object System.Windows.Forms.Form
+$MainWindow.Text              = $APPNAME
+$MainWindow.Size              = New-Object System.Drawing.Size(345,($MainWindow_verticalalign + 40))
+$MainWindow.MinimumSize       = New-Object System.Drawing.Size(345,($MainWindow_verticalalign + 20))
+#$MainWindow.AutoSize         = $true
+$MainWindow.AutoScale         = $true
+$MainWindow.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
+$MainWindow.StartPosition     = 'CenterScreen'
+$MainWindow.MaximizeBox       = $True
+$MainWindow.Topmost           = $True
+$MainWindow.BackColor         = "White"
+$MainWindow.Icon              = $icon
+$MainWindow.AllowDrop = $True
+#$MainWindow.AllowTransparency = $false
+#$MainWindow.Opacity = .90
 
 # FANCY ICON
 $pictureBox             = new-object Windows.Forms.PictureBox
-$pictureBox.Location    = New-Object System.Drawing.Point($form_leftalign,10)
+$pictureBox.Location    = New-Object System.Drawing.Point($MainWindow_leftalign,10)
 $img = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
 $pictureBox.Width       = 64 #$img.Size.Width
 $pictureBox.Height      = 64 #$img.Size.Height
@@ -152,17 +152,17 @@ $pictureBox.Add_Click({
                     If ($Result -eq "Yes") { Start-Process $GITHUB_LINK } })
 
 
-$form.controls.add($pictureBox)
+$MainWindow.controls.add($pictureBox)
 
 
 # LABEL AND TEXT
 $label                  = New-Object System.Windows.Forms.Label
-$label.Location         = New-Object System.Drawing.Point(($form_leftalign + 70),20) # leftalign+80 if icon
+$label.Location         = New-Object System.Drawing.Point(($MainWindow_leftalign + 70),20) # leftalign+80 if icon
 $label.Size             = New-Object System.Drawing.Size(180,20)
 $label.AutoSize         = $true
 $label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 11, [System.Drawing.FontStyle]::Bold)
 $label.Text             = $APPNAME
-$form.Controls.Add($label)
+$MainWindow.Controls.Add($label)
 
 
 #===============================================
@@ -174,55 +174,56 @@ $labelgrid                  = New-Object System.Windows.Forms.Label
 $labelgrid.Text             = $text_label_how
 $labelgrid.AutoSize         = $True
 $labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Italic)
-$labelgrid.Location         = New-Object System.Drawing.Point(($form_leftalign + 70),45)
+$labelgrid.Location         = New-Object System.Drawing.Point(($MainWindow_leftalign + 70),45)
 $labelgrid.Size             = New-Object System.Drawing.Size(250,20)
-$form.Controls.Add($labelgrid)
+$MainWindow.Controls.Add($labelgrid)
 
 
 ## Configure the Gridview
-$sourcefiles                   = New-Object System.Windows.Forms.DataGridView
-$sourcefiles.Location          = New-Object System.Drawing.Size($form_leftalign,80)
-$sourcefiles.Size              = New-Object System.Drawing.Size(310,70)
-$sourcefiles.AutoSize = $true
-$sourcefiles.BackgroundColor = "White"
-$sourcefiles.Anchor = "Left,Bottom,Top,Right"
+$datagridview                   = New-Object System.Windows.Forms.DataGridView
+$datagridview.Location          = New-Object System.Drawing.Size($MainWindow_leftalign,80)
+$datagridview.Size              = New-Object System.Drawing.Size(310,70)
+$datagridview.AutoSize = $true
+$datagridview.BackgroundColor = "White"
+$datagridview.Anchor = "Left,Bottom,Top,Right"
 
-$sourcefiles.AllowDrop = $True
-$sourcefiles.ColumnCount = 3
-$sourcefiles.ColumnHeadersVisible = $true
-$sourcefiles.RowHeadersVisible = $false
-$sourcefiles.ReadOnly = $true
-$sourcefiles.AutoSizeRowsMode = "AllCells"
-$sourcefiles.AutoSizeColumnsMode = "Fill"
-$sourcefiles.AllowUserToAddRows = "False"
-$ImageColumn = New-Object System.Windows.Forms.DataGridViewImageColumn
+$datagridview.AllowDrop = $True
+$datagridview.ColumnCount = 3
+$datagridview.ColumnHeadersVisible = $true
+$datagridview.RowHeadersVisible = $false
+$datagridview.ReadOnly = $true
+$datagridview.AutoSizeRowsMode = "AllCells"
+$datagridview.AutoSizeColumnsMode = "Fill"
+$datagridview.AllowUserToAddRows = "False"
 
-$sourcefiles.Columns[0].Name = $text_column_file
-$sourcefiles.Columns[0].Width = 120
 
-$sourcefiles.Columns[1].Name = $text_column_words
-$sourcefiles.Columns[1].Width = 36
-$sourcefiles.Columns[1].DefaultCellStyle.Alignment = "MiddleRight" 
-$sourcefiles.Columns[1].HeaderCell.Style.Alignment = "MiddleRight" 
+$datagridview.Columns[0].Name = $text_column_file
+$datagridview.Columns[0].Width = 120
 
-$sourcefiles.Columns[2].Name = $text_column_proofreadtime
-$sourcefiles.Columns[2].Width = 36
-$sourcefiles.Columns[2].DefaultCellStyle.Alignment = "MiddleRight" 
-$sourcefiles.Columns[2].HeaderCell.Style.Alignment = "MiddleRight" 
+$datagridview.Columns[1].Name = $text_column_words
+$datagridview.Columns[1].Width = 36
+$datagridview.Columns[1].DefaultCellStyle.Alignment = "MiddleRight" 
+$datagridview.Columns[1].HeaderCell.Style.Alignment = "MiddleRight" 
+
+$datagridview.Columns[2].Name = $text_column_proofreadtime
+$datagridview.Columns[2].Width = 36
+$datagridview.Columns[2].DefaultCellStyle.Alignment = "MiddleRight" 
+$datagridview.Columns[2].HeaderCell.Style.Alignment = "MiddleRight" 
 
 # Add an image column. Has to be inserted afterward. Idk why
-$sourcefiles.Columns.Insert(0, $ImageColumn);
-$sourcefiles.Columns[0].Width = 32
+$ImageColumn = New-Object System.Windows.Forms.DataGridViewImageColumn
+$datagridview.Columns.Insert(0, $ImageColumn);
+$datagridview.Columns[0].Width = 32
 
 # Adding an image column adds a weird unremovable line. Use it for sum.
 $miniico =  ([System.Drawing.Icon]::ExtractAssociatedIcon(([Environment]::GetCommandLineArgs()[0])) ).ToBitmap()
-$sourcefiles.Rows[0].Cells[0].Value = $miniico
+$datagridview.Rows[0].Cells[0].Value = $miniico
 
-[string]$sourcefiles.Rows[0].Cells[1].Value = $text_totalsum
-[int]$sourcefiles.Rows[0].Cells[2].Value = 0
-[int]$sourcefiles.Rows[0].Cells[3].Value = 0
+[string]$datagridview.Rows[0].Cells[1].Value = $text_totalsum
+[int]$datagridview.Rows[0].Cells[2].Value = 0
+[int]$datagridview.Rows[0].Cells[3].Value = 0
 
-$form.Controls.Add($sourcefiles)
+$MainWindow.Controls.Add($datagridview)
 
 #===================================================
 #                GUI - Down Buttons                =
@@ -230,7 +231,7 @@ $form.Controls.Add($sourcefiles)
 
 $gui_panel = New-Object System.Windows.Forms.Panel
 $gui_panel.Left = 0
-$gui_panel.Top = ($form_verticalalign)
+$gui_panel.Top = ($MainWindow_verticalalign)
 $gui_panel.Width = 440
 $gui_panel.Height = 35
 $gui_panel.BackColor = '241,241,241'
@@ -239,35 +240,35 @@ $gui_panel.Dock = "Bottom"
 
 
 $gui_keepontop                           = New-Object System.Windows.Forms.Checkbox
-$gui_keepontop.Location                  = New-Object System.Drawing.Point(($form_leftalign),10)
+$gui_keepontop.Location                  = New-Object System.Drawing.Point(($MainWindow_leftalign),9)
 $gui_keepontop.Size                      = New-Object System.Drawing.Size(120,20)
 $gui_keepontop.Text                      = $text_keepontop
 $gui_keepontop.UseVisualStyleBackColor   = $True
 $gui_keepontop.Anchor                    = "Bottom,Left"
-$gui_keepontop.Checked                   = $form.Topmost
-$gui_keepontop.Add_Click({$form.Topmost = $gui_keepontop.Checked})
+$gui_keepontop.Checked                   = $MainWindow.Topmost
+$gui_keepontop.Add_Click({$MainWindow.Topmost = $gui_keepontop.Checked})
 
 $gui_okButton                               = New-Object System.Windows.Forms.Button
-$gui_okButton.Location                      = New-Object System.Drawing.Point(($form_leftalign + 265),7)
+$gui_okButton.Location                      = New-Object System.Drawing.Point(($MainWindow_leftalign + 265),7)
 $gui_okButton.Size                          = New-Object System.Drawing.Size(75,23)
 $gui_okButton.Text                          = $text_button_save
 $gui_okButton.UseVisualStyleBackColor       = $True
 $gui_okButton.Anchor                        = "Bottom,Right"
 #$gui_okButton.BackColor                     = ”Green”
 $gui_okButton.DialogResult                  = [System.Windows.Forms.DialogResult]::OK
-$form.AcceptButton                          = $gui_okButton
-#[void]$form.Controls.Add($gui_okButton)
+$MainWindow.AcceptButton                          = $gui_okButton
+#[void]$MainWindow.Controls.Add($gui_okButton)
 
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
-$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($form_leftalign + 345),7)
+$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($MainWindow_leftalign + 345),7)
 $gui_cancelButton.Size                      = New-Object System.Drawing.Size(75,23)
 $gui_cancelButton.Text                      = $text_button_close
 $gui_cancelButton.UseVisualStyleBackColor   = $True
 $gui_cancelButton.Anchor                    = "Bottom,Right"
 #$gui_cancelButton.BackColor                  = ”Red”
 $gui_cancelButton.DialogResult              = [System.Windows.Forms.DialogResult]::Cancel
-$form.CancelButton                          = $gui_cancelButton
-#[void]$form.Controls.Add($gui_cancelButton)
+$MainWindow.CancelButton                          = $gui_cancelButton
+#[void]$MainWindow.Controls.Add($gui_cancelButton)
 
 
 #$gui_panel.Controls.Add($gui_okButton)
@@ -275,7 +276,7 @@ $gui_panel.Controls.Add($gui_keepontop)
 $gui_panel.Controls.Add($gui_cancelButton)
 $gui_panel.Show()
 
-[void]$form.Controls.Add($gui_panel)
+[void]$MainWindow.Controls.Add($gui_panel)
 
 
 
@@ -351,12 +352,12 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
 
         $proofreadtime = [math]::round(($wordcount / $WORDS_PER_HOUR),$DECIMALS)
 
-        $sourcefiles.Rows[ ($sourcefiles.Rows.Count - 1) ].Cells[2].Value += $wordcount
-        $sourcefiles.Rows[ ($sourcefiles.Rows.Count - 1) ].Cells[3].Value += $proofreadtime
+        $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[2].Value += $wordcount
+        $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[3].Value += $proofreadtime
 
-        $sourcefiles.Rows.Add($ico,$file.Name,$wordcount,$proofreadtime);
+        $datagridview.Rows.Add($ico,$file.Name,$wordcount,$proofreadtime);
 
-        $form.Height = ($form.Height + 30)
+        $MainWindow.Height = ($MainWindow.Height + 30)
 
 
 
@@ -367,14 +368,14 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
 
 
 
-$form_FormClosed = {
+$MainWindow_FormClosed = {
 	try
     {
-        $sourcefiles.remove_Click($button_Click)
-		$sourcefiles.remove_DragOver($DragOver)
-		$sourcefiles.remove_DragDrop($DragDrop)
-        $sourcefiles.remove_DragDrop($DragDrop)
-		$form.remove_FormClosed($Form_Cleanup_FormClosed)
+        $datagridview.remove_Click($button_Click)
+		$datagridview.remove_DragOver($DragOver)
+		$datagridview.remove_DragDrop($DragDrop)
+        $datagridview.remove_DragDrop($DragDrop)
+		$MainWindow.remove_FormClosed($MainWindow_Cleanup_FormClosed)
 
         # Wont need Word anymore
         $word.Quit()
@@ -391,20 +392,47 @@ $form_FormClosed = {
 ### Wire up events ###
  
 #$button.Add_Click($button_Click)
-$sourcefiles.Add_DragOver($DragOver)
-$sourcefiles.Add_DragDrop($DragDrop)
-$form.Add_DragOver($DragOver)
-$form.Add_DragDrop($DragDrop)
-$form.Add_FormClosed($form_FormClosed)
+$datagridview.Add_DragOver($DragOver)
+$datagridview.Add_DragDrop($DragDrop)
+$MainWindow.Add_DragOver($DragOver)
+$MainWindow.Add_DragDrop($DragDrop)
+$MainWindow.Add_FormClosed($MainWindow_FormClosed)
  
-[void] $form.ShowDialog()
-
-
-exit
 
 #==============================================================
 #                     Processing Le input                     =
 #==============================================================
+
+<# function Rebuild-Table {
+    param($Datagridview)
+    $table = New-Object System.Data.DataTable
+
+    foreach ($row in (Select-Object -Skip 1 $Datagridview.Rows) )
+    {
+
+        $table.Rows.Add($row)
+
+    }
+
+    return $table
+
+} #>
+
+
+
+$result = $MainWindow.ShowDialog()
+
+# Cancel culture : Close if cancel
+if ($result -eq [System.Windows.Forms.DialogResult]::Cancel)
+    { Write-Output "[INPUT] Got Cancel. Aw. Exit." ; exit }
+
+
+#Rebuild-Table $datagridview
+
+
+
+exit
+
 
 # Create the CSV
 Write-Output "sep=$SEP" | Out-File -FilePath "$ANALYSIS"
