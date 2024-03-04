@@ -60,11 +60,10 @@ Write-Output "[STARTUP] Getting all variables in place"
 [string]$text_column_proofreadtime      = "Std"
 [string]$text_totalsum                  = "TOTAL"
 
-[string]$text_about = "CountingSheeps V1.0
+[string]$text_about = "CountingSheeps V0.9
 Wörter in datei lesen.
 AGPL-3.0 Stella Ménier - stella.menier@gmx.de
-
-Github Repo öffnen ?"
+Die Projektseite auf Github öffnen?"
 
 [string]$GITHUB_LINK                    = "https://github.com/teamcons/Skrivanek-CountingSheeps"
 [string]$text_label_how                 = "Einfach mit Drag u. Drop Dateien ablegen!"
@@ -148,9 +147,9 @@ $img = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).
 $pictureBox.Width       = 64 #$img.Size.Width
 $pictureBox.Height      = 64 #$img.Size.Height
 $pictureBox.Image       = $img;
-#$pictureBox.Add_Click({
-#                    $Result = [System.Windows.Forms.MessageBox]::Show($text_about,$APPNAME,4,[System.Windows.Forms.MessageBoxIcon]::Information)
-#                    If ($Result -eq "Yes") { Start-Process $GITHUB_LINK } })
+$pictureBox.Add_Click({
+                    $Result = [System.Windows.Forms.MessageBox]::Show($text_about,$APPNAME,4,[System.Windows.Forms.MessageBoxIcon]::Information)
+                    If ($Result -eq "Yes") { Start-Process $GITHUB_LINK } })
 
 
 $form.controls.add($pictureBox)
