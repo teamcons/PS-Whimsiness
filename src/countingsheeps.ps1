@@ -35,7 +35,7 @@ Write-Output "================================"
 
 Write-Output ""
 Write-Output "For Skrivanek GmbH - Count number of words really, really quick!"
-Write-Output "CC0 Stella Ménier, Project manager Skrivanek BELGIUM - <stella.menier@gmx.de>"
+Write-Output "GPL-3.0 Stella Ménier, Project manager Skrivanek BELGIUM - <stella.menier@gmx.de>"
 Write-Output "Git: https://github.com/teamcons/Skrivanek-CountingSheeps"
 Write-Output ""
 Write-Output ""
@@ -45,8 +45,7 @@ Write-Output ""
 # Get all important variables in place 
 
 Write-Output "[STARTUP] Getting all variables in place"
-[string]$APPNAME                        = "CountingSheeps"
-[string]$ANALYSIS                       = "Analysis.csv"
+[string]$APPNAME                        = "Counting Sheeps !"
 [string]$SEP                            = ";"
 [int]$WORDS_PER_HOUR                    = 1800
 [int]$DECIMALS                          = 1
@@ -54,7 +53,6 @@ Write-Output "[STARTUP] Getting all variables in place"
 #========================================
 # Localization
 
-[string]$text_projectname               = "Wöerter zählen"
 [string]$text_column_file               = "Datei"
 [string]$text_column_words              = "Wortzahl"
 [string]$text_column_proofreadtime      = "Std"
@@ -62,11 +60,11 @@ Write-Output "[STARTUP] Getting all variables in place"
 
 [string]$text_about = "CountingSheeps V0.9
 GPL-3.0 Stella Ménier - stella.menier@gmx.de
-Die Projektseite auf Github öffnen?"
+
+Projektseite auf Github öffnen?"
 
 [string]$GITHUB_LINK                    = "https://github.com/teamcons/Skrivanek-CountingSheeps"
 [string]$text_label_how                 = "Einfach mit Drag u. Drop Dateien ablegen!"
-[string]$text_button_load               = "Laden"
 [string]$text_button_close              = "Schließen"
 [string]$text_button_save               = "Speichern"
 [string]$text_keepontop                 = "Über alle Fenster"
@@ -166,7 +164,7 @@ function saveeverything
 $MainWindow                   = New-Object System.Windows.Forms.Form
 $MainWindow.Text              = $APPNAME
 $MainWindow.Size              = New-Object System.Drawing.Size(345,($MainWindow_verticalalign + 40))
-$MainWindow.MinimumSize       = New-Object System.Drawing.Size(345,($MainWindow_verticalalign + 20))
+$MainWindow.MinimumSize       = New-Object System.Drawing.Size(345,($MainWindow_verticalalign + 25))
 #$MainWindow.AutoSize         = $true
 $MainWindow.AutoScale         = $true
 $MainWindow.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
@@ -274,8 +272,6 @@ $gui_panel.Width = 440
 $gui_panel.Height = 35
 $gui_panel.BackColor = '241,241,241'
 $gui_panel.Dock = "Bottom"
-#$gui_panel.Anchor = "Left,Bottom,Right"
-
 
 $gui_keepontop                           = New-Object System.Windows.Forms.Checkbox
 $gui_keepontop.Location                  = New-Object System.Drawing.Point(($MainWindow_leftalign),9)
@@ -294,6 +290,8 @@ $gui_saveButton.UseVisualStyleBackColor       = $True
 $gui_saveButton.Anchor                        = "Bottom,Right"
 #$gui_okButton.BackColor                     = ”Green”
 $gui_saveButton.Add_Click({saveeverything})
+$gui_saveButton.DialogResult              = [System.Windows.Forms.DialogResult]::OK
+$MainWindow.AcceptButton                          = $gui_saveButton
 
 
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
