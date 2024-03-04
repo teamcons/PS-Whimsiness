@@ -230,6 +230,7 @@ $datagridview.AutoSizeRowsMode = "AllCells"
 $datagridview.AutoSizeColumnsMode = "Fill"
 $datagridview.AllowUserToAddRows = "False"
 $datagridview.AllowUserToDeleteRows = $true
+$datagridview.BorderStyle = "None"
 
 $datagridview.Columns[0].Name = $text_column_file
 $datagridview.Columns[0].Width = 120
