@@ -5,8 +5,8 @@ Count files, and how long it takes to proofread them (1800 words -> 1 hour basis
 Its not great for PDF and PPT, but everything else it rocks
 
   <table>
-      <td><img  width="500" height="500" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png"" /></td>
-      <td>
+      <td><img  width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png"" /></td>
+      <td><p>
 
 ### Features:
 - Can save grid as CSV
@@ -15,7 +15,7 @@ Its not great for PDF and PPT, but everything else it rocks
 - Cute
 - Minimal, resizes as you add files
 - (MAYBE, TODO) delete line
-</td>
+        </p></td>
   </table>
 
 
