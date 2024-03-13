@@ -7,7 +7,7 @@ Its not great for PDF, but everything else it rocks, and you can even save it
 
 
 <div align="center">
-    <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/img/Screenshot CountingSheeps.png" /></td>
+    <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png" /></td>
 </div>
 
 
@@ -18,7 +18,7 @@ Stay awake !
 
 
 <div align="center">
-    <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/img/Screenshot EDrink.png" /></td>
+    <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot EDrink.png" /></td>
 </div>
 
 
@@ -29,7 +29,7 @@ Keep a window on top for text
 
 
 <div align="center">
-    <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/img/Screenshot ScratchPad.png" /></td>
+    <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot ScratchPad.png" /></td>
 </div>
 
 
