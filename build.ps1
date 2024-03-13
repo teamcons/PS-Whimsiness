@@ -6,7 +6,7 @@ else
     if (!$ScriptPath){ $global:ScriptPath = "." } }
 
 ps2exe `
--inputFile $ScriptPath\src\countingsheeps.ps1 `
+-inputFile $ScriptPath\sources\countingsheeps.ps1 `
 -iconFile $ScriptPath\assets\bluesheep.ico `
 -noConsole `
 -noOutput `
@@ -18,3 +18,31 @@ ps2exe `
 -version 0.9 `
 -Verbose `
 -outputFile $ScriptPath\countingsheeps.exe
+
+ps2exe `
+-inputFile $ScriptPath\sources\energydrink.ps1 `
+-iconFile $ScriptPath\assets\soft-drink.ico `
+-noConsole `
+-noOutput `
+-exitOnCancel `
+-title "EnergyDrink" `
+-description "Stay awake !" `
+-company "teamcons" `
+-copyright "GPL-3.0 Stella - stella.menier@gmx.de" `
+-version 0.9 `
+-Verbose `
+-outputFile $ScriptPath\energydrink.exe
+
+
+ps2exe `
+-inputFile $ScriptPath\sources\scratchpad.ps1 `
+-noConsole `
+-noOutput `
+-exitOnCancel `
+-title "ScratchPad" `
+-description "Temporary copypaste zone" `
+-company "teamcons" `
+-copyright "GPL-3.0 Stella - stella.menier@gmx.de" `
+-version 0.9 `
+-Verbose `
+-outputFile $ScriptPath\scratchpad.exe
