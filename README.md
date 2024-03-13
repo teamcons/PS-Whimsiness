@@ -7,8 +7,33 @@ Its not great for PDF, but everything else it rocks, and you can even save it
 
 
 <div align="center">
-    <img src="https://github.com/teamcons/Skrivanek-CountingSheeps/blob/main/img/Screenshot App.png" /></td>
+    <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/img/Screenshot CountingSheeps.png" /></td>
 </div>
+
+
+
+# EDrink
+
+Stay awake !
+
+
+<div align="center">
+    <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/img/Screenshot EDrink.png" /></td>
+</div>
+
+
+
+# ScratchPad
+
+Keep a window on top for text
+
+
+<div align="center">
+    <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/img/Screenshot ScratchPad.png" /></td>
+</div>
+
+
+
 
 
 # Super Skrivanek Suite
