@@ -5,7 +5,7 @@
 Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
 Its not great for PDF and PPT, but everything else it rocks
 
-  <table align="left" border="none">
+  <table align="center" border="none">
       <td><img  width="300" height="300" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png"" /></td>
       <td><p>
 
@@ -24,7 +24,7 @@ Its not great for PDF and PPT, but everything else it rocks
 
 ### Stay awake ! Prevent your computer from going to sleep
 
-  <table align="left">
+  <table align="center" border="none">
       <td><img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot EDrink.png"" /></td>
       <td><p>
 
@@ -41,7 +41,7 @@ Its not great for PDF and PPT, but everything else it rocks
 
 ### Keep a window on top for text
 
-  <table align="left" border="none">
+  <table align="center" border="none">
       <td><img  width="200" height="200" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot ScratchPad.png"" /></td>
       <td><p>
 
