@@ -15,7 +15,7 @@ Features:
 -Minimal, resizes as you add files
 -(MAYBE) delete line
 
-
+---
 
 # 💽 Energy Drink
 
@@ -29,6 +29,7 @@ Features:
     <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot EDrink.png" /></td>
 </div>
 
+---
 
 
 # 💽 ScratchPad
@@ -40,12 +41,13 @@ Features:
 -Drag and Drop: Add path to files dropped onto it
 
 
+
 <div align="center">
     <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot ScratchPad.png" /></td>
 </div>
 
 
-
+---
 
 
 # Super Skrivanek Suite
