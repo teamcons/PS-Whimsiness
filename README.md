@@ -54,7 +54,7 @@ So this just creates an icon in systray and keeps the puter awake.
 ### Keep a window on top for text
 
   <table align="center" border="none">
-      <td><img  width="200" height="200" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot ScratchPad.png"" /></td>
+      <td><img  width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot ScratchPad.png"" /></td>
       <td><p>
 
 ### Features:
