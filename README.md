@@ -7,13 +7,13 @@
 Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
 Its not great for PDF and PPT, but everything else it rocks
 
-Features:
--Can save grid as CSV
--Can stay on top, if you want to
--You can save up each cell
--Cute
--Minimal, resizes as you add files
--(MAYBE, TODO) delete line
+### Features:
+- Can save grid as CSV
+- Can stay on top, if you want to
+- You can save up each cell
+- Cute
+- Minimal, resizes as you add files
+- (MAYBE, TODO) delete line
 
 ---
 
