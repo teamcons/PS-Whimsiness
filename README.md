@@ -1,10 +1,10 @@
 
 # 💽 CountingSheeps
 
-
-<img align="left" width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png" /></td>
-
-Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
+<div align="center">
+  <table>
+      <td><img  width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png"" /></td>
+      <td>Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
 Its not great for PDF and PPT, but everything else it rocks
 
 ### Features:
@@ -14,6 +14,11 @@ Its not great for PDF and PPT, but everything else it rocks
 - Cute
 - Minimal, resizes as you add files
 - (MAYBE, TODO) delete line
+</td>
+  </table>
+</div>
+
+
 
 
 
@@ -35,7 +40,7 @@ Features:
 # 💽 ScratchPad
 
 
-<img align="left" width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot ScratchPad.png" /></td>
+<img align="left" width="200" height="200" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot ScratchPad.png" /></td>
 
 Keep a window on top for text
 ### Features:
