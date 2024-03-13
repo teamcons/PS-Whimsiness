@@ -3,7 +3,7 @@
 
 <div align="center">
   <table>
-      <td><img  width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png"" /></td>
+      <td><img  src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png"" /></td>
       <td>Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
 Its not great for PDF and PPT, but everything else it rocks
 
