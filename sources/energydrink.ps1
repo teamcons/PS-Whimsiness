@@ -58,13 +58,6 @@ $stream = [System.IO.MemoryStream]::new($iconBytes, 0, $iconBytes.Length)
 $icon = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
 
 
-
-################################################################################################################################"
-# ACTIONS FROM THE SYSTRAY
-################################################################################################################################"
-
- 
-
 # ---------------------------------------------------------------------
 # Action to keep system awake
 # ---------------------------------------------------------------------
@@ -108,10 +101,9 @@ $Menu_About = New-Object System.Windows.Forms.MenuItem
 $Menu_About.Enabled = $true
 $Menu_About.Text = "About"
 $Menu_About.add_Click({
-    $Main_Tool_Icon.BalloonTipTitle = $APPNAME
+    $Main_Tool_Icon.BalloonTipTitle = "Keep puter awake!"
     $Main_Tool_Icon.BalloonTipIcon = [System.Windows.Forms.ToolTipIcon]::Info
-    $Main_Tool_Icon.BalloonTipText = "Made by Stella ! :3
-<stella.menier@gmx.de>"
+    $Main_Tool_Icon.BalloonTipText = "Made by Stella ! :3 <stella.menier@gmx.de>"
     $Main_Tool_Icon.Visible = $true
     $Main_Tool_Icon.ShowBalloonTip(1000)
  })
@@ -152,6 +144,13 @@ $Main_Tool_Icon.contextMenu.MenuItems.AddRange($Menu_Exit)
 
  
 # ---------------------------------------------------------------------
+
+
+$Main_Tool_Icon.BalloonTipTitle = "Started !"
+$Main_Tool_Icon.BalloonTipIcon = [System.Windows.Forms.ToolTipIcon]::Info
+$Main_Tool_Icon.BalloonTipText = "The puter is now prevented from going to sleep"
+$Main_Tool_Icon.Visible = $true
+$Main_Tool_Icon.ShowBalloonTip(1000)
 
 Start-Job -ScriptBlock $keepAwakeScript -Name "keepAwake"
 

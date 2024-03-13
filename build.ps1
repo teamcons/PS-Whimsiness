@@ -26,7 +26,7 @@ ps2exe `
 
 #========================
 # ENERGYDRINK
-<# 
+#<# 
 ps2exe `
 -inputFile $ScriptPath\sources\energydrink.ps1 `
 -iconFile $ScriptPath\assets\soft-drink.ico `
@@ -44,7 +44,7 @@ ps2exe `
 
 #========================
 # SCRATCHPAD
-#<#
+<#
 ps2exe `
 -inputFile $ScriptPath\sources\scratchpad.ps1 `
 -noConsole `
