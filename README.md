@@ -2,7 +2,7 @@
 # 💽 CountingSheeps
 
 
-<img align="left" width="200" height="200" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png" /></td>
+<img align="left" width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png" /></td>
 
 Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
 Its not great for PDF and PPT, but everything else it rocks
