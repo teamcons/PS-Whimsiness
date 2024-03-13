@@ -2,7 +2,7 @@
 # 💽 CountingSheeps
 
 
-<img align="left" width="100" height="100" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png" /></td>
+<img align="left" width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png" /></td>
 
 Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
 Its not great for PDF and PPT, but everything else it rocks
@@ -25,9 +25,8 @@ Features:
 -Can toggle between preventing sleep or not
 -No nonsense, its just three buttons
 
-<div align="center">
-    <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot EDrink.png" /></td>
-</div>
+<img align="left" width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot EDrink.png" /></td>
+
 
 ---
 
@@ -42,9 +41,8 @@ Features:
 
 
 
-<div align="center">
-    <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot ScratchPad.png" /></td>
-</div>
+<img align="left" width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot ScratchPad.png" /></td>
+
 
 
 ---
