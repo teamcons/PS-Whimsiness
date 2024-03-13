@@ -5,6 +5,10 @@ else
     {$global:ScriptPath = Split-Path -Parent -Path ([Environment]::GetCommandLineArgs()[0]) 
     if (!$ScriptPath){ $global:ScriptPath = "." } }
 
+
+#========================
+# COUNTINGSHEEPS
+#<# 
 ps2exe `
 -inputFile $ScriptPath\sources\countingsheeps.ps1 `
 -iconFile $ScriptPath\assets\bluesheep.ico `
@@ -18,8 +22,11 @@ ps2exe `
 -version 0.9 `
 -Verbose `
 -outputFile $ScriptPath\countingsheeps.exe
+ #>
 
-<# 
+#========================
+# ENERGYDRINK
+#<# 
 ps2exe `
 -inputFile $ScriptPath\sources\energydrink.ps1 `
 -iconFile $ScriptPath\assets\soft-drink.ico `
@@ -35,7 +42,8 @@ ps2exe `
 -outputFile $ScriptPath\energydrink.exe
  #>
 
-
+#========================
+# SCRATCHPAD
 <#
 ps2exe `
 -inputFile $ScriptPath\sources\scratchpad.ps1 `
