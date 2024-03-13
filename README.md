@@ -1,13 +1,14 @@
 
 # 💽 CountingSheeps
 
-<div align="center">
-  <table>
-      <td><img  src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png"" /></td>
-      <td>Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
+Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
 Its not great for PDF and PPT, but everything else it rocks
 
-### Features:
+
+<div align="center">
+  <table>
+      <td><img  width="500" height="500" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png"" /></td>
+      <td> ### Features:
 - Can save grid as CSV
 - Can stay on top, if you want to
 - You can save up each cell
