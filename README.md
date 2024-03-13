@@ -26,7 +26,7 @@ Stay awake ! Prevent your computer from going to sleep
 
 
   <table align="center">
-      <td><img  width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot EDrink.png"" /></td>
+      <td><img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot EDrink.png"" /></td>
       <td><p>
 
 ### Features:
