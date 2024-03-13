@@ -28,12 +28,14 @@ $MainWindow.AllowDrop         = $true
 $MainWindow.AutoSize          = $true
 
 # Define textbox
-$textBox 			        = New-Object System.Windows.Forms.TextBox
+$textBox 			        = New-Object System.Windows.Forms.RichTextBox
 $textBox.text			    = -join("~ Write stuff here ~","`r`n","`r`n",(Get-Clipboard),"`r`n")
 $textBox.Font               = New-Object System.Drawing.Font('Microsoft Sans Serif', 10, [System.Drawing.FontStyle]::Regular)
 $textBox.Dock 			    = "Fill"
 $textBox.Multiline 		    = $true
-$textbox.AcceptsReturn 		= $true
+#$textbox.AcceptsReturn 		= $true
+$textBox.BorderStyle 		    = "None"
+$textBox.AllowDrop         = $true
 
 
 # Add path to file when a file is dropped on it
@@ -56,13 +58,12 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
 }
 
 # Add those events
-$MainWindow.Add_DragOver($DragOver)
-$MainWindow.Add_DragDrop($DragDrop)
-
+$textBox.Add_DragOver($DragOver)
+$textBox.Add_DragDrop($DragDrop)
 
 # Change opacity depending on focus
 $textBox.Add_GotFocus({ $MainWindow.Opacity  = .90 })
-$textBox.Add_LostFocus({ $MainWindow.Opacity = .40 })
+$textBox.Add_LostFocus({ $MainWindow.Opacity = .55 })
 
 # Add and done
 $MainWindow.Controls.Add($textBox)
