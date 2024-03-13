@@ -2,9 +2,15 @@
 # 💽 CountingSheeps
 
 Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
+Its not great for PDF and PPT, but everything else it rocks
 
-Its not great for PDF, but everything else it rocks, and you can even save it
-
+Features:
+-Can save grid as CSV
+-Can stay on top, if you want to
+-You can save up each cell
+-Cute
+-Minimal, resizes as you add files
+-(MAYBE) delete line
 
 <div align="center">
     <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png" /></td>
@@ -12,10 +18,13 @@ Its not great for PDF, but everything else it rocks, and you can even save it
 
 
 
-# 💽 EDrink
+# 💽 Energy Drink
 
-Stay awake !
+Stay awake ! Prevent your computer from going to sleep
 
+Features:
+-Can toggle between preventing sleep or not
+-No nonsense, its just three buttons
 
 <div align="center">
     <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot EDrink.png" /></td>
@@ -26,6 +35,10 @@ Stay awake !
 # 💽 ScratchPad
 
 Keep a window on top for text
+Features:
+-RichText support: Keeps test formatting
+-Unobtrusive: Very transparent when losing focus
+-Drag and Drop: Add path to files dropped onto it
 
 
 <div align="center">
@@ -39,6 +52,7 @@ Keep a window on top for text
 # Super Skrivanek Suite
 
 Its part of the suite of softwarescripts we did for our workplace because its relevant there for us.
+Every file is a standalone, and depends only on itself.
 
 
 # Acknowledgments
