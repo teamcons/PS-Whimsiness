@@ -4,11 +4,11 @@
 Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
 Its not great for PDF and PPT, but everything else it rocks
 
-
-<div align="center">
   <table>
       <td><img  width="500" height="500" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png"" /></td>
-      <td> ### Features:
+      <td>
+
+### Features:
 - Can save grid as CSV
 - Can stay on top, if you want to
 - You can save up each cell
@@ -17,7 +17,7 @@ Its not great for PDF and PPT, but everything else it rocks
 - (MAYBE, TODO) delete line
 </td>
   </table>
-</div>
+
 
 
 
