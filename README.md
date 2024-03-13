@@ -24,6 +24,13 @@ Its not great for PDF and PPT, but everything else it rocks
 
 ### Stay awake ! Prevent your computer from going to sleep
 
+Windows doesnt respect or leave untouched some settings
+And im annoyed when i read something or wait for emails, and it goes to sleep
+
+So this just creates an icon in systray and keeps the puter awake.
+
+
+
   <table align="center" border="none">
       <td><img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot EDrink.png"" /></td>
       <td><p>
@@ -68,11 +75,15 @@ For CountingSheep, reused a lot of code from:
 
 
 The soda can icon
-<a href="https://www.flaticon.com/free-icons/sheep" title="sheep icons">Sheep icons created by SBTS2018 - Flaticon</a>
-
+<a href="https://www.flaticon.com/free-icons/soda" title="soda icons">Soda icons created by Chanut-is-Industries - Flaticon</a>
 
 The sheep icon
 <a href="https://www.flaticon.com/free-icons/sheep" title="sheep icons">Sheep icons created by SBTS2018 - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/sheep" title="sheep icons">Sheep icons created by Freepik - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/sheep" title="sheep icons">Sheep icons created by Freepik - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/sheep" title="sheep icons">Sheep icons created by Good Ware - Flaticon</a>
+
+Thanks to - https://github.com/damienvanrobaeys/Build-PS1-Systray-Tool
+          - https://www.systanddeploy.com/2018/12/create-your-own-powershell.html
+          - https://stackoverflow.com/questions/54649456/powershell-notifyicon-context-menu
+          - https://adamtheautomator.com/powershell-async/

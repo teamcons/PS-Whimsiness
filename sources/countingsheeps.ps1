@@ -116,27 +116,26 @@ function Save-CSV([string] $initialDirectory)
 
 
 function saveeverything
-    {
+{
 
     $analysisfile = Save-CSV $ScriptPath
     # Cancel culture : Drop everything if cancel
-    if ($analysisfile -eq "")
-        { Write-Output "[INPUT] Got Cancel. Aw. Exit." ; exit }
-
-
-    # Create the CSV, specify separator to avoid issues opening the csv in your fav office software
-    Write-Output "sep=$SEP" | Out-File -FilePath "$analysisfile"
-
-    # Add column headers
-    $top = -join($datagridview.Columns[1].Name,$SEP,$datagridview.Columns[2].Name,$SEP,$datagridview.Columns[3].Name,$SEP)
-    Write-Output $top | Out-File -FilePath "$analysisfile" -Append 
-
-
-    # Rebuild and append each line
-    foreach ($row in $datagridview.Rows )
+    if (($analysisfile -ne $none) -and ($analysisfile -ne ""))
     {
-        $line = -join($row[0].Cells[1].Value,$SEP,$row[0].Cells[2].Value,$SEP,$row[0].Cells[3].Value,$SEP)
-        Write-Output $line | Out-File -FilePath "$analysisfile" -Append
+        # Create the CSV, specify separator to avoid issues opening the csv in your fav office software
+        Write-Output "sep=$SEP" | Out-File -FilePath "$analysisfile"
+
+        # Add column headers
+        $top = -join($datagridview.Columns[1].Name,$SEP,$datagridview.Columns[2].Name,$SEP,$datagridview.Columns[3].Name,$SEP)
+        Write-Output $top | Out-File -FilePath "$analysisfile" -Append 
+
+
+        # Rebuild and append each line
+        foreach ($row in $datagridview.Rows )
+        {
+            $line = -join($row[0].Cells[1].Value,$SEP,$row[0].Cells[2].Value,$SEP,$row[0].Cells[3].Value,$SEP)
+            Write-Output $line | Out-File -FilePath "$analysisfile" -Append
+        }
     }
 }
 
@@ -289,8 +288,8 @@ $gui_saveButton.UseVisualStyleBackColor       = $True
 $gui_saveButton.Anchor                        = "Bottom,Right"
 #$gui_okButton.BackColor                     = ”Green”
 $gui_saveButton.Add_Click({saveeverything})
-$gui_saveButton.DialogResult              = [System.Windows.Forms.DialogResult]::OK
-$MainWindow.AcceptButton                          = $gui_saveButton
+#$gui_saveButton.DialogResult              = [System.Windows.Forms.DialogResult]::OK
+#$MainWindow.AcceptButton                          = $gui_saveButton
 
 
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
@@ -301,8 +300,8 @@ $gui_cancelButton.UseVisualStyleBackColor   = $True
 $gui_cancelButton.Anchor                    = "Bottom,Right"
 #$gui_cancelButton.BackColor                  = ”Red”
 $gui_cancelButton.DialogResult              = [System.Windows.Forms.DialogResult]::Cancel
-$MainWindow.CancelButton                          = $gui_cancelButton
-
+$MainWindow.CancelButton                    = $gui_cancelButton
+#$gui_cancelButton.Add_Click({$MainWindow_FormClosed})
 
 $gui_panel.Controls.Add($gui_saveButton)
 $gui_panel.Controls.Add($gui_keepontop)
@@ -410,12 +409,12 @@ $MainWindow_FormClosed = {
 		$datagridview.remove_DragDrop($DragDrop)
         $datagridview.remove_DragDrop($DragDrop)
 		$MainWindow.remove_FormClosed($MainWindow_Cleanup_FormClosed)
+        $MainWindow.Close()
 
         # Wont need Word anymore
         $word.Quit()
         $excel.Quit()
         $powerpoint.Quit()
-
 
 	}
 	catch [Exception]

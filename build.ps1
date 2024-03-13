@@ -19,6 +19,7 @@ ps2exe `
 -Verbose `
 -outputFile $ScriptPath\countingsheeps.exe
 
+<# 
 ps2exe `
 -inputFile $ScriptPath\sources\energydrink.ps1 `
 -iconFile $ScriptPath\assets\soft-drink.ico `
@@ -32,8 +33,10 @@ ps2exe `
 -version 0.9 `
 -Verbose `
 -outputFile $ScriptPath\energydrink.exe
+ #>
 
 
+<#
 ps2exe `
 -inputFile $ScriptPath\sources\scratchpad.ps1 `
 -noConsole `
@@ -46,3 +49,4 @@ ps2exe `
 -version 0.9 `
 -Verbose `
 -outputFile $ScriptPath\scratchpad.exe
+ #>
