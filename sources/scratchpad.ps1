@@ -17,23 +17,53 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [void] [System.Windows.Forms.Application]::EnableVisualStyles() 
 
+# Define main
 $MainWindow                   = New-Object System.Windows.Forms.Form
 $MainWindow.Text              = "Scratchpad"
 $MainWindow.StartPosition     = 'CenterScreen'
 $MainWindow.Topmost           = $True
 $MainWindow.Icon              = [System.Drawing.Icon]::ExtractAssociatedIcon("C:\Windows\notepad.exe")
 $MainWindow.AllowTransparency = $true
-$MainWindow.Opacity 		  = .85
+$MainWindow.AllowDrop         = $true
+$MainWindow.AutoSize          = $true
 
+# Define textbox
 $textBox 			        = New-Object System.Windows.Forms.TextBox
-$textBox.text			    = Get-Clipboard
+$textBox.text			    = -join("~ Write stuff here ~","`r`n","`r`n",(Get-Clipboard),"`r`n")
 $textBox.Font               = New-Object System.Drawing.Font('Microsoft Sans Serif', 10, [System.Drawing.FontStyle]::Regular)
 $textBox.Dock 			    = "Fill"
 $textBox.Multiline 		    = $true
 $textbox.AcceptsReturn 		= $true
 
+
+# Add path to file when a file is dropped on it
+$DragOver = [System.Windows.Forms.DragEventHandler]{
+	if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop))
+	{
+	    $_.Effect = 'Copy'
+	}
+	else
+	{
+	    $_.Effect = 'None'
+	}
+}
+$DragDrop = [System.Windows.Forms.DragEventHandler]{
+	foreach ($filepath in $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
+    {
+        $textBox.text = -join($textBox.text,"`r`n",$filepath,"`r`n")
+	}
+    
+}
+
+# Add those events
+$MainWindow.Add_DragOver($DragOver)
+$MainWindow.Add_DragDrop($DragDrop)
+
+
+# Change opacity depending on focus
+$textBox.Add_GotFocus({ $MainWindow.Opacity  = .90 })
+$textBox.Add_LostFocus({ $MainWindow.Opacity = .40 })
+
+# Add and done
 $MainWindow.Controls.Add($textBox)
 $MainWindow.ShowDialog()
-
-
-
