@@ -62,7 +62,7 @@ $textBox.Add_DragOver($DragOver)
 $textBox.Add_DragDrop($DragDrop)
 
 # Change opacity depending on focus
-$textBox.Add_GotFocus({ $MainWindow.Opacity  = .90 })
+$textBox.Add_GotFocus({ $MainWindow.Opacity  = 1 })
 $textBox.Add_LostFocus({ $MainWindow.Opacity = .55 })
 
 # Add and done

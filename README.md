@@ -2,8 +2,14 @@
 
 # 💽 CountingSheeps
 
-Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
-Its not great for PDF and PPT, but everything else it rocks
+### Count files !
+
+and how long it takes to proofread them (1800 words -> 1 hour basis), because i need that at work.
+
+Its not great for PDF and PPT, but everything else it rocks.
+
+Startup is slow due to interacting with Office. Which is slow.
+
 
   <table align="center" border="none">
       <td><img  width="300" height="300" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png"" /></td>
@@ -12,7 +18,6 @@ Its not great for PDF and PPT, but everything else it rocks
 ### Features:
 - Can save grid as CSV
 - Can stay on top, if you want to
-- You can save up each cell
 - Cute
 - Minimal, resizes as you add files
 - (MAYBE, TODO) delete line
@@ -37,7 +42,7 @@ So this just creates an icon in systray and keeps the puter awake.
 
 ### Features:
 - Can toggle between preventing sleep or not
-- No nonsense, its just three buttons
+- No nonsense, its just like three buttons
         </p></td>
   </table>
 
@@ -53,10 +58,10 @@ So this just creates an icon in systray and keeps the puter awake.
       <td><p>
 
 ### Features:
-- RichText support: Keeps test formatting
+- RichText support: Keeps text formatting
+- Swayy: When you start it, it loads clipboard content
 - Unobtrusive: Very transparent when losing focus
 - Drag and Drop: Add path to files dropped onto it
-
 
     </p></td>
   </table>
@@ -65,14 +70,29 @@ So this just creates an icon in systray and keeps the puter awake.
 
 # Super Skrivanek Suite
 
-Its part of the suite of softwarescripts we did for our workplace because its relevant there for us.
-Every file is a standalone, and depends only on itself.
+Its part of the suite of softwares/scripts we did to assist at work. Which is why CountingSheep estimates proofreading time.
+
+Every file is a standalone, and depends only on itself. All assets are embedded in the code in Base64.
+
+GUI is built to be minimal. Dont display unneeded options and features, be smart.
+
+Only dependency is PS2EXE if you want to have the fancy exe.
+
 
 
 # Acknowledgments
 
-For CountingSheep, reused a lot of code from:
+The Drag And Drop code is pillaged and adapted from Dan's tutorial code. Thank you !
+https://www.rlvision.com/blog/a-drag-and-drop-gui-made-with-powershell/
+https://github.com/rlv-dan/Tutorial-code
 
+Had a look through various sources for having a tray icon. Thanks to all of these !
+- https://github.com/damienvanrobaeys/Build-PS1-Systray-Tool
+- https://www.systanddeploy.com/2018/12/create-your-own-powershell.html
+- https://stackoverflow.com/questions/54649456/powershell-notifyicon-context-menu
+- https://adamtheautomator.com/powershell-async/
+
+The icons are from the same website... I should do my owns. Thanks nonetheless !
 
 The soda can icon
 <a href="https://www.flaticon.com/free-icons/soda" title="soda icons">Soda icons created by Chanut-is-Industries - Flaticon</a>
@@ -83,7 +103,4 @@ The sheep icon
 <a href="https://www.flaticon.com/free-icons/sheep" title="sheep icons">Sheep icons created by Freepik - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/sheep" title="sheep icons">Sheep icons created by Good Ware - Flaticon</a>
 
-Thanks to - https://github.com/damienvanrobaeys/Build-PS1-Systray-Tool
-          - https://www.systanddeploy.com/2018/12/create-your-own-powershell.html
-          - https://stackoverflow.com/questions/54649456/powershell-notifyicon-context-menu
-          - https://adamtheautomator.com/powershell-async/
+
