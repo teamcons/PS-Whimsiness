@@ -1,3 +1,4 @@
+<style>table {border: none;}</style>
 
 # 💽 CountingSheeps
 
@@ -17,10 +18,6 @@ Its not great for PDF and PPT, but everything else it rocks
 - (MAYBE, TODO) delete line
         </p></td>
   </table>
-
-
-
-
 
 
 # 💽 Energy Drink
@@ -56,7 +53,8 @@ Keep a window on top for text
 - Unobtrusive: Very transparent when losing focus
 - Drag and Drop: Add path to files dropped onto it
 
-        </p></td>
+
+    </p></td>
   </table>
 
 
