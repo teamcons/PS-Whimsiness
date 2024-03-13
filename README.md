@@ -15,39 +15,35 @@ Its not great for PDF and PPT, but everything else it rocks
 - Minimal, resizes as you add files
 - (MAYBE, TODO) delete line
 
----
+
 
 # 💽 Energy Drink
 
 Stay awake ! Prevent your computer from going to sleep
 
 Features:
--Can toggle between preventing sleep or not
--No nonsense, its just three buttons
+- Can toggle between preventing sleep or not
+- No nonsense, its just three buttons
 
 <div align="center">
     <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot EDrink.png" /></td>
 </div>
 
----
+
 
 
 # 💽 ScratchPad
 
+
+<img align="left" width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot ScratchPad.png" /></td>
+
 Keep a window on top for text
-Features:
--RichText support: Keeps test formatting
--Unobtrusive: Very transparent when losing focus
--Drag and Drop: Add path to files dropped onto it
+### Features:
+- RichText support: Keeps test formatting
+- Unobtrusive: Very transparent when losing focus
+- Drag and Drop: Add path to files dropped onto it
 
 
-
-<div align="center">
-    <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot ScratchPad.png" /></td>
-</div>
-
-
----
 
 
 # Super Skrivanek Suite
