@@ -2,14 +2,12 @@
 
 # 💽 CountingSheeps
 
-
+Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
+Its not great for PDF and PPT, but everything else it rocks
 
   <table align="center">
       <td><img  width="300" height="300" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png"" /></td>
       <td><p>
-
-Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
-Its not great for PDF and PPT, but everything else it rocks
 
 ### Features:
 - Can save grid as CSV
@@ -24,13 +22,11 @@ Its not great for PDF and PPT, but everything else it rocks
 
 # 💽 Energy Drink
 
-
+### Stay awake ! Prevent your computer from going to sleep
 
   <table align="center">
       <td><img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot EDrink.png"" /></td>
       <td><p>
-
-### Stay awake ! Prevent your computer from going to sleep
 
 ### Features:
 - Can toggle between preventing sleep or not
@@ -43,15 +39,11 @@ Its not great for PDF and PPT, but everything else it rocks
 
 # 💽 ScratchPad
 
-
-
-
+### Keep a window on top for text
 
   <table align="center">
       <td><img  width="200" height="200" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot ScratchPad.png"" /></td>
       <td><p>
-
-### Keep a window on top for text
 
 ### Features:
 - RichText support: Keeps test formatting
