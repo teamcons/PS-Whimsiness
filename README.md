@@ -24,7 +24,7 @@ Its not great for PDF and PPT, but everything else it rocks
 
 ### Stay awake ! Prevent your computer from going to sleep
 
-  <table align="left" border="none">
+  <table align="left">
       <td><img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot EDrink.png"" /></td>
       <td><p>
 
