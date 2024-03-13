@@ -4,7 +4,7 @@
 Count files, and how long it takes to proofread them (1800 words -> 1 hour basis)
 Its not great for PDF and PPT, but everything else it rocks
 
-  <table>
+  <table align="center">
       <td><img  width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png"" /></td>
       <td><p>
 
@@ -27,13 +27,16 @@ Its not great for PDF and PPT, but everything else it rocks
 
 Stay awake ! Prevent your computer from going to sleep
 
-Features:
+
+  <table align="center">
+      <td><img  width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot EDrink.png"" /></td>
+      <td><p>
+
+### Features:
 - Can toggle between preventing sleep or not
 - No nonsense, its just three buttons
-
-<div align="center">
-    <img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot EDrink.png" /></td>
-</div>
+        </p></td>
+  </table>
 
 
 
@@ -41,14 +44,20 @@ Features:
 # 💽 ScratchPad
 
 
-<img align="left" width="200" height="200" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot ScratchPad.png" /></td>
 
 Keep a window on top for text
+
+  <table align="center">
+      <td><img  width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot ScratchPad.png"" /></td>
+      <td><p>
+
 ### Features:
 - RichText support: Keeps test formatting
 - Unobtrusive: Very transparent when losing focus
 - Drag and Drop: Add path to files dropped onto it
 
+        </p></td>
+  </table>
 
 
 
