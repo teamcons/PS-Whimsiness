@@ -313,6 +313,13 @@ $datagridview.Columns[4].Width = 24
 [int]$datagridview.Rows[0].Cells[3].Value = 0
 [string]$datagridview.Rows[0].Cells[4].Value = ""
 
+<# $font                                   = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Bold)
+$datagridview.Rows[0].Cells[1].DefaultCellStyle.Font     = $font
+$datagridview.Rows[0].Cells[2].Font     = $font
+$datagridview.Rows[0].Cells[3].Font     = $font #>
+
+
+
 $MainWindow.Controls.Add($datagridview)
 
 #===================================================
