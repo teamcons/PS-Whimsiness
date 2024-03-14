@@ -48,7 +48,9 @@ Write-Output "[STARTUP] Getting all variables in place"
 [string]$APPNAME                        = "Counting Sheeps !"
 [string]$SEP                            = ";"
 [int]$WORDS_PER_HOUR                    = 1800
-[int]$DECIMALS                          = 1
+[int]$DECIMALS                          = 2
+[string]$Form_Theme                     = "LightGreen"      #"White" #'241,241,241'x
+
 
 #========================================
 # Localization
@@ -59,16 +61,22 @@ Write-Output "[STARTUP] Getting all variables in place"
 [string]$text_totalsum                  = "TOTAL"
 
 [string]$text_about = "CountingSheeps V0.9
+Für die Skrivanek GmbH - Zähle die Wörter sehr, sehr schnell!
 GPL-3.0 Stella Ménier - stella.menier@gmx.de
 
 Projektseite auf Github öffnen?"
 
 [string]$GITHUB_LINK                    = "https://github.com/teamcons/Skrivanek-CountingSheeps"
-[string]$text_label_how                 = "Einfach mit Drag u. Drop Dateien ablegen!"
+[string]$text_label_how                 = "Einfach Dateien per Drag & Drop auf der Wiese ablegen!"
 [string]$text_button_close              = "Schließen"
 [string]$text_button_save               = "Speichern"
 [string]$text_keepontop                 = "Über alle Fenster"
 
+
+
+#===============================================
+#                Some more init                =
+#===============================================
 
 
 if ($MyInvocation.MyCommand.CommandType -eq "ExternalScript")
@@ -86,6 +94,15 @@ $script:word = New-Object -ComObject Word.Application
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [void] [System.Windows.Forms.Application]::EnableVisualStyles() 
+
+
+
+
+#===========================================
+#                BIG STRING                =
+#===========================================
+
+
 
 #================================
 # Project icon in Base 64
@@ -156,35 +173,27 @@ function Save-DataGridView
 #==============================================================
 
 
-# thx https://www.rlvision.com/blog/a-drag-and-drop-gui-made-with-powershell/
-
-
-#================
+#================================
 #= INITIAL WORK =
-
-
 
 [int]$MainWindow_leftalign = 10
 [int]$MainWindow_verticalalign = 180
-
 
 
 $MainWindow                   = New-Object System.Windows.Forms.Form
 $MainWindow.Text              = $APPNAME
 $MainWindow.Size              = New-Object System.Drawing.Size(345,($MainWindow_verticalalign + 25))
 $MainWindow.MinimumSize       = New-Object System.Drawing.Size(345,($MainWindow_verticalalign + 25))
-#$MainWindow.AutoSize         = $true
-$MainWindow.AutoScale         = $true
 $MainWindow.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
 $MainWindow.StartPosition     = 'CenterScreen'
 $MainWindow.MaximizeBox       = $True
 $MainWindow.Topmost           = $True
-$MainWindow.BackColor         = "LightGreen" #"White" #'241,241,241'x
+$MainWindow.BackColor         = $Form_Theme
 $MainWindow.Icon              = $icon
-$MainWindow.AllowDrop = $True
-#$MainWindow.AllowTransparency = $false
-#$MainWindow.Opacity = .90
+$MainWindow.AllowDrop         = $True
 
+
+#================================
 # FANCY ICON
 $pictureBox             = new-object Windows.Forms.PictureBox
 $pictureBox.Location    = New-Object System.Drawing.Point($MainWindow_leftalign,0)
@@ -196,32 +205,44 @@ $pictureBox.Add_Click({
                     $Result = [System.Windows.Forms.MessageBox]::Show($text_about,$APPNAME,4,[System.Windows.Forms.MessageBoxIcon]::Information)
                     If ($Result -eq "Yes") { Start-Process $GITHUB_LINK } })
 
-
-$MainWindow.controls.add($pictureBox)
-
-
+#================================
 # LABEL AND TEXT
 $label                  = New-Object System.Windows.Forms.Label
-$label.Location         = New-Object System.Drawing.Point(($MainWindow_leftalign + 70),10) # leftalign+80 if icon
-$label.Size             = New-Object System.Drawing.Size(180,20)
-$label.AutoSize         = $true
-$label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 11, [System.Drawing.FontStyle]::Bold)
 $label.Text             = $APPNAME
+$label.Location         = New-Object System.Drawing.Point(($MainWindow_leftalign + 75),10) # leftalign+80 if icon
+$label.Size             = New-Object System.Drawing.Size(180,20)
+$label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 11, [System.Drawing.FontStyle]::Bold)
+
+$MainWindow.controls.add($pictureBox)
 $MainWindow.Controls.Add($label)
+
+
+#================================
+# Else the label doesnt wrap around neatly
+$wraparound_panel                       = New-Object System.Windows.Forms.Panel
+$wraparound_panel.Location              = New-Object System.Drawing.Point(($MainWindow_leftalign + 75),30)
+$wraparound_panel.Height                = 30
+$wraparound_panel.Width                 = 235
+$wraparound_panel.AutoSize              = $true
+$wraparound_panel.BackColor             = $Form_Theme
+$wraparound_panel.Anchor                      = "Right,Left,Top"
+
+#================================
+# Label and button
+$labelgrid                  = New-Object System.Windows.Forms.Label
+$labelgrid.Text             = $text_label_how
+$labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Italic)
+$labelgrid.Dock             = "Fill"
+
+
+$wraparound_panel.Controls.Add($labelgrid)
+$MainWindow.Controls.Add($wraparound_panel)
 
 
 #===============================================
 #                GUI - THE GRID                =
 #===============================================
 
-# Label and button
-$labelgrid                  = New-Object System.Windows.Forms.Label
-$labelgrid.Text             = $text_label_how
-$labelgrid.AutoSize         = $True
-$labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Italic)
-$labelgrid.Location         = New-Object System.Drawing.Point(($MainWindow_leftalign + 70),35)
-$labelgrid.Size             = New-Object System.Drawing.Size(250,20)
-$MainWindow.Controls.Add($labelgrid)
 
 
 ## Configure the Gridview
@@ -274,6 +295,8 @@ $MainWindow.Controls.Add($datagridview)
 #                GUI - Down Buttons                =
 #===================================================
 
+
+#================================
 $gui_panel = New-Object System.Windows.Forms.Panel
 $gui_panel.Left = 0
 $gui_panel.Top = ($MainWindow_verticalalign)
@@ -282,6 +305,7 @@ $gui_panel.Height = 35
 $gui_panel.BackColor = '241,241,241'
 $gui_panel.Dock = "Bottom"
 
+#================================
 $gui_keepontop                           = New-Object System.Windows.Forms.Checkbox
 $gui_keepontop.Location                  = New-Object System.Drawing.Point(($MainWindow_leftalign),9)
 $gui_keepontop.Size                      = New-Object System.Drawing.Size(120,20)
@@ -291,6 +315,7 @@ $gui_keepontop.Anchor                    = "Bottom,Left"
 $gui_keepontop.Checked                   = $MainWindow.Topmost
 $gui_keepontop.Add_Click({$MainWindow.Topmost = $gui_keepontop.Checked})
 
+#================================
 $gui_saveButton                               = New-Object System.Windows.Forms.Button
 $gui_saveButton.Location                      = New-Object System.Drawing.Point(($MainWindow_leftalign + 255),7)
 $gui_saveButton.Size                          = New-Object System.Drawing.Size(80,23)
@@ -302,7 +327,7 @@ $gui_saveButton.Add_Click({Save-DataGridView})
 #$gui_saveButton.DialogResult              = [System.Windows.Forms.DialogResult]::OK
 #$MainWindow.AcceptButton                          = $gui_saveButton
 
-
+#================================
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
 $gui_cancelButton.Location                  = New-Object System.Drawing.Point(($MainWindow_leftalign + 340),7)
 $gui_cancelButton.Size                      = New-Object System.Drawing.Size(80,23)
@@ -323,9 +348,6 @@ $gui_panel.Show()
 
 
 
-
-
-
 #=========================================
 #                Handlers                =
 #=========================================
@@ -334,6 +356,8 @@ $gui_panel.Show()
 
 ### Write event handlers ###
 
+
+#================================
 $DragOver = [System.Windows.Forms.DragEventHandler]{
 	if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop))
 	{
@@ -344,7 +368,9 @@ $DragOver = [System.Windows.Forms.DragEventHandler]{
 	    $_.Effect = 'None'
 	}
 }
-	
+
+
+#================================
 $DragDrop = [System.Windows.Forms.DragEventHandler]{
 	foreach ($filepath in $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
     {
@@ -417,7 +443,7 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
  
 
 
-
+#================================
 $MainWindow_FormClosed = {
 	try
     {
@@ -439,6 +465,9 @@ $MainWindow_FormClosed = {
 }
  
  
+
+
+#================================
 ### Wire up events ###
  
 #$button.Add_Click($button_Click)
@@ -447,20 +476,7 @@ $datagridview.Add_DragDrop($DragDrop)
 $MainWindow.Add_DragOver($DragOver)
 $MainWindow.Add_DragDrop($DragDrop)
 $MainWindow.Add_FormClosed($MainWindow_FormClosed)
- 
 
-#==============================================================
-#                     Processing Le input                     =
-#==============================================================
-
-
+# Go
 $MainWindow.ShowDialog()
-
-
-
-# Clipboard
-#Set-Clipboard -Value $totalcount
-#Write-Output '[ACTION] Set clipboard to $wordcount'
-
-
 
