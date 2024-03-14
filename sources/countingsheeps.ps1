@@ -55,6 +55,7 @@ Write-Output "[STARTUP] Getting all variables in place"
 #========================================
 # Localization
 
+[string]$text_column_type               = "Typ"
 [string]$text_column_file               = "Datei"
 [string]$text_column_words              = "Wortzahl"
 [string]$text_column_proofreadtime      = "Std"
@@ -182,8 +183,8 @@ function Save-DataGridView
 
 $MainWindow                   = New-Object System.Windows.Forms.Form
 $MainWindow.Text              = $APPNAME
-$MainWindow.Size              = New-Object System.Drawing.Size(345,($MainWindow_verticalalign + 25))
-$MainWindow.MinimumSize       = New-Object System.Drawing.Size(345,($MainWindow_verticalalign + 25))
+$MainWindow.Size              = New-Object System.Drawing.Size(335,($MainWindow_verticalalign + 25))
+$MainWindow.MinimumSize       = New-Object System.Drawing.Size(335,($MainWindow_verticalalign + 25))
 $MainWindow.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
 $MainWindow.StartPosition     = 'CenterScreen'
 $MainWindow.MaximizeBox       = $True
@@ -248,9 +249,9 @@ $MainWindow.Controls.Add($wraparound_panel)
 ## Configure the Gridview
 $datagridview                           = New-Object System.Windows.Forms.DataGridView
 $datagridview.Location                  = New-Object System.Drawing.Size($MainWindow_leftalign,65)
-$datagridview.Size                      = New-Object System.Drawing.Size(310,55)
+$datagridview.Size                      = New-Object System.Drawing.Size(300,55)
 $datagridview.AutoSize                  = $true
-$datagridview.BackgroundColor           = '241,241,241' #"White"
+$datagridview.BackgroundColor           = $Form_Theme
 $datagridview.Anchor                    = "Left,Bottom,Top,Right"
 $datagridview.AllowDrop                 = $True
 $datagridview.ColumnCount               = 3
@@ -260,34 +261,57 @@ $datagridview.ReadOnly                  = $true
 $datagridview.AutoSizeRowsMode          = "AllCells"
 $datagridview.AutoSizeColumnsMode       = "Fill"
 $datagridview.AllowUserToAddRows        = "False"
+$datagridview.AllowUserToResizeRows     = "False"
 $datagridview.AllowUserToDeleteRows     = $true
 $datagridview.BorderStyle               = "None"
 
 $datagridview.Columns[0].Name = $text_column_file
-$datagridview.Columns[0].Width = 120
+$datagridview.Columns[0].Width = 100
 
 $datagridview.Columns[1].Name = $text_column_words
-$datagridview.Columns[1].Width = 36
+$datagridview.Columns[1].Width = 40
 $datagridview.Columns[1].DefaultCellStyle.Alignment = "MiddleRight" 
 $datagridview.Columns[1].HeaderCell.Style.Alignment = "MiddleRight" 
 
 $datagridview.Columns[2].Name = $text_column_proofreadtime
-$datagridview.Columns[2].Width = 36
+$datagridview.Columns[2].Width = 40
 $datagridview.Columns[2].DefaultCellStyle.Alignment = "MiddleRight" 
 $datagridview.Columns[2].HeaderCell.Style.Alignment = "MiddleRight" 
 
+
+#================================
 # Add an image column. Has to be inserted afterward. Idk why
-$ImageColumn = New-Object System.Windows.Forms.DataGridViewImageColumn
+$ImageColumn                                    = New-Object System.Windows.Forms.DataGridViewImageColumn
+$ImageColumn.HeaderText                         = $text_column_type
+$ImageColumn.Resizable                         = "false"
+$ImageColumn.AutoSizeMode                      = "none"
 $datagridview.Columns.Insert(0, $ImageColumn);
-$datagridview.Columns[0].Width = 32
+$datagridview.Columns[0].Width                  = 32
+
+
 
 # Adding an image column adds a weird unremovable line. Use it for sum.
 $miniico =  ([System.Drawing.Icon]::ExtractAssociatedIcon(([Environment]::GetCommandLineArgs()[0])) ).ToBitmap()
-$datagridview.Rows[0].Cells[0].Value = $miniico
+$datagridview.Rows[0].Cells[0].Value            = $miniico
+
+
+#================================
+# Add a button column. Has to be inserted afterward. Idk why
+$ButtonColumn                                   = New-Object System.Windows.Forms.DataGridViewButtonColumn
+$ButtonColumn.HeaderText                         = "X"
+#$ButtonColumn.FlatStyle                         = "Flat"
+$ButtonColumn.Resizable                         = "false"
+$ButtonColumn.AutoSizeMode                      = "none"
+$datagridview.Columns.Insert(4, $ButtonColumn);
+$datagridview.Columns[4].Width = 24
+
+
+
 
 [string]$datagridview.Rows[0].Cells[1].Value = $text_totalsum
 [int]$datagridview.Rows[0].Cells[2].Value = 0
 [int]$datagridview.Rows[0].Cells[3].Value = 0
+[string]$datagridview.Rows[0].Cells[4].Value = ""
 
 $MainWindow.Controls.Add($datagridview)
 
@@ -297,23 +321,23 @@ $MainWindow.Controls.Add($datagridview)
 
 
 #================================
-$gui_panel = New-Object System.Windows.Forms.Panel
-$gui_panel.Left = 0
-$gui_panel.Top = ($MainWindow_verticalalign)
-$gui_panel.Width = 440
-$gui_panel.Height = 35
-$gui_panel.BackColor = '241,241,241'
-$gui_panel.Dock = "Bottom"
+$gui_panel                                  = New-Object System.Windows.Forms.Panel
+$gui_panel.Left                             = 0
+$gui_panel.Top                              = ($MainWindow_verticalalign)
+$gui_panel.Width                            = 440
+$gui_panel.Height                           = 35
+$gui_panel.BackColor                        = '241,241,241'
+$gui_panel.Dock                             = "Bottom"
 
 #================================
-$gui_keepontop                           = New-Object System.Windows.Forms.Checkbox
-$gui_keepontop.Location                  = New-Object System.Drawing.Point(($MainWindow_leftalign),9)
-$gui_keepontop.Size                      = New-Object System.Drawing.Size(120,20)
-$gui_keepontop.Text                      = $text_keepontop
-$gui_keepontop.UseVisualStyleBackColor   = $True
-$gui_keepontop.Anchor                    = "Bottom,Left"
-$gui_keepontop.Checked                   = $MainWindow.Topmost
-$gui_keepontop.Add_Click({$MainWindow.Topmost = $gui_keepontop.Checked})
+$gui_keepontop                              = New-Object System.Windows.Forms.Checkbox
+$gui_keepontop.Location                     = New-Object System.Drawing.Point(($MainWindow_leftalign),9)
+$gui_keepontop.Size                         = New-Object System.Drawing.Size(120,20)
+$gui_keepontop.Text                         = $text_keepontop
+$gui_keepontop.UseVisualStyleBackColor      = $True
+$gui_keepontop.Anchor                       = "Bottom,Left"
+$gui_keepontop.Checked                      = $MainWindow.Topmost
+
 
 #================================
 $gui_saveButton                               = New-Object System.Windows.Forms.Button
@@ -430,7 +454,7 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
         # Add
         $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[2].Value += $wordcount
         $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[3].Value += $proofreadtime
-        $datagridview.Rows.Add($ico,$file.Name,$wordcount,$proofreadtime);
+        $datagridview.Rows.Add($ico,$file.Name,$wordcount,$proofreadtime,"X");
 
         # HIGHER
         $MainWindow.Height = ($MainWindow.Height + 33)
@@ -439,6 +463,48 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
 
 	} # End of processing list
     
+}
+
+
+#================================
+$DeleteRow = {
+    # Check if we are not trying to delete the last
+    # And if its actually the column with a X
+	if (($datagridview.CurrentCell.RowIndex -ne ($datagridview.Rows.Count - 1) ) -and ($datagridview.CurrentCell.ColumnIndex -eq 4 ))
+	{
+
+        # Delete offending line
+        $datagridview.Rows.RemoveAt($datagridview.CurrentCell.RowIndex)
+
+        # Init count
+        $wordcount          = 0
+        $proofreadtime      = 0
+
+        # Get old values out
+        $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[2].Value = $wordcount
+        $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[3].Value = $proofreadtime
+
+
+        # Recount
+        foreach ($row in $datagridview.Rows)
+        {
+            # Do not count the last
+            if ($row.RowIndex -ne $datagridview.Rows.Count - 1 )
+            {
+                $wordcount      += $row.Cells[2].Value 
+                $proofreadtime  += $row.Cells[3].Value
+            }
+        }
+
+        # Wake up babe new count just dropped
+        $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[2].Value += $wordcount
+        $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[3].Value += $proofreadtime
+
+
+        # LOWER
+        $MainWindow.Height = ($MainWindow.Height - 33)
+
+	}
 }
  
 
@@ -471,8 +537,14 @@ $MainWindow_FormClosed = {
 ### Wire up events ###
  
 #$button.Add_Click($button_Click)
+
+$gui_keepontop.Add_Click({$MainWindow.Topmost = $gui_keepontop.Checked})
+
 $datagridview.Add_DragOver($DragOver)
 $datagridview.Add_DragDrop($DragDrop)
+
+$datagridview.Add_CellMouseClick($DeleteRow)
+
 $MainWindow.Add_DragOver($DragOver)
 $MainWindow.Add_DragDrop($DragDrop)
 $MainWindow.Add_FormClosed($MainWindow_FormClosed)

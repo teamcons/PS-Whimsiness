@@ -20,7 +20,7 @@ Startup is slow due to interacting with Office. Which is slow.
 - Can stay on top, if you want to
 - Cute
 - Minimal, resizes as you add files
-- (MAYBE, TODO) delete line
+- Delete line
         </p></td>
   </table>
 
@@ -62,6 +62,7 @@ So this just creates an icon in systray and keeps the puter awake.
 - Swayy: When you start it, it loads clipboard content
 - Unobtrusive: Very transparent when losing focus
 - Drag and Drop: Add path to files dropped onto it
+- Small calculator (not done yet)
 
     </p></td>
   </table>
