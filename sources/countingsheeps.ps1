@@ -105,23 +105,34 @@ $icon = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream)
 
 
 
-function Save-CSV([string] $initialDirectory)
-{   
-    $OpenFileDialog = New-Object System.Windows.Forms.SaveFileDialog
-    $OpenFileDialog.initialDirectory = $initialDirectory
-    $OpenFileDialog.filter = "Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*"
-    $OpenFileDialog.ShowDialog() |  Out-Null
-    return $OpenFileDialog.filename
-}
+
+#==========================================
+#                Functions                =
+#==========================================
 
 
-function saveeverything
+#================================
+# Save to CSV
+function Save-DataGridView
 {
 
-    $analysisfile = Save-CSV $ScriptPath
+    [int]$totalwords                            =  $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[2].Value
+    [string]$defaultname                        = -join("CountingsSheeps-",$totalwords,"w.csv")
+
+    $OpenFileDialog                             = New-Object System.Windows.Forms.SaveFileDialog
+    $OpenFileDialog.initialDirectory            = $ScriptPath
+    $OpenFileDialog.filename                    = $defaultname
+    $OpenFileDialog.AddExtension                = $true
+    $OpenFileDialog.filter                      = "Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*"
+
+    $result = $OpenFileDialog.ShowDialog()
+    $analysisfile = $OpenFileDialog.filename
+    
     # Cancel culture : Drop everything if cancel
-    if (($analysisfile -ne $none) -and ($analysisfile -ne ""))
+    if ( ($result -ne [System.Windows.Forms.DialogResult]::Cancel) -and ($analysisfile -ne $none) -and ($analysisfile -ne ""))
     {
+
+
         # Create the CSV, specify separator to avoid issues opening the csv in your fav office software
         Write-Output "sep=$SEP" | Out-File -FilePath "$analysisfile"
 
@@ -154,13 +165,13 @@ function saveeverything
 
 
 [int]$MainWindow_leftalign = 10
-[int]$MainWindow_verticalalign = 190
+[int]$MainWindow_verticalalign = 180
 
 
 
 $MainWindow                   = New-Object System.Windows.Forms.Form
 $MainWindow.Text              = $APPNAME
-$MainWindow.Size              = New-Object System.Drawing.Size(345,($MainWindow_verticalalign + 40))
+$MainWindow.Size              = New-Object System.Drawing.Size(345,($MainWindow_verticalalign + 25))
 $MainWindow.MinimumSize       = New-Object System.Drawing.Size(345,($MainWindow_verticalalign + 25))
 #$MainWindow.AutoSize         = $true
 $MainWindow.AutoScale         = $true
@@ -168,7 +179,7 @@ $MainWindow.Font              = New-Object System.Drawing.Font('Microsoft Sans S
 $MainWindow.StartPosition     = 'CenterScreen'
 $MainWindow.MaximizeBox       = $True
 $MainWindow.Topmost           = $True
-$MainWindow.BackColor         = "White"
+$MainWindow.BackColor         = "LightGreen" #"White" #'241,241,241'x
 $MainWindow.Icon              = $icon
 $MainWindow.AllowDrop = $True
 #$MainWindow.AllowTransparency = $false
@@ -176,7 +187,7 @@ $MainWindow.AllowDrop = $True
 
 # FANCY ICON
 $pictureBox             = new-object Windows.Forms.PictureBox
-$pictureBox.Location    = New-Object System.Drawing.Point($MainWindow_leftalign,10)
+$pictureBox.Location    = New-Object System.Drawing.Point($MainWindow_leftalign,0)
 $img = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
 $pictureBox.Width       = 64 #$img.Size.Width
 $pictureBox.Height      = 64 #$img.Size.Height
@@ -191,7 +202,7 @@ $MainWindow.controls.add($pictureBox)
 
 # LABEL AND TEXT
 $label                  = New-Object System.Windows.Forms.Label
-$label.Location         = New-Object System.Drawing.Point(($MainWindow_leftalign + 70),20) # leftalign+80 if icon
+$label.Location         = New-Object System.Drawing.Point(($MainWindow_leftalign + 70),10) # leftalign+80 if icon
 $label.Size             = New-Object System.Drawing.Size(180,20)
 $label.AutoSize         = $true
 $label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 11, [System.Drawing.FontStyle]::Bold)
@@ -208,28 +219,28 @@ $labelgrid                  = New-Object System.Windows.Forms.Label
 $labelgrid.Text             = $text_label_how
 $labelgrid.AutoSize         = $True
 $labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Italic)
-$labelgrid.Location         = New-Object System.Drawing.Point(($MainWindow_leftalign + 70),45)
+$labelgrid.Location         = New-Object System.Drawing.Point(($MainWindow_leftalign + 70),35)
 $labelgrid.Size             = New-Object System.Drawing.Size(250,20)
 $MainWindow.Controls.Add($labelgrid)
 
 
 ## Configure the Gridview
-$datagridview                   = New-Object System.Windows.Forms.DataGridView
-$datagridview.Location          = New-Object System.Drawing.Size($MainWindow_leftalign,80)
-$datagridview.Size              = New-Object System.Drawing.Size(310,70)
-$datagridview.AutoSize = $true
-$datagridview.BackgroundColor = "White"
-$datagridview.Anchor = "Left,Bottom,Top,Right"
-$datagridview.AllowDrop = $True
-$datagridview.ColumnCount = 3
-$datagridview.ColumnHeadersVisible = $true
-$datagridview.RowHeadersVisible = $false
-$datagridview.ReadOnly = $true
-$datagridview.AutoSizeRowsMode = "AllCells"
-$datagridview.AutoSizeColumnsMode = "Fill"
-$datagridview.AllowUserToAddRows = "False"
-$datagridview.AllowUserToDeleteRows = $true
-$datagridview.BorderStyle = "None"
+$datagridview                           = New-Object System.Windows.Forms.DataGridView
+$datagridview.Location                  = New-Object System.Drawing.Size($MainWindow_leftalign,65)
+$datagridview.Size                      = New-Object System.Drawing.Size(310,55)
+$datagridview.AutoSize                  = $true
+$datagridview.BackgroundColor           = '241,241,241' #"White"
+$datagridview.Anchor                    = "Left,Bottom,Top,Right"
+$datagridview.AllowDrop                 = $True
+$datagridview.ColumnCount               = 3
+$datagridview.ColumnHeadersVisible      = $true
+$datagridview.RowHeadersVisible         = $false
+$datagridview.ReadOnly                  = $true
+$datagridview.AutoSizeRowsMode          = "AllCells"
+$datagridview.AutoSizeColumnsMode       = "Fill"
+$datagridview.AllowUserToAddRows        = "False"
+$datagridview.AllowUserToDeleteRows     = $true
+$datagridview.BorderStyle               = "None"
 
 $datagridview.Columns[0].Name = $text_column_file
 $datagridview.Columns[0].Width = 120
@@ -287,7 +298,7 @@ $gui_saveButton.Text                          = $text_button_save
 $gui_saveButton.UseVisualStyleBackColor       = $True
 $gui_saveButton.Anchor                        = "Bottom,Right"
 #$gui_okButton.BackColor                     = ”Green”
-$gui_saveButton.Add_Click({saveeverything})
+$gui_saveButton.Add_Click({Save-DataGridView})
 #$gui_saveButton.DialogResult              = [System.Windows.Forms.DialogResult]::OK
 #$MainWindow.AcceptButton                          = $gui_saveButton
 
@@ -309,6 +320,15 @@ $gui_panel.Controls.Add($gui_cancelButton)
 $gui_panel.Show()
 
 [void]$MainWindow.Controls.Add($gui_panel)
+
+
+
+
+
+
+#=========================================
+#                Handlers                =
+#=========================================
 
 
 
@@ -390,7 +410,7 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
         $datagridview.Rows.Add($ico,$file.Name,$wordcount,$proofreadtime);
 
         # HIGHER
-        $MainWindow.Height = ($MainWindow.Height + 30)
+        $MainWindow.Height = ($MainWindow.Height + 33)
 
 
 
