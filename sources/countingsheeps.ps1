@@ -558,7 +558,6 @@ $label.Add_Click({
     $datagridview.BackColor         = $MainWindow.BackColor
 })
 
-$MainWindow.Topmost = $gui_keepontop.Checked
 
 $datagridview.Add_DragOver($DragOver)
 $datagridview.Add_DragDrop($DragDrop)
