@@ -80,8 +80,8 @@ else
 
 
 $script:word = New-Object -ComObject Word.Application
-$script:excel = New-Object -ComObject Excel.Application
-$script:powerpoint = New-Object -ComObject Powerpoint.Application
+#$script:excel = New-Object -ComObject Excel.Application
+#$script:powerpoint = New-Object -ComObject Powerpoint.Application
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -333,12 +333,7 @@ $gui_panel.Show()
 
 
 ### Write event handlers ###
- 
-$button_Click = {
-    write-host "Listbox contains:" -ForegroundColor Yellow
- 
-}
- 
+
 $DragOver = [System.Windows.Forms.DragEventHandler]{
 	if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop))
 	{
@@ -366,11 +361,13 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
             $filecontent.Close()
             
         }
-        elseif ($file.Extension -match ".xls[|x]" )
+<#         elseif ($file.Extension -match ".xls[|x]" )
         {
 
+            #foreach ($cell in $b.ActiveSheet.Rows[3].Cells) { if ($cell.Text -ne "") {$cell.Text} }
+
             # OPEN IN EXCEL, PROCESS COUNT
-            $filecontent = $excel.Documents.Open($file.FullName)
+            $filecontent = $excel.Workbooks.Open($file.FullName)
             [int]$wordcount = $filecontent.ComputeStatistics([Microsoft.Office.Interop.Excel.WdStatistic]::wdStatisticWords)
             #CLOSE FILE
             $filecontent.Close()
@@ -382,7 +379,7 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
             [int]$wordcount = $filecontent.ComputeStatistics([Microsoft.Office.Interop.Powerpoint.WdStatistic]::wdStatisticWords)
             #CLOSE FILE
             $filecontent.Close()
-        }
+        } #>
         elseif ($file.Extension -match ".pdf" )
         {
             # COUNT WORDS IN PDF FILE
