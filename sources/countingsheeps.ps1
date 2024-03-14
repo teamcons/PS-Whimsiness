@@ -547,6 +547,19 @@ $MainWindow_FormClosed = {
 
 $gui_keepontop.Add_Click({$MainWindow.Topmost = $gui_keepontop.Checked})
 
+$label.Add_Click({
+    echo "click"
+    switch ($MainWindow.BackColor) {
+        "LightGray"     { $MainWindow.BackColor = "White" }
+        "White"         { $MainWindow.BackColor = "LightGreen" }
+        "LightGreen"    { $MainWindow.BackColor = "LightGray" }
+    }
+    $wraparound_panel.BackColor     = $MainWindow.BackColor
+    $datagridview.BackColor         = $MainWindow.BackColor
+})
+
+$MainWindow.Topmost = $gui_keepontop.Checked
+
 $datagridview.Add_DragOver($DragOver)
 $datagridview.Add_DragDrop($DragDrop)
 
