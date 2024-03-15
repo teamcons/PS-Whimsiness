@@ -146,7 +146,7 @@ $Menu_Toggle.Add_Click({
  })
 
 
- # Stop everything
+# Stop everything
 $Menu_Exit = New-Object System.Windows.Forms.MenuItem
 $Menu_Exit.Text = "Close app"
 $Menu_Exit.add_Click({
@@ -155,7 +155,6 @@ $Menu_Exit.add_Click({
     $Main_Tool_Icon.Icon.Dispose();
     $Main_Tool_Icon.Dispose();
     $appContext.Dispose();
-    exit
  })
 
 $Main_Tool_Icon.ContextMenu = New-Object System.Windows.Forms.ContextMenu

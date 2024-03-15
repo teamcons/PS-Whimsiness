@@ -8,7 +8,7 @@ else
 
 #========================
 # COUNTINGSHEEPS
-#<# 
+<# 
 ps2exe `
 -inputFile $ScriptPath\sources\countingsheeps.ps1 `
 -iconFile $ScriptPath\assets\bluesheep.ico `
@@ -34,12 +34,12 @@ ps2exe `
 -noOutput `
 -exitOnCancel `
 -title "EnergyDrink" `
--description "Stay awake !" `
+-description "Keep puter awake!" `
 -company "teamcons" `
 -copyright "GPL-3.0 Stella - stella.menier@gmx.de" `
 -version 0.9 `
 -Verbose `
--outputFile $ScriptPath\energydrink-final.exe
+-outputFile $ScriptPath\energydrink.exe
 
 
 #========================
