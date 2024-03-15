@@ -49,7 +49,7 @@ Write-Output "[STARTUP] Getting all variables in place"
 [string]$SEP                            = ";"
 [int]$WORDS_PER_HOUR                    = 1800
 [int]$DECIMALS                          = 2
-[string]$Form_Theme                     = "LightGreen"      #"White" #'241,241,241'x
+[string]$Form_Theme                     = '241,241,241' #"White" #"LightGreen"
 
 
 #========================================
@@ -547,7 +547,7 @@ $MainWindow_FormClosed = {
 
 $gui_keepontop.Add_Click({$MainWindow.Topmost = $gui_keepontop.Checked})
 
-$label.Add_Click({
+<# $label.Add_Click({
     echo "click"
     switch ($MainWindow.BackColor) {
         "LightGray"     { $MainWindow.BackColor = "White" }
@@ -556,7 +556,7 @@ $label.Add_Click({
     }
     $wraparound_panel.BackColor     = $MainWindow.BackColor
     $datagridview.BackColor         = $MainWindow.BackColor
-})
+}) #>
 
 
 $datagridview.Add_DragOver($DragOver)
