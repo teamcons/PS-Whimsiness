@@ -148,7 +148,7 @@ $Menu_Toggle.Add_Click({
 
  # Stop everything
 $Menu_Exit = New-Object System.Windows.Forms.MenuItem
-$Menu_Exit.Text = "Exit"
+$Menu_Exit.Text = "Close app"
 $Menu_Exit.add_Click({
     $Main_Tool_Icon.Visible = $false
     Stop-Job -Name "keepAwake"
