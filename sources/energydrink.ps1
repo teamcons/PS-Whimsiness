@@ -154,7 +154,8 @@ $Menu_Exit.add_Click({
     Stop-Job -Name "keepAwake"
     $Main_Tool_Icon.Icon.Dispose();
     $Main_Tool_Icon.Dispose();
-    #exit
+    $appContext.Dispose();
+    exit
  })
 
 $Main_Tool_Icon.ContextMenu = New-Object System.Windows.Forms.ContextMenu

@@ -559,14 +559,14 @@ $gui_keepontop.Add_Click({$MainWindow.Topmost = $gui_keepontop.Checked})
 }) #>
 
 
+# All the attach
 $datagridview.Add_DragOver($DragOver)
 $datagridview.Add_DragDrop($DragDrop)
-
 $datagridview.Add_CellMouseClick($DeleteRow)
-
 $MainWindow.Add_DragOver($DragOver)
 $MainWindow.Add_DragDrop($DragDrop)
 $MainWindow.Add_FormClosed($MainWindow_FormClosed)
+
 
 # Go
 $MainWindow.ShowDialog()
