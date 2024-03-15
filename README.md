@@ -12,7 +12,7 @@ Startup is slow due to interacting with Office. Which is slow.
 
 
   <table align="center" border="none">
-      <td><img  width="250" height="200" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png"" /></td>
+      <td><img src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot CountingSheeps.png"" /></td>
       <td><p>
 
 ### Features:
