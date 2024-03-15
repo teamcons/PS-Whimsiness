@@ -8,7 +8,7 @@ else
 
 #========================
 # COUNTINGSHEEPS
-#<# 
+<# 
 ps2exe `
 -inputFile $ScriptPath\sources\countingsheeps.ps1 `
 -iconFile $ScriptPath\assets\bluesheep.ico `
@@ -26,7 +26,7 @@ ps2exe `
 
 #========================
 # ENERGYDRINK
-<# 
+#<# 
 ps2exe `
 -inputFile $ScriptPath\sources\energydrink.ps1 `
 -iconFile $ScriptPath\assets\soft-drink.ico `
@@ -39,7 +39,7 @@ ps2exe `
 -copyright "GPL-3.0 Stella - stella.menier@gmx.de" `
 -version 0.9 `
 -Verbose `
--outputFile $ScriptPath\energydrink.exe
+-outputFile $ScriptPath\energydrink-tru.exe
  #>
 
 #========================

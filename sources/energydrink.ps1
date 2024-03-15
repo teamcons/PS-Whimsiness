@@ -9,14 +9,6 @@
 # Usage: Compiled form, just double-click.
 #
 #
-#----------------STEPS----------------
-#
-# Initialization
-# GUI
-# Processing Input
-# Build the project
-# Bonus
-#
 #-------------------------------------
 
 
@@ -98,7 +90,6 @@ $Main_Tool_Icon.Add_Click({
 
 # About in notification bubble
 $Menu_About = New-Object System.Windows.Forms.MenuItem
-$Menu_About.Enabled = $true
 $Menu_About.Text = "About"
 $Menu_About.add_Click({
     $Main_Tool_Icon.BalloonTipTitle = "Keep puter awake!"
@@ -108,9 +99,11 @@ $Menu_About.add_Click({
     $Main_Tool_Icon.ShowBalloonTip(1000)
  })
 
+ # Old : Toggled labels
+<# 
  # Toggle between halt and continue
 $Menu_Toggle = New-Object System.Windows.Forms.MenuItem
-$Menu_Toggle.Enabled = $true
+$Menu_Toggle.Checked = $true
 $Menu_Toggle.Text = "Halt"
 $Menu_Toggle.Add_Click({
     # If running (advertising to stop), stop, advertise starting
@@ -123,7 +116,24 @@ $Menu_Toggle.Add_Click({
         Start-Job -ScriptBlock $keepAwakeScript -Name "keepAwake"
         $Menu_Toggle.Text = "Halt"}
  })
+ #>
 
+ #New: Has a checkmark
+
+# Toggle between halt and continue
+$Menu_Toggle = New-Object System.Windows.Forms.MenuItem
+$Menu_Toggle.Checked = $true
+$Menu_Toggle.Text = "Keep awake"
+$Menu_Toggle.Add_Click({
+    # If it was checked when clicked, stop it
+    # Else, it wasnt checked, so start it
+    if ($Menu_Toggle.Checked) {
+        Stop-Job -Name "keepAwake"
+        $Menu_Toggle.Checked = $false }
+    else {
+        Start-Job -ScriptBlock $keepAwakeScript -Name "keepAwake"
+        $Menu_Toggle.Checked = $true }
+ })
 
 
  # Stop everything
@@ -150,14 +160,9 @@ $Main_Tool_Icon.BalloonTipTitle = "Started !"
 $Main_Tool_Icon.BalloonTipIcon = [System.Windows.Forms.ToolTipIcon]::Info
 $Main_Tool_Icon.BalloonTipText = "The puter is now prevented from going to sleep"
 $Main_Tool_Icon.Visible = $true
-$Main_Tool_Icon.ShowBalloonTip(1000)
+$Main_Tool_Icon.ShowBalloonTip(500)
 
 Start-Job -ScriptBlock $keepAwakeScript -Name "keepAwake"
-
-# Make PowerShell Disappear
-#$windowcode = '[DllImport("user32.dll")] public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);'
-#$asyncwindow = Add-Type -MemberDefinition $windowcode -name Win32ShowWindowAsync -namespace Win32Functions -PassThru
-#$null = $asyncwindow::ShowWindowAsync((Get-Process -PID $pid).MainWindowHandle, 0)
 
 # Force garbage collection just to start slightly lower RAM usage.
 [System.GC]::Collect()
