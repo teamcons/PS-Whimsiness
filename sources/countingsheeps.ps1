@@ -566,18 +566,22 @@ $MainWindow.Add_DragDrop($DragDrop)
 $MainWindow.Add_FormClosed($MainWindow_FormClosed)
 
 
+$script:word = New-Object -ComObject Word.Application
+
+
+
 # Go
-$MainWindow.Show()
+$MainWindow.ShowDialog()
 
 # Slow shit in the background, no one will notice
-$script:word = New-Object -ComObject Word.Application
+#$script:word = New-Object -ComObject Word.Application
 #$script:excel = New-Object -ComObject Excel.Application
 #$script:powerpoint = New-Object -ComObject Powerpoint.Application
 
 # This makes it pop up
-$MainWindow.Activate()
+#$MainWindow.Activate()
  
 # Create an application context for it to all run within. 
 # This helps with responsiveness and threading.
-$appContext = New-Object System.Windows.Forms.ApplicationContext 
-[void][System.Windows.Forms.Application]::Run($appContext)
+#$appContext = New-Object System.Windows.Forms.ApplicationContext 
+#[void][System.Windows.Forms.Application]::Run($appContext)
