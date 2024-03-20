@@ -88,9 +88,7 @@ else
 
 
 
-$script:word = New-Object -ComObject Word.Application
-#$script:excel = New-Object -ComObject Excel.Application
-#$script:powerpoint = New-Object -ComObject Powerpoint.Application
+
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -569,5 +567,17 @@ $MainWindow.Add_FormClosed($MainWindow_FormClosed)
 
 
 # Go
-$MainWindow.ShowDialog()
+$MainWindow.Show()
 
+# Slow shit in the background, no one will notice
+$script:word = New-Object -ComObject Word.Application
+#$script:excel = New-Object -ComObject Excel.Application
+#$script:powerpoint = New-Object -ComObject Powerpoint.Application
+
+# This makes it pop up
+$MainWindow.Activate()
+ 
+# Create an application context for it to all run within. 
+# This helps with responsiveness and threading.
+$appContext = New-Object System.Windows.Forms.ApplicationContext 
+[void][System.Windows.Forms.Application]::Run($appContext)
