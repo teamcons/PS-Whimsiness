@@ -262,6 +262,9 @@ $datagridview.AllowUserToAddRows        = "False"
 $datagridview.AllowUserToResizeRows     = "False"
 $datagridview.AllowUserToDeleteRows     = $true
 $datagridview.BorderStyle               = "None"
+$datagridview.BorderStyle                      = "FixedSingle"
+$datagridview.CellBorderStyle                  = "SingleHorizontal"
+#$datagridview.AlternatingRowsDefaultCellStyle.BackColor = "White"
 
 $datagridview.Columns[0].Name = $text_column_file
 $datagridview.Columns[0].Width = 100
