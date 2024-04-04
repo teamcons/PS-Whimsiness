@@ -75,6 +75,7 @@ Projektseite auf Github öffnen?"
 
 
 
+
 #===============================================
 #                Some more init                =
 #===============================================
@@ -121,55 +122,10 @@ $icon = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream)
 
 
 
-
-#==========================================
-#                Functions                =
-#==========================================
-
-
-#================================
-# Save to CSV
-function Save-DataGridView
-{
-
-    [int]$totalwords                            =  $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[2].Value
-    [string]$defaultname                        = -join("CountingsSheeps-",$totalwords,"w.csv")
-
-    $OpenFileDialog                             = New-Object System.Windows.Forms.SaveFileDialog
-    $OpenFileDialog.initialDirectory            = $ScriptPath
-    $OpenFileDialog.filename                    = $defaultname
-    $OpenFileDialog.AddExtension                = $true
-    $OpenFileDialog.filter                      = "Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*"
-
-    $result = $OpenFileDialog.ShowDialog()
-    $analysisfile = $OpenFileDialog.filename
-    
-    # Cancel culture : Drop everything if cancel
-    if ( ($result -ne [System.Windows.Forms.DialogResult]::Cancel) -and ($analysisfile -ne $none) -and ($analysisfile -ne ""))
-    {
-
-
-        # Create the CSV, specify separator to avoid issues opening the csv in your fav office software
-        Write-Output "sep=$SEP" | Out-File -FilePath "$analysisfile"
-
-        # Add column headers
-        $top = -join($datagridview.Columns[1].Name,$SEP,$datagridview.Columns[2].Name,$SEP,$datagridview.Columns[3].Name,$SEP)
-        Write-Output $top | Out-File -FilePath "$analysisfile" -Append 
-
-
-        # Rebuild and append each line
-        foreach ($row in $datagridview.Rows )
-        {
-            $line = -join($row[0].Cells[1].Value,$SEP,$row[0].Cells[2].Value,$SEP,$row[0].Cells[3].Value,$SEP)
-            Write-Output $line | Out-File -FilePath "$analysisfile" -Append
-        }
-    }
-}
-
-
 #==============================================================
 #                GUI - Ask the Right Questions                =
 #==============================================================
+
 
 
 #================================
@@ -200,9 +156,9 @@ $img = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).
 $pictureBox.Width       = 64 #$img.Size.Width
 $pictureBox.Height      = 64 #$img.Size.Height
 $pictureBox.Image       = $img;
-$pictureBox.Add_Click({
-                    $Result = [System.Windows.Forms.MessageBox]::Show($text_about,$APPNAME,4,[System.Windows.Forms.MessageBoxIcon]::Information)
-                    If ($Result -eq "Yes") { Start-Process $GITHUB_LINK } })
+#$pictureBox.Add_Click({
+ #                   $Result = [System.Windows.Forms.MessageBox]::Show($text_about,$APPNAME,4,[System.Windows.Forms.MessageBoxIcon]::Information)
+ #                   If ($Result -eq "Yes") { Start-Process $GITHUB_LINK } })
 
 #================================
 # LABEL AND TEXT
@@ -238,6 +194,7 @@ $wraparound_panel.Controls.Add($labelgrid)
 $MainWindow.Controls.Add($wraparound_panel)
 
 
+
 #===============================================
 #                GUI - THE GRID                =
 #===============================================
@@ -252,7 +209,7 @@ $datagridview.AutoSize                  = $true
 $datagridview.BackgroundColor           = $Form_Theme
 $datagridview.Anchor                    = "Left,Bottom,Top,Right"
 $datagridview.AllowDrop                 = $True
-$datagridview.ColumnCount               = 3
+$datagridview.ColumnCount               = 2
 $datagridview.ColumnHeadersVisible      = $true
 $datagridview.RowHeadersVisible         = $false
 $datagridview.ReadOnly                  = $true
@@ -266,59 +223,8 @@ $datagridview.BorderStyle                      = "FixedSingle"
 $datagridview.CellBorderStyle                  = "SingleHorizontal"
 #$datagridview.AlternatingRowsDefaultCellStyle.BackColor = "White"
 
-$datagridview.Columns[0].Name = $text_column_file
-$datagridview.Columns[0].Width = 100
-
-$datagridview.Columns[1].Name = $text_column_words
-$datagridview.Columns[1].Width = 40
-$datagridview.Columns[1].DefaultCellStyle.Alignment = "MiddleRight" 
-$datagridview.Columns[1].HeaderCell.Style.Alignment = "MiddleRight" 
-
-$datagridview.Columns[2].Name = $text_column_proofreadtime
-$datagridview.Columns[2].Width = 40
-$datagridview.Columns[2].DefaultCellStyle.Alignment = "MiddleRight" 
-$datagridview.Columns[2].HeaderCell.Style.Alignment = "MiddleRight" 
-
-
-#================================
-# Add an image column. Has to be inserted afterward. Idk why
-$ImageColumn                                    = New-Object System.Windows.Forms.DataGridViewImageColumn
-$ImageColumn.HeaderText                         = $text_column_type
-$ImageColumn.Resizable                         = "false"
-$ImageColumn.AutoSizeMode                      = "none"
-$datagridview.Columns.Insert(0, $ImageColumn);
-$datagridview.Columns[0].Width                  = 32
-
-
-
-# Adding an image column adds a weird unremovable line. Use it for sum.
-$miniico =  ([System.Drawing.Icon]::ExtractAssociatedIcon(([Environment]::GetCommandLineArgs()[0])) ).ToBitmap()
-$datagridview.Rows[0].Cells[0].Value            = $miniico
-
-
-#================================
-# Add a button column. Has to be inserted afterward. Idk why
-$ButtonColumn                                   = New-Object System.Windows.Forms.DataGridViewButtonColumn
-$ButtonColumn.HeaderText                         = "X"
-#$ButtonColumn.FlatStyle                         = "Flat"
-$ButtonColumn.Resizable                         = "false"
-$ButtonColumn.AutoSizeMode                      = "none"
-$datagridview.Columns.Insert(4, $ButtonColumn);
-$datagridview.Columns[4].Width = 24
-
-
-
-
-[string]$datagridview.Rows[0].Cells[1].Value = $text_totalsum
-[int]$datagridview.Rows[0].Cells[2].Value = 0
-[int]$datagridview.Rows[0].Cells[3].Value = 0
-[string]$datagridview.Rows[0].Cells[4].Value = ""
-
-<# $font                                   = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Bold)
-$datagridview.Rows[0].Cells[1].DefaultCellStyle.Font     = $font
-$datagridview.Rows[0].Cells[2].Font     = $font
-$datagridview.Rows[0].Cells[3].Font     = $font #>
-
+$datagridview.Columns[0].Name = "source"
+$datagridview.Columns[1].Name = "target"
 
 
 $MainWindow.Controls.Add($datagridview)
@@ -349,8 +255,8 @@ $gui_keepontop.Checked                      = $MainWindow.Topmost
 
 #================================
 $gui_saveButton                               = New-Object System.Windows.Forms.Button
-$gui_saveButton.Location                      = New-Object System.Drawing.Point(($MainWindow_leftalign + 255),5)
-$gui_saveButton.Size                          = New-Object System.Drawing.Size(80,25)
+$gui_saveButton.Location                      = New-Object System.Drawing.Point(($MainWindow_leftalign + 255),7)
+$gui_saveButton.Size                          = New-Object System.Drawing.Size(80,23)
 $gui_saveButton.Text                          = $text_button_save
 $gui_saveButton.UseVisualStyleBackColor       = $True
 $gui_saveButton.Anchor                        = "Bottom,Right"
@@ -371,10 +277,9 @@ $gui_cancelButton.DialogResult              = [System.Windows.Forms.DialogResult
 $MainWindow.CancelButton                    = $gui_cancelButton
 #$gui_cancelButton.Add_Click({$MainWindow_FormClosed})
 
-$gui_panel.Controls.Add($gui_saveButton)
+#$gui_panel.Controls.Add($gui_saveButton)
 $gui_panel.Controls.Add($gui_keepontop)
 $gui_panel.Controls.Add($gui_cancelButton)
-$gui_panel.Show()
 
 [void]$MainWindow.Controls.Add($gui_panel)
 
@@ -406,66 +311,19 @@ $DragOver = [System.Windows.Forms.DragEventHandler]{
 $DragDrop = [System.Windows.Forms.DragEventHandler]{
 	foreach ($filepath in $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
     {
-        $file = Get-Item $filepath
 
-        # Use different backend depending on what needed
-        # Each time, check the extension to know what we deal with
-        if ($file.Extension -match ".doc[|x]" )
-        {
-            # OPEN IN WORD, PROCESS COUNT
-            $filecontent = $word.Documents.Open($file.FullName)
-            [int]$wordcount = $filecontent.ComputeStatistics([Microsoft.Office.Interop.Word.WdStatistic]::wdStatisticWords)
-            #CLOSE FILE
-            $filecontent.Close()
-            
-        }
-<#         elseif ($file.Extension -match ".xls[|x]" )
-        {
+	$datagridview.Rows.clear()
+	[xml]$cn = Get-Content $filepath
 
-            #foreach ($cell in $b.ActiveSheet.Rows[3].Cells) { if ($cell.Text -ne "") {$cell.Text} }
-
-            # OPEN IN EXCEL, PROCESS COUNT
-            $filecontent = $excel.Workbooks.Open($file.FullName)
-            [int]$wordcount = $filecontent.ComputeStatistics([Microsoft.Office.Interop.Excel.WdStatistic]::wdStatisticWords)
-            #CLOSE FILE
-            $filecontent.Close()
-        }
-        elseif ($file.Extension -match ".ppt[|x]" )
-        {
-            # OPEN IN POWRPOINT, PROCESS COUNT
-            $filecontent = $powerpoint.Documents.Open($file.FullName)
-            [int]$wordcount = $filecontent.ComputeStatistics([Microsoft.Office.Interop.Powerpoint.WdStatistic]::wdStatisticWords)
-            #CLOSE FILE
-            $filecontent.Close()
-        } #>
-        elseif ($file.Extension -match ".pdf" )
-        {
-            # COUNT WORDS IN PDF FILE
-            [int]$wordcount = (Get-Content $file.FullName | Measure-Object –Word).Words
-        }
     
-        elseif ($file.Extension -match ".[txt|csv|md|log]" )
-        {
-            # COUNT WORDS IN TXT FILE
-            [int]$wordcount = (Get-Content $file.FullName | Measure-Object –Word).Words
-        }
-        else
-        {
-            # IDK
-            [int]$wordcount = 0
-        }
-            
-        # Update totalcount
-        $ico =  ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
-        $proofreadtime = [math]::round(($wordcount / $WORDS_PER_HOUR),$DECIMALS)
+	$pictureBox.Image = ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
 
-        # Add
-        $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[2].Value += $wordcount
-        $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[3].Value += $proofreadtime
-        $datagridview.Rows.Add($ico,$file.Name,$wordcount,$proofreadtime,"X");
+		foreach ($i in $cn.xliff.file.body.group.ChildNodes)
+		{
+					$datagridview.Rows.Add($i.source,$i.target);
+		}
 
-        # HIGHER
-        $MainWindow.Height = ($MainWindow.Height + 33)
+
 
 
 
@@ -474,47 +332,6 @@ $DragDrop = [System.Windows.Forms.DragEventHandler]{
 }
 
 
-#================================
-$DeleteRow = {
-    # Check if we are not trying to delete the last
-    # And if its actually the column with a X
-	if (($datagridview.CurrentCell.RowIndex -ne ($datagridview.Rows.Count - 1) ) -and ($datagridview.CurrentCell.ColumnIndex -eq 4 ))
-	{
-
-        # Delete offending line
-        $datagridview.Rows.RemoveAt($datagridview.CurrentCell.RowIndex)
-
-        # Init count
-        $wordcount          = 0
-        $proofreadtime      = 0
-
-        # Get old values out
-        $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[2].Value = $wordcount
-        $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[3].Value = $proofreadtime
-
-
-        # Recount
-        foreach ($row in $datagridview.Rows)
-        {
-            # Do not count the last
-            if ($row.RowIndex -ne $datagridview.Rows.Count - 1 )
-            {
-                $wordcount      += $row.Cells[2].Value 
-                $proofreadtime  += $row.Cells[3].Value
-            }
-        }
-
-        # Wake up babe new count just dropped
-        $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[2].Value += $wordcount
-        $datagridview.Rows[ ($datagridview.Rows.Count - 1) ].Cells[3].Value += $proofreadtime
-
-
-        # LOWER
-        $MainWindow.Height = ($MainWindow.Height - 33)
-
-	}
-}
- 
 
 
 #================================
@@ -527,11 +344,6 @@ $MainWindow_FormClosed = {
         $datagridview.remove_DragDrop($DragDrop)
 		$MainWindow.remove_FormClosed($MainWindow_Cleanup_FormClosed)
         $MainWindow.Close()
-
-        # Wont need Word anymore
-        $word.Quit()
-        $excel.Quit()
-        $powerpoint.Quit()
 
 	}
 	catch [Exception]
@@ -548,38 +360,20 @@ $MainWindow_FormClosed = {
 
 $gui_keepontop.Add_Click({$MainWindow.Topmost = $gui_keepontop.Checked})
 
-<# $label.Add_Click({
-    echo "click"
-    switch ($MainWindow.BackColor) {
-        "LightGray"     { $MainWindow.BackColor = "White" }
-        "White"         { $MainWindow.BackColor = "LightGreen" }
-        "LightGreen"    { $MainWindow.BackColor = "LightGray" }
-    }
-    $wraparound_panel.BackColor     = $MainWindow.BackColor
-    $datagridview.BackColor         = $MainWindow.BackColor
-}) #>
-
 
 # All the attach
 $datagridview.Add_DragOver($DragOver)
 $datagridview.Add_DragDrop($DragDrop)
-$datagridview.Add_CellMouseClick($DeleteRow)
+
 $MainWindow.Add_DragOver($DragOver)
 $MainWindow.Add_DragDrop($DragDrop)
 $MainWindow.Add_FormClosed($MainWindow_FormClosed)
-
-
-$script:word = New-Object -ComObject Word.Application
 
 
 
 # Go
 $MainWindow.ShowDialog()
 
-# Slow shit in the background, no one will notice
-#$script:word = New-Object -ComObject Word.Application
-#$script:excel = New-Object -ComObject Excel.Application
-#$script:powerpoint = New-Object -ComObject Powerpoint.Application
 
 # This makes it pop up
 #$MainWindow.Activate()
@@ -588,3 +382,11 @@ $MainWindow.ShowDialog()
 # This helps with responsiveness and threading.
 #$appContext = New-Object System.Windows.Forms.ApplicationContext 
 #[void][System.Windows.Forms.Application]::Run($appContext)
+
+
+
+
+
+
+
+
