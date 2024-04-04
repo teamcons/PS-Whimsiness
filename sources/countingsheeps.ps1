@@ -339,7 +339,7 @@ $gui_panel.Dock                             = "Bottom"
 
 #================================
 $gui_keepontop                              = New-Object System.Windows.Forms.Checkbox
-$gui_keepontop.Location                     = New-Object System.Drawing.Point(($MainWindow_leftalign),9)
+$gui_keepontop.Location                     = New-Object System.Drawing.Point(($MainWindow_leftalign),7)
 $gui_keepontop.Size                         = New-Object System.Drawing.Size(120,20)
 $gui_keepontop.Text                         = $text_keepontop
 $gui_keepontop.UseVisualStyleBackColor      = $True
@@ -349,7 +349,7 @@ $gui_keepontop.Checked                      = $MainWindow.Topmost
 
 #================================
 $gui_saveButton                               = New-Object System.Windows.Forms.Button
-$gui_saveButton.Location                      = New-Object System.Drawing.Point(($MainWindow_leftalign + 255),5)
+$gui_saveButton.Location                      = New-Object System.Drawing.Point(($MainWindow_leftalign + 255),3)
 $gui_saveButton.Size                          = New-Object System.Drawing.Size(80,25)
 $gui_saveButton.Text                          = $text_button_save
 $gui_saveButton.UseVisualStyleBackColor       = $True
@@ -361,7 +361,7 @@ $gui_saveButton.Add_Click({Save-DataGridView})
 
 #================================
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
-$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($MainWindow_leftalign + 340),5)
+$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($MainWindow_leftalign + 340),3)
 $gui_cancelButton.Size                      = New-Object System.Drawing.Size(80,25)
 $gui_cancelButton.Text                      = $text_button_close
 $gui_cancelButton.UseVisualStyleBackColor   = $True

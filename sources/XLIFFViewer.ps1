@@ -47,19 +47,12 @@ Write-Output ""
 Write-Output "[STARTUP] Getting all variables in place"
 [string]$APPNAME                        = "Counting Sheeps !"
 [string]$SEP                            = ";"
-[int]$WORDS_PER_HOUR                    = 1800
-[int]$DECIMALS                          = 2
 [string]$Form_Theme                     = '241,241,241' #"White" #"LightGreen"
 
 
 #========================================
 # Localization
 
-[string]$text_column_type               = "Typ"
-[string]$text_column_file               = "Datei"
-[string]$text_column_words              = "Wortzahl"
-[string]$text_column_proofreadtime      = "Std"
-[string]$text_totalsum                  = "TOTAL"
 
 [string]$text_about = "CountingSheeps V0.9
 Für die Skrivanek GmbH - Zähle die Wörter sehr, sehr schnell!
@@ -121,6 +114,39 @@ $stream = [System.IO.MemoryStream]::new($iconBytes, 0, $iconBytes.Length)
 $icon = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
 
 
+
+
+#==========================================
+#                Functions                =
+#==========================================
+
+
+#================================
+# Takes path to an XLIFF, load it in datagridview
+function Load-XLIFF
+{
+	param($filepath)
+
+	$datagridview.Rows.clear()
+	[xml]$cn = Get-Content $filepath
+
+    
+	$pictureBox.Image = ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
+
+	# Foreach nodes
+	foreach ($i in $cn.xliff.file.body.group.ChildNodes)
+	{
+
+		# Too common empty nodes, skip
+		if ($i.source -ne $none)
+		{
+			$datagridview.Rows.Add($i.source,$i.target);
+		}
+	}
+
+
+
+}
 
 #==============================================================
 #                GUI - Ask the Right Questions                =
@@ -245,7 +271,7 @@ $gui_panel.Dock                             = "Bottom"
 
 #================================
 $gui_keepontop                              = New-Object System.Windows.Forms.Checkbox
-$gui_keepontop.Location                     = New-Object System.Drawing.Point(($MainWindow_leftalign),9)
+$gui_keepontop.Location                     = New-Object System.Drawing.Point(($MainWindow_leftalign),7)
 $gui_keepontop.Size                         = New-Object System.Drawing.Size(120,20)
 $gui_keepontop.Text                         = $text_keepontop
 $gui_keepontop.UseVisualStyleBackColor      = $True
@@ -255,8 +281,8 @@ $gui_keepontop.Checked                      = $MainWindow.Topmost
 
 #================================
 $gui_saveButton                               = New-Object System.Windows.Forms.Button
-$gui_saveButton.Location                      = New-Object System.Drawing.Point(($MainWindow_leftalign + 255),7)
-$gui_saveButton.Size                          = New-Object System.Drawing.Size(80,23)
+$gui_saveButton.Location                      = New-Object System.Drawing.Point(($MainWindow_leftalign + 255),3)
+$gui_saveButton.Size                          = New-Object System.Drawing.Size(80,25)
 $gui_saveButton.Text                          = $text_button_save
 $gui_saveButton.UseVisualStyleBackColor       = $True
 $gui_saveButton.Anchor                        = "Bottom,Right"
@@ -267,7 +293,7 @@ $gui_saveButton.Add_Click({Save-DataGridView})
 
 #================================
 $gui_cancelButton                           = New-Object System.Windows.Forms.Button
-$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($MainWindow_leftalign + 340),5)
+$gui_cancelButton.Location                  = New-Object System.Drawing.Point(($MainWindow_leftalign + 340),3)
 $gui_cancelButton.Size                      = New-Object System.Drawing.Size(80,25)
 $gui_cancelButton.Text                      = $text_button_close
 $gui_cancelButton.UseVisualStyleBackColor   = $True
@@ -311,27 +337,9 @@ $DragOver = [System.Windows.Forms.DragEventHandler]{
 $DragDrop = [System.Windows.Forms.DragEventHandler]{
 	foreach ($filepath in $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
     {
-
-	$datagridview.Rows.clear()
-	[xml]$cn = Get-Content $filepath
-
-    
-	$pictureBox.Image = ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
-
-		foreach ($i in $cn.xliff.file.body.group.ChildNodes)
-		{
-					$datagridview.Rows.Add($i.source,$i.target);
-		}
-
-
-
-
-
-	} # End of processing list
-    
+		Load-XLIFF $filepath
+	}
 }
-
-
 
 
 #================================
@@ -355,11 +363,8 @@ $MainWindow_FormClosed = {
 
 #================================
 ### Wire up events ###
- 
-#$button.Add_Click($button_Click)
 
 $gui_keepontop.Add_Click({$MainWindow.Topmost = $gui_keepontop.Checked})
-
 
 # All the attach
 $datagridview.Add_DragOver($DragOver)
@@ -368,8 +373,6 @@ $datagridview.Add_DragDrop($DragDrop)
 $MainWindow.Add_DragOver($DragOver)
 $MainWindow.Add_DragDrop($DragDrop)
 $MainWindow.Add_FormClosed($MainWindow_FormClosed)
-
-
 
 # Go
 $MainWindow.ShowDialog()
