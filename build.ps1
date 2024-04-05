@@ -8,7 +8,7 @@ else
 
 #========================
 # COUNTINGSHEEPS
-#<# 
+<# 
 ps2exe `
 -inputFile $ScriptPath\sources\countingsheeps.ps1 `
 -iconFile $ScriptPath\assets\bluesheep.ico `
@@ -57,4 +57,22 @@ ps2exe `
 -version 0.9 `
 -Verbose `
 -outputFile $ScriptPath\scratchpad.exe
+ #>
+
+ #========================
+# SDLXLIFFVIEWER
+#<# 
+ps2exe `
+-inputFile $ScriptPath\sources\XLIFFViewer.ps1 `
+-iconFile $ScriptPath\assets\XLIFFDocument.ico `
+-noConsole `
+-noOutput `
+-exitOnCancel `
+-title "XLIFFViewer" `
+-description "Check inside XLIFF !" `
+-company "Skrivanek GmbH" `
+-copyright "GPL-3.0 Stella - stella.menier@gmx.de" `
+-version 0.9 `
+-Verbose `
+-outputFile $ScriptPath\XLIFFViewer.exe
  #>
