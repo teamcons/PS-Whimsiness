@@ -245,7 +245,7 @@ $wraparound_panel.Anchor                      = "Right,Left,Top"
 # Label and button
 $labelgrid                  = New-Object System.Windows.Forms.Label
 $labelgrid.Text             = $text_label_how
-$labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Italic)
+#$labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Italic)
 $labelgrid.Dock             = "Fill"
 #$labelgrid.ReadOnly			= $true
 #$labelgrid.Multiline		= $true
