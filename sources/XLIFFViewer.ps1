@@ -47,7 +47,6 @@ Write-Output ""
 
 Write-Output "[STARTUP] Getting all variables in place"
 [string]$APPNAME                        = "XLIFFViewer"
-[string]$SEP                            = ";"
 [string]$Form_Theme                     = '241,241,241' #"White" #"LightGreen"
 
 
@@ -62,7 +61,7 @@ GPL-3.0 Stella Ménier - stella.menier@gmx.de
 Projektseite auf Github öffnen?"
 
 [string]$GITHUB_LINK                    = "https://github.com/teamcons/PS-Whimsiness"
-[string]$text_label_how                 = "Einfach Dateien per Drag & Drop auf das Fenster ablegen!"
+[string]$text_label_how                 = "Einfach Dateien per Drag & Drop auf das Fenster ablegen"
 [string]$text_button_close              = "Schließen"
 [string]$text_button_save               = "Speichern"
 [string]$text_keepontop                 = "Über alle Fenster"
@@ -127,13 +126,15 @@ $icon = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream)
 function Load-XLIFF
 {
 	param($filepath)
+
+	#$wraparound_panel.Hide()
 	$datagridview.Show()
 	$datagridview.Rows.clear()
 	[xml]$cn = Get-Content $filepath
 	$file = Get-Item $filepath
 
-	$MainWindow.Text            = -join($file.Name) #$APPNAME," - ",
-    $label.Text 				= -join("",$file.Name)
+	$MainWindow.Text            = -join($APPNAME," - ",$file.Name) #
+    #$label.Text 				= -join("",$file.Name)
 	$labelgrid.Text 			= -join("Original: ",($cn.xliff.file.original).Split("\")[-1])    #,"
 #CreationDate:",($cn.xliff.file.header.'file-info'.value[1].'#text'))
 
@@ -235,7 +236,7 @@ $label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif',
 # Else the label doesnt wrap around neatly
 $wraparound_panel                       = New-Object System.Windows.Forms.Panel
 $wraparound_panel.Location              = New-Object System.Drawing.Point(($MainWindow_leftalign),5)
-$wraparound_panel.Height                = 30
+$wraparound_panel.Height                = 15
 $wraparound_panel.Width                 = 370
 $wraparound_panel.AutoSize              = $true
 $wraparound_panel.BackColor             = $Form_Theme
@@ -266,8 +267,8 @@ $MainWindow.Controls.Add($wraparound_panel)
 
 ## Configure the Gridview
 $datagridview                           = New-Object System.Windows.Forms.DataGridView
-$datagridview.Location                  = New-Object System.Drawing.Size($MainWindow_leftalign,40)
-$datagridview.Size                      = New-Object System.Drawing.Size(365,90)
+$datagridview.Location                  = New-Object System.Drawing.Size($MainWindow_leftalign,30) #40 with wraparound
+$datagridview.Size                      = New-Object System.Drawing.Size(365,100)
 $datagridview.AutoSize                  = $true
 $datagridview.BackgroundColor           = $Form_Theme
 $datagridview.Anchor                    = "Left,Bottom,Top,Right"
@@ -280,10 +281,10 @@ $datagridview.AutoSizeRowsMode          = "AllCells"
 $datagridview.AutoSizeColumnsMode       = "Fill"
 $datagridview.AllowUserToResizeRows     = $false
 $datagridview.BorderStyle               = "None"
-$datagridview.BorderStyle                      = "Fixed3D"
-$datagridview.CellBorderStyle                  = "SingleHorizontal"
+$datagridview.BorderStyle               = "Fixed3D"
+$datagridview.CellBorderStyle           = "SingleHorizontal"
 $datagridview.AlternatingRowsDefaultCellStyle.BackColor = "241,241,241"
-
+$datagridview.SelectionMode 			= "FullRowSelect"
 $datagridview.DefaultCellStyle.WrapMode = "false"
 
 
