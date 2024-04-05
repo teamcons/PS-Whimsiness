@@ -132,7 +132,7 @@ function Load-XLIFF
 	$file = Get-Item $filepath
 
 	$MainWindow.Text            = -join($APPNAME," - ",$file.Name)
-    $label.Text 				= -join("SDLXLIFF: ",$file.Name)
+    $label.Text 				= -join("",$file.Name)
 	$labelgrid.Text 			= -join("Original: ",($cn.xliff.file.original).Split("\")[-1])
 	$pictureBox.Image 			= ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
 
