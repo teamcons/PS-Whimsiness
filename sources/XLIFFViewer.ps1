@@ -134,7 +134,10 @@ function Load-XLIFF
 
 	$MainWindow.Text            = -join($file.Name) #$APPNAME," - ",
     $label.Text 				= -join("",$file.Name)
-	$labelgrid.Text 			= -join("Original: ",($cn.xliff.file.original).Split("\")[-1])
+	$labelgrid.Text 			= -join("Original: ",($cn.xliff.file.original).Split("\")[-1])    #,"
+#CreationDate:",($cn.xliff.file.header.'file-info'.value[1].'#text'))
+
+
 	$pictureBox.Image 			= ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
 
 	$datagridview.Columns[0].Name = -join("source: ",$cn.xliff.file.'source-language')
@@ -233,18 +236,22 @@ $label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif',
 $wraparound_panel                       = New-Object System.Windows.Forms.Panel
 $wraparound_panel.Location              = New-Object System.Drawing.Point(($MainWindow_leftalign),10)
 $wraparound_panel.Height                = 30
-$wraparound_panel.Width                 = 295
+$wraparound_panel.Width                 = 300
 $wraparound_panel.AutoSize              = $true
 $wraparound_panel.BackColor             = $Form_Theme
 $wraparound_panel.Anchor                      = "Right,Left,Top"
 
 #================================
 # Label and button
-$labelgrid                  = New-Object System.Windows.Forms.Label
+$labelgrid                  = New-Object System.Windows.Forms.TextBox
 $labelgrid.Text             = $text_label_how
-$labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Italic)
+#$labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Italic)
 $labelgrid.Dock             = "Fill"
-
+$labelgrid.ReadOnly			= $true
+$labelgrid.Multiline		= $true
+$labelgrid.BackColor             = $Form_Theme
+$labelgrid.BorderStyle             = "None"
+$labelgrid.SelectedText		= $none
 
 $wraparound_panel.Controls.Add($labelgrid)
 $MainWindow.Controls.Add($wraparound_panel)
