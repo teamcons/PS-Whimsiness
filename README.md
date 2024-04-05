@@ -47,6 +47,23 @@ So this just creates an icon in systray and keeps the puter awake.
   </table>
 
 
+# 💽 ScratchPad
+
+### Check out stray XLIFF files at work
+
+  <table align="center" border="none">
+      <td><img  width="250" height="250" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot XLIFFViewer.png"" /></td>
+      <td><p>
+
+### Features:
+- Working on making it flexiblener
+- Can keep on top
+-Can switch wraparoud
+
+    </p></td>
+  </table>
+
+
 
 
 # 💽 ScratchPad
