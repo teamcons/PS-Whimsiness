@@ -61,7 +61,7 @@ GPL-3.0 Stella Ménier - stella.menier@gmx.de
 
 Projektseite auf Github öffnen?"
 
-[string]$GITHUB_LINK                    = "https://github.com/teamcons/Skrivanek-CountingSheeps"
+[string]$GITHUB_LINK                    = "https://github.com/teamcons/PS-Whimsiness"
 [string]$text_label_how                 = "Einfach Dateien per Drag & Drop auf das Fenster ablegen!"
 [string]$text_button_close              = "Schließen"
 [string]$text_button_save               = "Speichern"
@@ -127,12 +127,12 @@ $icon = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream)
 function Load-XLIFF
 {
 	param($filepath)
-
+	$datagridview.Show()
 	$datagridview.Rows.clear()
 	[xml]$cn = Get-Content $filepath
 	$file = Get-Item $filepath
 
-	$MainWindow.Text            = -join($APPNAME," - ",$file.Name)
+	$MainWindow.Text            = -join($file.Name) #$APPNAME," - ",
     $label.Text 				= -join("",$file.Name)
 	$labelgrid.Text 			= -join("Original: ",($cn.xliff.file.original).Split("\")[-1])
 	$pictureBox.Image 			= ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
@@ -188,7 +188,7 @@ function Load-XLIFF
 #= INITIAL WORK =
 
 [int]$MainWindow_leftalign = 10
-[int]$MainWindow_verticalalign = 180
+[int]$MainWindow_verticalalign = 160
 
 
 $MainWindow                   = New-Object System.Windows.Forms.Form
@@ -225,13 +225,13 @@ $label.Size             = New-Object System.Drawing.Size(305,20)
 $label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 11, [System.Drawing.FontStyle]::Bold)
 
 #$MainWindow.controls.add($pictureBox)
-$MainWindow.Controls.Add($label)
+#$MainWindow.Controls.Add($label)
 
 
 #================================
 # Else the label doesnt wrap around neatly
 $wraparound_panel                       = New-Object System.Windows.Forms.Panel
-$wraparound_panel.Location              = New-Object System.Drawing.Point(($MainWindow_leftalign),32)
+$wraparound_panel.Location              = New-Object System.Drawing.Point(($MainWindow_leftalign),10)
 $wraparound_panel.Height                = 30
 $wraparound_panel.Width                 = 295
 $wraparound_panel.AutoSize              = $true
@@ -259,7 +259,7 @@ $MainWindow.Controls.Add($wraparound_panel)
 
 ## Configure the Gridview
 $datagridview                           = New-Object System.Windows.Forms.DataGridView
-$datagridview.Location                  = New-Object System.Drawing.Size($MainWindow_leftalign,65)
+$datagridview.Location                  = New-Object System.Drawing.Size($MainWindow_leftalign,45)
 $datagridview.Size                      = New-Object System.Drawing.Size(300,55)
 $datagridview.AutoSize                  = $true
 $datagridview.BackgroundColor           = $Form_Theme
@@ -277,12 +277,15 @@ $datagridview.BorderStyle                      = "FixedSingle"
 $datagridview.CellBorderStyle                  = "SingleHorizontal"
 $datagridview.AlternatingRowsDefaultCellStyle.BackColor = "241,241,241"
 
-$datagridview.Columns[0].Name = "source"
-$datagridview.Columns[1].Name = "target"
+$datagridview.Columns[0].Name = "Source"
+$datagridview.Columns[0].SortMode = "NotSortable"
+
+$datagridview.Columns[1].Name = "Target"
+$datagridview.Columns[1].SortMode = "NotSortable"
 
 
 $MainWindow.Controls.Add($datagridview)
-
+$datagridview.Hide()
 #===================================================
 #                GUI - Down Buttons                =
 #===================================================
