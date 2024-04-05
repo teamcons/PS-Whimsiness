@@ -61,7 +61,7 @@ GPL-3.0 Stella Ménier - stella.menier@gmx.de
 Projektseite auf Github öffnen?"
 
 [string]$GITHUB_LINK                    = "https://github.com/teamcons/Skrivanek-CountingSheeps"
-[string]$text_label_how                 = "Einfach Dateien per Drag & Drop auf der Wiese ablegen!"
+[string]$text_label_how                 = "Einfach Dateien per Drag & Drop auf das Fenster ablegen!"
 [string]$text_button_close              = "Schließen"
 [string]$text_button_save               = "Speichern"
 [string]$text_keepontop                 = "Über alle Fenster"
@@ -193,13 +193,13 @@ function Load-XLIFF
 $MainWindow                   = New-Object System.Windows.Forms.Form
 $MainWindow.Text              = $APPNAME
 $MainWindow.Size              = New-Object System.Drawing.Size(335,($MainWindow_verticalalign + 25))
-$MainWindow.MinimumSize       = New-Object System.Drawing.Size(335,($MainWindow_verticalalign + 25))
+$MainWindow.MinimumSize       = New-Object System.Drawing.Size(230,($MainWindow_verticalalign + 25))
 $MainWindow.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
 $MainWindow.StartPosition     = 'CenterScreen'
 $MainWindow.MaximizeBox       = $True
 $MainWindow.Topmost           = $True
 $MainWindow.BackColor         = $Form_Theme
-$MainWindow.Icon              = $icon
+#$MainWindow.Icon              = $icon
 $MainWindow.AllowDrop         = $True
 
 
@@ -332,8 +332,8 @@ $MainWindow.CancelButton                    = $gui_cancelButton
 #$gui_cancelButton.Add_Click({$MainWindow_FormClosed})
 
 #$gui_panel.Controls.Add($gui_saveButton)
-$gui_panel.Controls.Add($gui_keepontop)
 $gui_panel.Controls.Add($gui_cancelButton)
+$gui_panel.Controls.Add($gui_keepontop)
 
 [void]$MainWindow.Controls.Add($gui_panel)
 
