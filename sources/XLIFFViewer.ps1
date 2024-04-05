@@ -191,13 +191,13 @@ function Load-XLIFF
 #= INITIAL WORK =
 
 [int]$MainWindow_leftalign = 10
-[int]$MainWindow_verticalalign = 160
+[int]$MainWindow_verticalalign = 190
 
 
 $MainWindow                   = New-Object System.Windows.Forms.Form
 $MainWindow.Text              = $APPNAME
-$MainWindow.Size              = New-Object System.Drawing.Size(335,($MainWindow_verticalalign + 25))
-$MainWindow.MinimumSize       = New-Object System.Drawing.Size(230,($MainWindow_verticalalign + 25))
+$MainWindow.Size              = New-Object System.Drawing.Size(400,($MainWindow_verticalalign + 25))
+$MainWindow.MinimumSize       = New-Object System.Drawing.Size(300,($MainWindow_verticalalign + 25))
 $MainWindow.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
 $MainWindow.StartPosition     = 'CenterScreen'
 $MainWindow.MaximizeBox       = $True
@@ -224,7 +224,7 @@ $pictureBox.Add_Click({
 $label                  = New-Object System.Windows.Forms.Label
 $label.Text             = $APPNAME
 $label.Location         = New-Object System.Drawing.Point(($MainWindow_leftalign),10) # leftalign+80 if icon
-$label.Size             = New-Object System.Drawing.Size(305,20)
+$label.Size             = New-Object System.Drawing.Size(395,20)
 $label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 11, [System.Drawing.FontStyle]::Bold)
 
 #$MainWindow.controls.add($pictureBox)
@@ -234,9 +234,9 @@ $label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif',
 #================================
 # Else the label doesnt wrap around neatly
 $wraparound_panel                       = New-Object System.Windows.Forms.Panel
-$wraparound_panel.Location              = New-Object System.Drawing.Point(($MainWindow_leftalign),10)
+$wraparound_panel.Location              = New-Object System.Drawing.Point(($MainWindow_leftalign),5)
 $wraparound_panel.Height                = 30
-$wraparound_panel.Width                 = 300
+$wraparound_panel.Width                 = 370
 $wraparound_panel.AutoSize              = $true
 $wraparound_panel.BackColor             = $Form_Theme
 $wraparound_panel.Anchor                      = "Right,Left,Top"
@@ -266,8 +266,8 @@ $MainWindow.Controls.Add($wraparound_panel)
 
 ## Configure the Gridview
 $datagridview                           = New-Object System.Windows.Forms.DataGridView
-$datagridview.Location                  = New-Object System.Drawing.Size($MainWindow_leftalign,45)
-$datagridview.Size                      = New-Object System.Drawing.Size(300,55)
+$datagridview.Location                  = New-Object System.Drawing.Size($MainWindow_leftalign,40)
+$datagridview.Size                      = New-Object System.Drawing.Size(365,90)
 $datagridview.AutoSize                  = $true
 $datagridview.BackgroundColor           = $Form_Theme
 $datagridview.Anchor                    = "Left,Bottom,Top,Right"
@@ -278,11 +278,15 @@ $datagridview.RowHeadersVisible         = $false
 $datagridview.ReadOnly                  = $false #true
 $datagridview.AutoSizeRowsMode          = "AllCells"
 $datagridview.AutoSizeColumnsMode       = "Fill"
-$datagridview.AllowUserToResizeRows     = $true
+$datagridview.AllowUserToResizeRows     = $false
 $datagridview.BorderStyle               = "None"
-$datagridview.BorderStyle                      = "FixedSingle"
+$datagridview.BorderStyle                      = "Fixed3D"
 $datagridview.CellBorderStyle                  = "SingleHorizontal"
 $datagridview.AlternatingRowsDefaultCellStyle.BackColor = "241,241,241"
+
+$datagridview.DefaultCellStyle.WrapMode = "false"
+
+
 
 $datagridview.Columns[0].Name = "Source"
 $datagridview.Columns[0].SortMode = "NotSortable"
@@ -292,7 +296,7 @@ $datagridview.Columns[1].SortMode = "NotSortable"
 
 
 $MainWindow.Controls.Add($datagridview)
-$datagridview.Hide()
+
 #===================================================
 #                GUI - Down Buttons                =
 #===================================================
@@ -316,6 +320,18 @@ $gui_keepontop.UseVisualStyleBackColor      = $True
 #$gui_keepontop.Appearance      = "Button"
 $gui_keepontop.Anchor                       = "Bottom,Left"
 $gui_keepontop.Checked                      = $MainWindow.Topmost
+
+
+#================================
+$gui_wrap                              = New-Object System.Windows.Forms.Checkbox
+$gui_wrap.Location                     = New-Object System.Drawing.Point(($MainWindow_leftalign + 120),7)
+$gui_wrap.Size                         = New-Object System.Drawing.Size(120,20)
+$gui_wrap.Text                         = "Wrap"
+$gui_wrap.UseVisualStyleBackColor      = $True
+#$gui_keepontop.Appearance      = "Button"
+$gui_wrap.Anchor                       = "Bottom,Left"
+$gui_wrap.Checked                      = $false
+
 
 
 #================================
@@ -344,6 +360,7 @@ $MainWindow.CancelButton                    = $gui_cancelButton
 
 #$gui_panel.Controls.Add($gui_saveButton)
 $gui_panel.Controls.Add($gui_cancelButton)
+$gui_panel.Controls.Add($gui_wrap)
 $gui_panel.Controls.Add($gui_keepontop)
 
 [void]$MainWindow.Controls.Add($gui_panel)
@@ -404,6 +421,10 @@ $MainWindow_FormClosed = {
 ### Wire up events ###
 
 $gui_keepontop.Add_Click({$MainWindow.Topmost = $gui_keepontop.Checked})
+
+
+$gui_wrap.Add_Click({	if ($gui_wrap.Checked) {$datagridview.DefaultCellStyle.WrapMode = "true"}
+					else {$datagridview.DefaultCellStyle.WrapMode = "false"}})
 
 # All the attach
 $datagridview.Add_DragOver($DragOver)
