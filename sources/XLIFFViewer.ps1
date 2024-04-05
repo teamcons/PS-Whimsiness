@@ -402,6 +402,19 @@ $MainWindow.Add_DragOver($DragOver)
 $MainWindow.Add_DragDrop($DragDrop)
 $MainWindow.Add_FormClosed($MainWindow_FormClosed)
 
+
+# Load whatever it is called upon, if there is something
+if ($arg -ne $null) 
+{
+	try
+    { Load-XLIFF $arg 	}
+	catch [Exception]
+    { Write-Output "no" }
+}
+
+
+
+
 # Go
 $MainWindow.ShowDialog()
 
