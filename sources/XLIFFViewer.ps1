@@ -140,8 +140,8 @@ function Load-XLIFF
 
 	$pictureBox.Image 			= ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
 
-	$datagridview.Columns[0].Name = -join("source: ",$cn.xliff.file.'source-language')
-	$datagridview.Columns[1].Name = -join("target: ",$cn.xliff.file.'target-language')
+	$datagridview.Columns[0].Name = -join("Source: ",$cn.xliff.file.'source-language')
+	$datagridview.Columns[1].Name = -join("Target: ",$cn.xliff.file.'target-language')
 
 
 	# Foreach nodes
@@ -243,15 +243,15 @@ $wraparound_panel.Anchor                      = "Right,Left,Top"
 
 #================================
 # Label and button
-$labelgrid                  = New-Object System.Windows.Forms.TextBox
+$labelgrid                  = New-Object System.Windows.Forms.Label
 $labelgrid.Text             = $text_label_how
-#$labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Italic)
+$labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Italic)
 $labelgrid.Dock             = "Fill"
-$labelgrid.ReadOnly			= $true
-$labelgrid.Multiline		= $true
-$labelgrid.BackColor             = $Form_Theme
-$labelgrid.BorderStyle             = "None"
-$labelgrid.SelectedText		= $none
+#$labelgrid.ReadOnly			= $true
+#$labelgrid.Multiline		= $true
+#$labelgrid.BackColor             = $Form_Theme
+#$labelgrid.BorderStyle             = "None"
+#$labelgrid.SelectedText		= $none
 
 $wraparound_panel.Controls.Add($labelgrid)
 $MainWindow.Controls.Add($wraparound_panel)
