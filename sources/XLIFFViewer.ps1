@@ -132,7 +132,7 @@ function Load-XLIFF
 	$file = Get-Item $filepath
 
 	$MainWindow.Text            = -join($APPNAME," - ",$file.Name)
-    $label.Text 				= -join("",$file.Name)
+    $label.Text 				= -join("SDLXLIFF: ",$file.Name)
 	$labelgrid.Text 			= -join("Original: ",($cn.xliff.file.original).Split("\")[-1])
 	$pictureBox.Image 			= ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
 
@@ -267,8 +267,8 @@ $datagridview.AllowDrop                 = $True
 $datagridview.ColumnCount               = 2
 $datagridview.ColumnHeadersVisible      = $true
 $datagridview.RowHeadersVisible         = $false
-$datagridview.ReadOnly                  = $true
-#$datagridview.AutoSizeRowsMode          = "AllCells"
+$datagridview.ReadOnly                  = $false #true
+$datagridview.AutoSizeRowsMode          = "AllCells"
 $datagridview.AutoSizeColumnsMode       = "Fill"
 $datagridview.AllowUserToResizeRows     = $true
 $datagridview.BorderStyle               = "None"
