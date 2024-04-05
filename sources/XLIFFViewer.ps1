@@ -45,7 +45,7 @@ Write-Output ""
 # Get all important variables in place 
 
 Write-Output "[STARTUP] Getting all variables in place"
-[string]$APPNAME                        = "Counting Sheeps !"
+[string]$APPNAME                        = "XLIFFViewer"
 [string]$SEP                            = ";"
 [string]$Form_Theme                     = '241,241,241' #"White" #"LightGreen"
 
@@ -129,24 +129,53 @@ function Load-XLIFF
 
 	$datagridview.Rows.clear()
 	[xml]$cn = Get-Content $filepath
+	$file = Get-Item $filepath
 
-    
-	$pictureBox.Image = ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
+	$MainWindow.Text            = -join($APPNAME," - ",$file.Name)
+    $label.Text 				= $file.Name
+	$labelgrid.Text 			= $cn.xliff.file.original
+	$pictureBox.Image 			= ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
+
+	$datagridview.Columns[0].Name = -join("source: ",$cn.xliff.file.'source-language')
+	$datagridview.Columns[1].Name = -join("target: ",$cn.xliff.file.'target-language')
+
 
 	# Foreach nodes
-	foreach ($i in $cn.xliff.file.body.group.ChildNodes)
+	foreach ($i in $cn.xliff.file.body.group.'trans-unit')
 	{
 
 		# Too common empty nodes, skip
-		if ($i.source -ne $none)
+		if ($i.source -eq $none)
 		{
-			$datagridview.Rows.Add($i.source,$i.target);
+
+			echo "no"
+
+
 		}
-	}
+
+		else {
+			Write-Output "Standard simple segment"
+			$datagridview.Rows.Add($i.source,$i.target.mrk.'#text');			
+		}
+
+
+		#elseif ($i.source.g.ToString() -eq "g" )
+		#{
+		#	$datagridview.Rows.Add($i.source.g.g.'#text',"");
+			#foreach ($g in $i.source.g.g)
+			#{
+			#	Write-Output "G-gang"
+			#	$datagridview.Rows.Add($g.'#text',"");
+			#}
+		#}
 
 
 
-}
+	} #end of foreach segment
+
+
+
+} #End of loadxliff
 
 #==============================================================
 #                GUI - Ask the Right Questions                =
@@ -182,28 +211,28 @@ $img = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).
 $pictureBox.Width       = 64 #$img.Size.Width
 $pictureBox.Height      = 64 #$img.Size.Height
 $pictureBox.Image       = $img;
-#$pictureBox.Add_Click({
- #                   $Result = [System.Windows.Forms.MessageBox]::Show($text_about,$APPNAME,4,[System.Windows.Forms.MessageBoxIcon]::Information)
- #                   If ($Result -eq "Yes") { Start-Process $GITHUB_LINK } })
+$pictureBox.Add_Click({
+                   $Result = [System.Windows.Forms.MessageBox]::Show($text_about,$APPNAME,4,[System.Windows.Forms.MessageBoxIcon]::Information)
+                   If ($Result -eq "Yes") { Start-Process $GITHUB_LINK } })
 
 #================================
 # LABEL AND TEXT
 $label                  = New-Object System.Windows.Forms.Label
 $label.Text             = $APPNAME
-$label.Location         = New-Object System.Drawing.Point(($MainWindow_leftalign + 75),10) # leftalign+80 if icon
-$label.Size             = New-Object System.Drawing.Size(180,20)
+$label.Location         = New-Object System.Drawing.Point(($MainWindow_leftalign),10) # leftalign+80 if icon
+$label.Size             = New-Object System.Drawing.Size(295,20)
 $label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 11, [System.Drawing.FontStyle]::Bold)
 
-$MainWindow.controls.add($pictureBox)
+#$MainWindow.controls.add($pictureBox)
 $MainWindow.Controls.Add($label)
 
 
 #================================
 # Else the label doesnt wrap around neatly
 $wraparound_panel                       = New-Object System.Windows.Forms.Panel
-$wraparound_panel.Location              = New-Object System.Drawing.Point(($MainWindow_leftalign + 75),30)
+$wraparound_panel.Location              = New-Object System.Drawing.Point(($MainWindow_leftalign),30)
 $wraparound_panel.Height                = 30
-$wraparound_panel.Width                 = 235
+$wraparound_panel.Width                 = 295
 $wraparound_panel.AutoSize              = $true
 $wraparound_panel.BackColor             = $Form_Theme
 $wraparound_panel.Anchor                      = "Right,Left,Top"
@@ -239,15 +268,13 @@ $datagridview.ColumnCount               = 2
 $datagridview.ColumnHeadersVisible      = $true
 $datagridview.RowHeadersVisible         = $false
 $datagridview.ReadOnly                  = $true
-$datagridview.AutoSizeRowsMode          = "AllCells"
+#$datagridview.AutoSizeRowsMode          = "AllCells"
 $datagridview.AutoSizeColumnsMode       = "Fill"
-$datagridview.AllowUserToAddRows        = "False"
-$datagridview.AllowUserToResizeRows     = "False"
-$datagridview.AllowUserToDeleteRows     = $true
+$datagridview.AllowUserToResizeRows     = $true
 $datagridview.BorderStyle               = "None"
 $datagridview.BorderStyle                      = "FixedSingle"
 $datagridview.CellBorderStyle                  = "SingleHorizontal"
-#$datagridview.AlternatingRowsDefaultCellStyle.BackColor = "White"
+$datagridview.AlternatingRowsDefaultCellStyle.BackColor = "241,241,241"
 
 $datagridview.Columns[0].Name = "source"
 $datagridview.Columns[1].Name = "target"
@@ -275,6 +302,7 @@ $gui_keepontop.Location                     = New-Object System.Drawing.Point(($
 $gui_keepontop.Size                         = New-Object System.Drawing.Size(120,20)
 $gui_keepontop.Text                         = $text_keepontop
 $gui_keepontop.UseVisualStyleBackColor      = $True
+#$gui_keepontop.Appearance      = "Button"
 $gui_keepontop.Anchor                       = "Bottom,Left"
 $gui_keepontop.Checked                      = $MainWindow.Topmost
 
