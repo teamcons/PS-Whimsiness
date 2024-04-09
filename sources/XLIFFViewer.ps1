@@ -198,7 +198,7 @@ function Load-XLIFF
 $MainWindow                   = New-Object System.Windows.Forms.Form
 $MainWindow.Text              = $APPNAME
 $MainWindow.Size              = New-Object System.Drawing.Size(400,($MainWindow_verticalalign + 25))
-$MainWindow.MinimumSize       = New-Object System.Drawing.Size(300,($MainWindow_verticalalign + 25))
+$MainWindow.MinimumSize       = New-Object System.Drawing.Size(230,(100))
 $MainWindow.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
 $MainWindow.StartPosition     = 'CenterScreen'
 $MainWindow.MaximizeBox       = $True
@@ -296,7 +296,6 @@ $datagridview.Columns[1].Name = "Target"
 $datagridview.Columns[1].SortMode = "NotSortable"
 
 
-$MainWindow.Controls.Add($datagridview)
 
 #===================================================
 #                GUI - Down Buttons                =
@@ -366,6 +365,7 @@ $gui_panel.Controls.Add($gui_keepontop)
 
 [void]$MainWindow.Controls.Add($gui_panel)
 
+$MainWindow.Controls.Add($datagridview)
 
 
 #=========================================
