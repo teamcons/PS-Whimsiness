@@ -63,8 +63,8 @@ ps2exe `
 # SDLXLIFFVIEWER
 #<# 
 ps2exe `
--inputFile $ScriptPath\sources\XLIFFViewer.ps1 `
--iconFile $ScriptPath\assets\XLIFFDocument.ico `
+-inputFile $ScriptPath\sources\SDLViewer.ps1 `
+-iconFile $ScriptPath\assets\SDLDocument.ico `
 -noConsole `
 -noOutput `
 -exitOnCancel `
@@ -74,5 +74,5 @@ ps2exe `
 -copyright "GPL-3.0 Stella - stella.menier@gmx.de" `
 -version 0.9 `
 -Verbose `
--outputFile $ScriptPath\XLIFFViewer.exe
+-outputFile $ScriptPath\SDLViewer.exe
  #>

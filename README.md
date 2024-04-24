@@ -47,20 +47,21 @@ So this just creates an icon in systray and keeps the puter awake.
   </table>
 
 
-# 💽 XLIFFViewer
+# 💽 SDLViewer
 
 ### Check out stray XLIFF files at work
 
   <table align="center" border="none">
-      <td><img  width="300" height="300" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot XLIFFViewer.png"" /></td>
+      <td><img  width="300" height="300" src="https://github.com/teamcons/PS-Whimsiness/blob/main/images/Screenshot SDLViewer.png"" /></td>
       <td><p>
+
 
 ### Features:
 - Working on making it flexiblener
 - Can keep on top
 - Can switch wraparoud
-- TODO: Open Trados packages ?
-- TODO: Edit and save changes ? (+ return trados pkg)
+- TODO: Open TRADOS analysis
+- TODO: Open MEMOQ analysis
 
     </p></td>
   </table>
