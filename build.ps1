@@ -68,7 +68,7 @@ ps2exe `
 -noConsole `
 -noOutput `
 -exitOnCancel `
--title "XLIFFViewer" `
+-title "SDLViewer" `
 -description "Check inside XLIFF !" `
 -company "Skrivanek GmbH" `
 -copyright "GPL-3.0 Stella - stella.menier@gmx.de" `

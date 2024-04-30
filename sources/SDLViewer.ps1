@@ -156,10 +156,13 @@ function Load-XLIFF
 } #End of loadxliff
 
 
+
+# Load whatever
 function Load-Thing
 {
 	param($filepath)
 	$gui_panel.Show()
+	$datagridview.Show()
 	$gui_greeter.Hide()
 
 	$file = Get-Item $filepath
@@ -167,14 +170,14 @@ function Load-Thing
 	if ($file.Extension -match "xliff")
 	{
 		Load-XLIFF $filepath
-
 	}
-
-
-
 } #End of loadthing
 
 
+
+
+
+# Search file
 
 
 
@@ -195,7 +198,7 @@ function Load-Thing
 $MainWindow                   = New-Object System.Windows.Forms.Form
 $MainWindow.Text              = $APPNAME
 $MainWindow.Size              = New-Object System.Drawing.Size(280,($MainWindow_verticalalign + 25))
-#$MainWindow.MinimumSize       = New-Object System.Drawing.Size(230,(100))
+$MainWindow.MinimumSize       = $MainWindow.Size
 $MainWindow.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
 $MainWindow.StartPosition     = 'CenterScreen'
 $MainWindow.MaximizeBox       = $True
@@ -220,20 +223,18 @@ $pictureBox             = new-object Windows.Forms.PictureBox
 $pictureBox.Image       = $icon
 $pictureBox.Width       = $icon.Size.Width
 $pictureBox.Height      = $icon.Size.Height
-$pictureBox.Top			= 40
-$pictureBox.Left 		= (($MainWindow.Width/2) - ($icon.Size.Width / 2))
+$pictureBox.Top			= 35
+$pictureBox.Left 		= (($MainWindow.Width/2) - ($icon.Size.Width / 2) - 8)
+#$pictureBox.Anchor                      = "Right,Left,Top"
 
-$pictureBox.Add_Click({
-                   $Result = [System.Windows.Forms.MessageBox]::Show($text_about,$APPNAME,4,[System.Windows.Forms.MessageBoxIcon]::Information)
-                   If ($Result -eq "Yes") { Start-Process $GITHUB_LINK } })
 
 $label                  = New-Object System.Windows.Forms.Label
 $label.Text             = "Drop XLIFF or Analysis file here"
 $label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 10, [System.Drawing.FontStyle]::Regular)
 $label.Left				= (($MainWindow.Width/2) - 100)
-$label.Top				= ($pictureBox.Top + $pictureBox.Height + 10)
+$label.Top				= ($pictureBox.Top + $pictureBox.Height + 15)
 $label.Width			= 200
-
+#$label.Anchor           = "Right,Left,Top"
 $gui_greeter.controls.add($pictureBox)
 $gui_greeter.Controls.Add($label)
 $MainWindow.controls.add($gui_greeter)
@@ -255,7 +256,7 @@ $wraparound_panel.Anchor                      = "Right,Left,Top"
 #================================
 # Label and button
 $labelgrid                  = New-Object System.Windows.Forms.Label
-$labelgrid.Text             = $text_label_how
+$labelgrid.Text             = "$text_label_how"
 $labelgrid.Dock             = "Fill"
 
 $wraparound_panel.Controls.Add($labelgrid)
@@ -272,7 +273,7 @@ $MainWindow.Controls.Add($wraparound_panel)
 ## Configure the Gridview
 $datagridview                           = New-Object System.Windows.Forms.DataGridView
 $datagridview.Location                  = New-Object System.Drawing.Size($MainWindow_leftalign,30) #40 with wraparound
-$datagridview.Size                      = New-Object System.Drawing.Size(365,100)
+$datagridview.Size                      = New-Object System.Drawing.Size(245,100)
 $datagridview.AutoSize                  = $true
 $datagridview.BackgroundColor           = $Form_Theme
 $datagridview.Anchor                    = "Left,Bottom,Top,Right"
@@ -290,7 +291,7 @@ $datagridview.CellBorderStyle           = "SingleHorizontal"
 $datagridview.AlternatingRowsDefaultCellStyle.BackColor = "241,241,241"
 $datagridview.SelectionMode 			= "FullRowSelect"
 $datagridview.DefaultCellStyle.WrapMode = "false"
-
+$datagridview.Hide()
 
 
 $datagridview.Columns[0].Name = "Source"
@@ -417,11 +418,25 @@ $MainWindow_FormClosed = {
     { }
 }
  
- 
+$BrowseFile = {
+		$FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{ 
+			InitialDirectory = [Environment]::GetFolderPath('Recent') 
+			Filter = 'XLIFF (*.sdlxliff)|*.sdlxliff|Trados analysis (*.xml)|*.xml'
+		}
+		$null = $FileBrowser.ShowDialog()
+	
+		if ($FileBrowser.FileName -ne "" )
+		{
+			Load-Thing $FileBrowser.FileName
+		}
+	}
 
 
 #================================
 ### Wire up events ###
+
+
+$pictureBox.Add_Click($BrowseFile)
 
 $gui_keepontop.Add_Click({$MainWindow.Topmost = $gui_keepontop.Checked})
 
