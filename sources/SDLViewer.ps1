@@ -137,6 +137,7 @@ function Load-XLIFF
 	$labelgrid.Text 			= -join("Original: ",($cn.xliff.file.original).Split("\")[-1])
 	$pictureBox.Image 			= ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
 
+	$datagridview.ColumnCount               = 2
 	$datagridview.Columns[0].Name = -join("Source: ",$cn.xliff.file.'source-language')
 	$datagridview.Columns[0].SortMode = "NotSortable"
 	$datagridview.Columns[1].Name = -join("Target: ",$cn.xliff.file.'target-language')
@@ -152,7 +153,42 @@ function Load-XLIFF
 			$datagridview.Rows.Add($i.source,$i.target.mrk.'#text');			
 		}
 	} #end of foreach segment
+} #End of loadxliff
 
+function Load-TradosXML
+{
+	param($filepath)
+
+	#$wraparound_panel.Hide()
+
+	$datagridview.Show()
+	$datagridview.Rows.clear()
+	[xml]$cn = Get-Content $filepath
+	$file = Get-Item $filepath
+
+	$MainWindow.Text            = -join($APPNAME," - ",$file.Name) #
+	$labelgrid.Text 			= -join("Original: ",($cn.xliff.file.original).Split("\")[-1])
+	$pictureBox.Image 			= ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
+
+
+	$datagridview.Columns[0].Name = -join("Source: ",$cn.xliff.file.'source-language')
+	$datagridview.Columns[0].SortMode = "NotSortable"
+	$datagridview.Columns[1].Name = -join("Target: ",$cn.xliff.file.'target-language')
+	$datagridview.Columns[1].SortMode = "NotSortable"
+
+	# Foreach nodes
+	foreach ($i in $cn.xliff.file.body.group.'trans-unit')
+	{
+		# Too common empty nodes, skip
+		if ($i.source -eq $none) {echo "no"}
+		else {
+			Write-Output "Standard simple segment"
+			$datagridview.Rows.Add($i.source,$i.target.mrk.'#text');			
+		}
+
+
+		
+	} #end of foreach segment
 } #End of loadxliff
 
 
@@ -167,17 +203,12 @@ function Load-Thing
 
 	$file = Get-Item $filepath
 
-	if ($file.Extension -match "xliff")
-	{
-		Load-XLIFF $filepath
+	switch ($file.Extension) {
+		".sdlxliff"{ Load-XLIFF $filepath }
+		".xml"{ Load-TradosXML  $filepath }
+		Default {}
 	}
 } #End of loadthing
-
-
-
-
-
-# Search file
 
 
 
@@ -293,12 +324,6 @@ $datagridview.SelectionMode 			= "FullRowSelect"
 $datagridview.DefaultCellStyle.WrapMode = "false"
 $datagridview.Hide()
 
-
-$datagridview.Columns[0].Name = "Source"
-$datagridview.Columns[0].SortMode = "NotSortable"
-
-$datagridview.Columns[1].Name = "Target"
-$datagridview.Columns[1].SortMode = "NotSortable"
 
 
 
