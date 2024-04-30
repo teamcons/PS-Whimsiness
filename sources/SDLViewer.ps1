@@ -46,7 +46,7 @@ Write-Output ""
 # Get all important variables in place 
 
 Write-Output "[STARTUP] Getting all variables in place"
-[string]$APPNAME                        = "XLIFFViewer"
+[string]$APPNAME                        = "SDLViewer"
 [string]$Form_Theme                     = '241,241,241' #"White" #"LightGreen"
 
 
@@ -134,53 +134,50 @@ function Load-XLIFF
 	$file = Get-Item $filepath
 
 	$MainWindow.Text            = -join($APPNAME," - ",$file.Name) #
-    #$label.Text 				= -join("",$file.Name)
-	$labelgrid.Text 			= -join("Original: ",($cn.xliff.file.original).Split("\")[-1])    #,"
-#CreationDate:",($cn.xliff.file.header.'file-info'.value[1].'#text'))
-
-
+	$labelgrid.Text 			= -join("Original: ",($cn.xliff.file.original).Split("\")[-1])
 	$pictureBox.Image 			= ([System.Drawing.Icon]::ExtractAssociatedIcon($filepath) ).ToBitmap()
 
 	$datagridview.Columns[0].Name = -join("Source: ",$cn.xliff.file.'source-language')
+	$datagridview.Columns[0].SortMode = "NotSortable"
 	$datagridview.Columns[1].Name = -join("Target: ",$cn.xliff.file.'target-language')
-
+	$datagridview.Columns[1].SortMode = "NotSortable"
 
 	# Foreach nodes
 	foreach ($i in $cn.xliff.file.body.group.'trans-unit')
 	{
-
 		# Too common empty nodes, skip
-		if ($i.source -eq $none)
-		{
-
-			echo "no"
-
-
-		}
-
+		if ($i.source -eq $none) {echo "no"}
 		else {
 			Write-Output "Standard simple segment"
 			$datagridview.Rows.Add($i.source,$i.target.mrk.'#text');			
 		}
-
-
-		#elseif ($i.source.g.ToString() -eq "g" )
-		#{
-		#	$datagridview.Rows.Add($i.source.g.g.'#text',"");
-			#foreach ($g in $i.source.g.g)
-			#{
-			#	Write-Output "G-gang"
-			#	$datagridview.Rows.Add($g.'#text',"");
-			#}
-		#}
-
-
-
 	} #end of foreach segment
 
-
-
 } #End of loadxliff
+
+
+function Load-Thing
+{
+	param($filepath)
+	$gui_panel.Show()
+	$gui_greeter.Hide()
+
+	$file = Get-Item $filepath
+
+	if ($file.Extension -match "xliff")
+	{
+		Load-XLIFF $filepath
+
+	}
+
+
+
+} #End of loadthing
+
+
+
+
+
 
 #==============================================================
 #                GUI - Ask the Right Questions                =
@@ -197,8 +194,8 @@ function Load-XLIFF
 
 $MainWindow                   = New-Object System.Windows.Forms.Form
 $MainWindow.Text              = $APPNAME
-$MainWindow.Size              = New-Object System.Drawing.Size(400,($MainWindow_verticalalign + 25))
-$MainWindow.MinimumSize       = New-Object System.Drawing.Size(230,(100))
+$MainWindow.Size              = New-Object System.Drawing.Size(280,($MainWindow_verticalalign + 25))
+#$MainWindow.MinimumSize       = New-Object System.Drawing.Size(230,(100))
 $MainWindow.Font              = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Regular)
 $MainWindow.StartPosition     = 'CenterScreen'
 $MainWindow.MaximizeBox       = $True
@@ -208,28 +205,41 @@ $MainWindow.Icon              = $icon
 $MainWindow.AllowDrop         = $True
 
 
+
+
+
 #================================
-# FANCY ICON
+$gui_greeter                                  = New-Object System.Windows.Forms.Panel
+$gui_greeter.Left                             = 0
+$gui_greeter.Size 								= $MainWindow.Size
+$gui_greeter.BackColor                        = '241,241,241'
+$gui_greeter.Dock                             = "Fill"
+
+
 $pictureBox             = new-object Windows.Forms.PictureBox
-$pictureBox.Location    = New-Object System.Drawing.Point($MainWindow_leftalign,0)
-$img = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($stream).GetHIcon()))
-$pictureBox.Width       = 64 #$img.Size.Width
-$pictureBox.Height      = 64 #$img.Size.Height
-$pictureBox.Image       = $img;
+$pictureBox.Image       = $icon
+$pictureBox.Width       = $icon.Size.Width
+$pictureBox.Height      = $icon.Size.Height
+$pictureBox.Top			= 40
+$pictureBox.Left 		= (($MainWindow.Width/2) - ($icon.Size.Width / 2))
+
 $pictureBox.Add_Click({
                    $Result = [System.Windows.Forms.MessageBox]::Show($text_about,$APPNAME,4,[System.Windows.Forms.MessageBoxIcon]::Information)
                    If ($Result -eq "Yes") { Start-Process $GITHUB_LINK } })
 
-#================================
-# LABEL AND TEXT
 $label                  = New-Object System.Windows.Forms.Label
-$label.Text             = $APPNAME
-$label.Location         = New-Object System.Drawing.Point(($MainWindow_leftalign),10) # leftalign+80 if icon
-$label.Size             = New-Object System.Drawing.Size(395,20)
-$label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 11, [System.Drawing.FontStyle]::Bold)
+$label.Text             = "Drop XLIFF or Analysis file here"
+$label.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 10, [System.Drawing.FontStyle]::Regular)
+$label.Left				= (($MainWindow.Width/2) - 100)
+$label.Top				= ($pictureBox.Top + $pictureBox.Height + 10)
+$label.Width			= 200
 
-#$MainWindow.controls.add($pictureBox)
-#$MainWindow.Controls.Add($label)
+$gui_greeter.controls.add($pictureBox)
+$gui_greeter.Controls.Add($label)
+$MainWindow.controls.add($gui_greeter)
+
+
+
 
 
 #================================
@@ -246,13 +256,7 @@ $wraparound_panel.Anchor                      = "Right,Left,Top"
 # Label and button
 $labelgrid                  = New-Object System.Windows.Forms.Label
 $labelgrid.Text             = $text_label_how
-#$labelgrid.Font             = New-Object System.Drawing.Font('Microsoft Sans Serif', 9, [System.Drawing.FontStyle]::Italic)
 $labelgrid.Dock             = "Fill"
-#$labelgrid.ReadOnly			= $true
-#$labelgrid.Multiline		= $true
-#$labelgrid.BackColor             = $Form_Theme
-#$labelgrid.BorderStyle             = "None"
-#$labelgrid.SelectedText		= $none
 
 $wraparound_panel.Controls.Add($labelgrid)
 $MainWindow.Controls.Add($wraparound_panel)
@@ -311,6 +315,8 @@ $gui_panel.Height                           = 35
 $gui_panel.BackColor                        = '241,241,241'
 $gui_panel.Dock                             = "Bottom"
 
+$gui_panel.Hide()
+
 #================================
 $gui_keepontop                              = New-Object System.Windows.Forms.Checkbox
 $gui_keepontop.Location                     = New-Object System.Drawing.Point(($MainWindow_leftalign),7)
@@ -331,8 +337,6 @@ $gui_wrap.UseVisualStyleBackColor      = $True
 #$gui_keepontop.Appearance      = "Button"
 $gui_wrap.Anchor                       = "Bottom,Left"
 $gui_wrap.Checked                      = $false
-
-
 
 #================================
 $gui_saveButton                               = New-Object System.Windows.Forms.Button
@@ -375,8 +379,6 @@ $MainWindow.Controls.Add($datagridview)
 
 
 ### Write event handlers ###
-
-
 #================================
 $DragOver = [System.Windows.Forms.DragEventHandler]{
 	if ($_.Data.GetDataPresent([Windows.Forms.DataFormats]::FileDrop))
@@ -394,7 +396,7 @@ $DragOver = [System.Windows.Forms.DragEventHandler]{
 $DragDrop = [System.Windows.Forms.DragEventHandler]{
 	foreach ($filepath in $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop))
     {
-		Load-XLIFF $filepath
+		Load-Thing $filepath
 	}
 }
 
@@ -423,8 +425,7 @@ $MainWindow_FormClosed = {
 
 $gui_keepontop.Add_Click({$MainWindow.Topmost = $gui_keepontop.Checked})
 
-
-$gui_wrap.Add_Click({	if ($gui_wrap.Checked) {$datagridview.DefaultCellStyle.WrapMode = "true"}
+$gui_wrap.Add_Click({if ($gui_wrap.Checked) {$datagridview.DefaultCellStyle.WrapMode = "true"}
 					else {$datagridview.DefaultCellStyle.WrapMode = "false"}})
 
 # All the attach
@@ -437,17 +438,17 @@ $MainWindow.Add_FormClosed($MainWindow_FormClosed)
 
 
 # Load whatever it is called upon, if there is something
-if ($arg -ne $null) 
+if ($arg -ne "") 
 {
 	try
-    { Load-XLIFF $arg 	}
+    { Load-Thing $arg 	}
 	catch [Exception]
     { Write-Output "no" }
 }
 
 
 
-
+#================================
 # Go
 $MainWindow.ShowDialog()
 
