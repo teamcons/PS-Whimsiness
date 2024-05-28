@@ -112,13 +112,11 @@ $hotcornerScript = {
         if ( ([Windows.Forms.Cursor]::Position.X -le $hotcorner_sensitivity) -and ([Windows.Forms.Cursor]::Position.Y -le $hotcorner_sensitivity))
         {
             # Trigger Windows + Tab (Overview)
-            # And then wait three seconds before hot corner again
             Write-Output "[HOT CORNER] Activated!"
             [KeySends.KeySend]::KeyDown("LWin")
             [KeySends.KeySend]::KeyDown("Tab")
             [KeySends.KeySend]::KeyUp("LWin")
             [KeySends.KeySend]::KeyUp("Tab")
-            Start-Sleep -seconds (1)
         }
         
         Start-Sleep -Milliseconds $hotcorner_reactivity
@@ -176,10 +174,10 @@ $Menu_Toggle_HC.Add_Click({
     # If it was checked when clicked, stop it
     # Else, it wasnt checked, so start it
     if ($Menu_Toggle_HC.Checked) {
-        Stop-Job -Name "hotCorner"
+        #Stop-Job -Name "hotCorner"
         $Menu_Toggle_HC.Checked = $false}
     else {
-        Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
+        #Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
         $Menu_Toggle_HC.Checked = $true}
  })
 
@@ -236,9 +234,30 @@ $Main_Tool_Icon.Visible = $true
 $Main_Tool_Icon.ShowBalloonTip(500)
 
 Start-Job -ScriptBlock $keepAwakeScript -Name "keepAwake"
-Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
 
-[Windows.Forms.Cursor]::Position
+# The whole thing doesnt work if in the background
+#Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
+
+# So have it in main thread then
+while ($true) {
+
+    [Windows.Forms.Cursor]::Position
+    # If in the corner
+    if ( ($Menu_Toggle_HC.Checked) -and ([Windows.Forms.Cursor]::Position.X -le $hotcorner_sensitivity) -and ([Windows.Forms.Cursor]::Position.Y -le $hotcorner_sensitivity))
+    {
+        # Trigger Windows + Tab (Overview)
+        Write-Output "[HOT CORNER] Activated!"
+        [KeySends.KeySend]::KeyDown("LWin")
+        [KeySends.KeySend]::KeyDown("Tab")
+        [KeySends.KeySend]::KeyUp("LWin")
+        [KeySends.KeySend]::KeyUp("Tab")
+    }
+    
+    Start-Sleep -Milliseconds $hotcorner_reactivity
+}
+
+
+
 
 # Force garbage collection just to start slightly lower RAM usage.
 [System.GC]::Collect()
