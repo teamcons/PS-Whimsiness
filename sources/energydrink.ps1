@@ -107,7 +107,7 @@ $keepAwakeScript = {
 $hotcornerScript = {
     while ($true) {
 
-        [Windows.Forms.Cursor]::Position
+        #[Windows.Forms.Cursor]::Position
         # If in the corner
         if ( ([Windows.Forms.Cursor]::Position.X -le $hotcorner_sensitivity) -and ([Windows.Forms.Cursor]::Position.Y -le $hotcorner_sensitivity))
         {
@@ -168,22 +168,18 @@ $Menu_About.add_Click({
 
 # Toggle between halt and continue
 $Menu_Toggle_HC = New-Object System.Windows.Forms.MenuItem
-$Menu_Toggle_HC.Checked = $true
+$Menu_Toggle_HC.Checked = $false
 $Menu_Toggle_HC.Text = "Hot corner (Top left)"
 $Menu_Toggle_HC.Add_Click({
     # If it was checked when clicked, stop it
     # Else, it wasnt checked, so start it
     if ($Menu_Toggle_HC.Checked) {
-        #Stop-Job -Name "hotCorner"
+        Stop-Job -Name "hotCorner"
         $Menu_Toggle_HC.Checked = $false}
     else {
-        #Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
+        Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
         $Menu_Toggle_HC.Checked = $true}
  })
-
-
-
-
 
 
 # Toggle between halt and continue
@@ -235,27 +231,8 @@ $Main_Tool_Icon.ShowBalloonTip(500)
 
 Start-Job -ScriptBlock $keepAwakeScript -Name "keepAwake"
 
-# The whole thing doesnt work if in the background
-#Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
-
-# So have it in main thread then
-while ($true) {
-
-    [Windows.Forms.Cursor]::Position
-    # If in the corner
-    if ( ($Menu_Toggle_HC.Checked) -and ([Windows.Forms.Cursor]::Position.X -le $hotcorner_sensitivity) -and ([Windows.Forms.Cursor]::Position.Y -le $hotcorner_sensitivity))
-    {
-        # Trigger Windows + Tab (Overview)
-        Write-Output "[HOT CORNER] Activated!"
-        [KeySends.KeySend]::KeyDown("LWin")
-        [KeySends.KeySend]::KeyDown("Tab")
-        [KeySends.KeySend]::KeyUp("LWin")
-        [KeySends.KeySend]::KeyUp("Tab")
-    }
-    
-    Start-Sleep -Milliseconds $hotcorner_reactivity
-}
-
+# BUGFIX: The whole thing doesnt work if in the background
+Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
 
 
 
