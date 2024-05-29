@@ -39,7 +39,7 @@ ps2exe `
 -copyright "GPL-3.0 Stella - stella.menier@gmx.de" `
 -version 0.9 `
 -Verbose `
--outputFile $ScriptPath\energydrinkk.exe
+-outputFile $ScriptPath\energydrink.exe
 
  #>
 
