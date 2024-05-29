@@ -172,10 +172,10 @@ $Menu_Toggle_HC.Add_Click({
     # If it was checked when clicked, stop it
     # Else, it wasnt checked, so start it
     if ($Menu_Toggle_HC.Checked) {
-        Stop-Job -Name "hotCorner"
+        #Stop-Job -Name "hotCorner"
         $Menu_Toggle_HC.Checked = $false}
     else {
-        Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
+        #Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
         $Menu_Toggle_HC.Checked = $true}
  })
 
@@ -232,7 +232,7 @@ Start-Job -ScriptBlock $keepAwakeScript -Name "keepAwake"
 # BUGFIX: The whole thing doesnt work if in the background
 #Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
 
-
+#Invoke-Command -ScriptBlock $hotcornerScript
 
 
 # Force garbage collection just to start slightly lower RAM usage.
@@ -242,3 +242,5 @@ Start-Job -ScriptBlock $keepAwakeScript -Name "keepAwake"
 # This helps with responsiveness, especially when clicking Exit.
 $appContext = New-Object System.Windows.Forms.ApplicationContext
 [void][System.Windows.Forms.Application]::Run($appContext)
+
+
