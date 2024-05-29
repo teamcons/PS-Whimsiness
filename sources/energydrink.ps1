@@ -148,8 +148,6 @@ $Main_Tool_Icon.Add_Click({
         $Main_Tool_Icon.GetType().GetMethod("ShowContextMenu",[System.Reflection.BindingFlags]::Instance -bor [System.Reflection.BindingFlags]::NonPublic).Invoke($Main_Tool_Icon,$null)
     }
 })
-#[void](Register-ObjectEvent  -InputObject $Main_Tool_Icon -EventName MouseDoubleClick  -SourceIdentifier IconClicked  -Action {Start-Process "https://github.com/teamcons"}) 
-#register-objectevent -InputObject $Main_Tool_Icon -EventName  BalloonTipClicked -Action {Start-Process "https://github.com/teamcons"}
 
 
 # About in notification bubble
@@ -232,7 +230,8 @@ $Main_Tool_Icon.ShowBalloonTip(500)
 Start-Job -ScriptBlock $keepAwakeScript -Name "keepAwake"
 
 # BUGFIX: The whole thing doesnt work if in the background
-Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
+#Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
+
 
 
 
