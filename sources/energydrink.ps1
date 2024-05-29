@@ -35,6 +35,12 @@ Add-Type -AssemblyName System.Drawing
 [byte]$hotcorner_sensitivity            = 20
 [byte]$keypress_waittime                = 5
 
+# Grab script location in a way that is compatible with PS2EXE
+if ($MyInvocation.MyCommand.CommandType -eq "ExternalScript")
+    { $global:ScriptPath = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition }
+else
+    {$global:ScriptPath = Split-Path -Parent -Path ([Environment]::GetCommandLineArgs()[0]) 
+    if (!$ScriptPath){ $global:ScriptPath = "." } }
 
 
 #================================
@@ -173,9 +179,11 @@ $Menu_Toggle_HC.Add_Click({
     # Else, it wasnt checked, so start it
     if ($Menu_Toggle_HC.Checked) {
         #Stop-Job -Name "hotCorner"
+        Stop-Process -Name warmedge
         $Menu_Toggle_HC.Checked = $false}
     else {
         #Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
+        Start-Process $ScriptPath\warmedge.exe
         $Menu_Toggle_HC.Checked = $true}
  })
 
@@ -232,7 +240,6 @@ Start-Job -ScriptBlock $keepAwakeScript -Name "keepAwake"
 # BUGFIX: The whole thing doesnt work if in the background
 #Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
 
-#Invoke-Command -ScriptBlock $hotcornerScript
 
 
 # Force garbage collection just to start slightly lower RAM usage.

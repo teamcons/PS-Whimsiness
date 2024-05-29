@@ -31,9 +31,9 @@ Startup is slow due to interacting with Office. Which is slow.
 
 Windows doesnt respect or leave untouched some settings
 And im annoyed when i read something or wait for emails, and it goes to sleep
-
 So this just creates an icon in systray and keeps the puter awake.
 
+NEW: Also now has an option to activate a window and workspaces overview as top left hot corner
 
 
   <table align="center" border="none">
@@ -42,9 +42,21 @@ So this just creates an icon in systray and keeps the puter awake.
 
 ### Features:
 - Can toggle between preventing sleep or not
-- No nonsense, its just like three buttons
+- Can activate a hot corner for overview, if the warmedge exe is present
         </p></td>
   </table>
+
+
+
+
+# 💽 Warmedge
+
+### Top left hot corner
+
+Im used to having a top left hot corner for overivew, like in Gnome-shell.
+
+I wanted it in EnergyDrink but it does not work if its not a separate process.
+So here is a companion executable which needs to be in the same folder.
 
 
 # 💽 SDLViewer
