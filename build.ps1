@@ -44,24 +44,6 @@ ps2exe `
  #>
 
 #========================
-# ENERGYDRINK
-#<# 
-ps2exe `
--inputFile $ScriptPath\sources\warmedge.ps1 `
--iconFile $ScriptPath\assets\soft-drink.ico `
--noConsole `
--noOutput `
--exitOnCancel `
--title "Warm edge" `
--description "Top left hot corner" `
--company "teamcons" `
--copyright "GPL-3.0 Stella - stella.menier@gmx.de" `
--version 0.9 `
--Verbose `
--outputFile $ScriptPath\warmedge.exe
-
- #>
-#========================
 # SCRATCHPAD
 <#
 ps2exe `

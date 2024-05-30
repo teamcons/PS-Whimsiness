@@ -31,8 +31,6 @@ Add-Type -AssemblyName System.Drawing
 [System.Reflection.Assembly]::LoadWithPartialName('WindowsFormsIntegration')    | out-null
 
 [string]$APPNAME                        = "EnergyDrink"
-[int]$hotcorner_reactivity              = 500
-[byte]$hotcorner_sensitivity            = 20
 [byte]$keypress_waittime                = 5
 
 # Grab script location in a way that is compatible with PS2EXE
@@ -62,39 +60,6 @@ $streamdark = [System.IO.MemoryStream]::new($iconBytes, 0, $iconBytes.Length)
 $icondark = [System.Drawing.Icon]::FromHandle(([System.Drawing.Bitmap]::new($streamdark).GetHIcon()))
 
 
-
-
-# This is very ugly
-#https://www.itcodar.com/csharp/sending-windows-key-using-sendkeys.html
-$source = @"
-using System;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
-namespace KeySends
-{
-    public class KeySend
-    {
-        [DllImport("user32.dll")]
-        public static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
-        private const int KEYEVENTF_EXTENDEDKEY = 1;
-        private const int KEYEVENTF_KEYUP = 2;
-        public static void KeyDown(Keys vKey)
-        {
-            keybd_event((byte)vKey, 0, KEYEVENTF_EXTENDEDKEY, 0);
-        }
-        public static void KeyUp(Keys vKey)
-        {
-            keybd_event((byte)vKey, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-        }
-    }
-}
-"@
-Add-Type -TypeDefinition $source -ReferencedAssemblies "System.Windows.Forms"
-
-
-
-
 # ---------------------------------------------------------------------
 # Action to keep system awake
 # ---------------------------------------------------------------------
@@ -107,28 +72,6 @@ $keepAwakeScript = {
         Start-Sleep -seconds ($keypress_waittime * 60)
     }
 }
-
-
-# Check where mouse, if corner then simulate keypress
-$hotcornerScript = {
-    while ($true) {
-
-        #[Windows.Forms.Cursor]::Position
-        # If in the corner
-        if ( ([Windows.Forms.Cursor]::Position.X -le $hotcorner_sensitivity) -and ([Windows.Forms.Cursor]::Position.Y -le $hotcorner_sensitivity))
-        {
-            # Trigger Windows + Tab (Overview)
-            Write-Output "[HOT CORNER] Activated!"
-            [KeySends.KeySend]::KeyDown("LWin")
-            [KeySends.KeySend]::KeyDown("Tab")
-            [KeySends.KeySend]::KeyUp("LWin")
-            [KeySends.KeySend]::KeyUp("Tab")
-        }
-        
-        Start-Sleep -Milliseconds $hotcorner_reactivity
-    }
-}
-
 
 # Stop EVERYTHING
 function Stop-Tree {
@@ -169,39 +112,20 @@ $Menu_About.add_Click({
 
 
 
-
 # Toggle between halt and continue
-$Menu_Toggle_HC = New-Object System.Windows.Forms.MenuItem
-$Menu_Toggle_HC.Checked = $false
-$Menu_Toggle_HC.Text = "Hot corner (Top left)"
-$Menu_Toggle_HC.Add_Click({
+$Menu_Toggle = New-Object System.Windows.Forms.MenuItem
+$Menu_Toggle.Checked = $true
+$Menu_Toggle.Text = "Keep awake"
+$Menu_Toggle.Add_Click({
     # If it was checked when clicked, stop it
     # Else, it wasnt checked, so start it
-    if ($Menu_Toggle_HC.Checked) {
-        #Stop-Job -Name "hotCorner"
-        Stop-Process -Name warmedge
-        $Menu_Toggle_HC.Checked = $false}
-    else {
-        #Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
-        Start-Process $ScriptPath\warmedge.exe
-        $Menu_Toggle_HC.Checked = $true}
- })
-
-
-# Toggle between halt and continue
-$Menu_Toggle_KA = New-Object System.Windows.Forms.MenuItem
-$Menu_Toggle_KA.Checked = $true
-$Menu_Toggle_KA.Text = "Keep awake"
-$Menu_Toggle_KA.Add_Click({
-    # If it was checked when clicked, stop it
-    # Else, it wasnt checked, so start it
-    if ($Menu_Toggle_KA.Checked) {
+    if ($Menu_Toggle.Checked) {
         Stop-Job -Name "keepAwake"
-        $Menu_Toggle_KA.Checked = $false
+        $Menu_Toggle.Checked = $false
         $Main_Tool_Icon.Icon = $icondark }
     else {
         Start-Job -ScriptBlock $keepAwakeScript -Name "keepAwake"
-        $Menu_Toggle_KA.Checked = $true
+        $Menu_Toggle.Checked = $true
         $Main_Tool_Icon.Icon = $icon }
  })
 
@@ -236,11 +160,6 @@ $Main_Tool_Icon.Visible = $true
 $Main_Tool_Icon.ShowBalloonTip(500)
 
 Start-Job -ScriptBlock $keepAwakeScript -Name "keepAwake"
-
-# BUGFIX: The whole thing doesnt work if in the background
-#Start-Job -ScriptBlock $hotcornerScript -Name "hotCorner"
-
-
 
 # Force garbage collection just to start slightly lower RAM usage.
 [System.GC]::Collect()
