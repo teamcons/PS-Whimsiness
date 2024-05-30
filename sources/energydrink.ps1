@@ -103,11 +103,14 @@ $Main_Tool_Icon.Add_Click({
 $Menu_About = New-Object System.Windows.Forms.MenuItem
 $Menu_About.Text = "About"
 $Menu_About.add_Click({
-    $Main_Tool_Icon.BalloonTipTitle = "Keep puter awake!"
+<#     $Main_Tool_Icon.BalloonTipTitle = "Keep puter awake!"
     $Main_Tool_Icon.BalloonTipIcon = [System.Windows.Forms.ToolTipIcon]::Info
     $Main_Tool_Icon.BalloonTipText = "Made by Stella ! :3 <stella.menier@gmx.de>"
     $Main_Tool_Icon.Visible = $true
-    $Main_Tool_Icon.ShowBalloonTip(1000)
+    $Main_Tool_Icon.ShowBalloonTip(1000) #>
+
+    Start-Process https://github.com/teamcons/PS-Whimsiness
+
  })
 
 
@@ -115,7 +118,7 @@ $Menu_About.add_Click({
 # Toggle between halt and continue
 $Menu_Toggle = New-Object System.Windows.Forms.MenuItem
 $Menu_Toggle.Checked = $true
-$Menu_Toggle.Text = "Keep awake"
+$Menu_Toggle.Text = "Keep puter awake"
 $Menu_Toggle.Add_Click({
     # If it was checked when clicked, stop it
     # Else, it wasnt checked, so start it
@@ -142,22 +145,12 @@ $Menu_Exit.add_Click({
 
 $Main_Tool_Icon.ContextMenu = New-Object System.Windows.Forms.ContextMenu
 $Main_Tool_Icon.contextMenu.MenuItems.AddRange($Menu_About)
-$Main_Tool_Icon.contextMenu.MenuItems.AddRange($Menu_Toggle_HC)
-$Main_Tool_Icon.contextMenu.MenuItems.AddRange($Menu_Toggle_KA)
+$Main_Tool_Icon.contextMenu.MenuItems.AddRange($Menu_Toggle)
 $Main_Tool_Icon.contextMenu.MenuItems.AddRange($Menu_Exit)
-
- 
-
 
 
 
 # ---------------------------------------------------------------------
-
-$Main_Tool_Icon.BalloonTipTitle = "Started !"
-$Main_Tool_Icon.BalloonTipIcon = [System.Windows.Forms.ToolTipIcon]::Info
-$Main_Tool_Icon.BalloonTipText = "The puter is now prevented from going to sleep"
-$Main_Tool_Icon.Visible = $true
-$Main_Tool_Icon.ShowBalloonTip(500)
 
 Start-Job -ScriptBlock $keepAwakeScript -Name "keepAwake"
 
